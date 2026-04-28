@@ -4,7 +4,7 @@
 
 Se selecciona la `Propuesta 1`, pero con un enfoque reformulado:
 
-> La intervención humana en PRs generados por agentes de IA no se estudia como fin en sí mismo, sino como una señal observable para estimar la autonomía real, la confiabilidad práctica y la capacidad de integración de esos agentes dentro del proceso de desarrollo de software.
+> La intervención humana en PRs generados por agentes de IA no se estudia como fin en sí mismo, sino como un indicador observable para estimar la autonomía real, la confiabilidad práctica y la capacidad de integración de esos agentes dentro del proceso de desarrollo de software.
 
 En otras palabras, la pregunta central deja de ser solo "cuánto intervienen los humanos" y pasa a ser "qué nos dice esa intervención sobre la capacidad real de los agentes para contribuir de forma útil y aceptable en un proyecto".
 
@@ -16,13 +16,13 @@ En otras palabras, la pregunta central deja de ser solo "cuánto intervienen los
 
 El dataset `AIDev` ofrece una oportunidad concreta para observar cómo se comportan en la práctica los pull requests creados por agentes de IA. Sin embargo, medir únicamente la frecuencia de intervención humana sería insuficiente: por sí sola, esa medida no explica por qué los resultados importan ni qué se puede aprender de ellos.
 
-El valor del estudio aparece cuando la intervención humana se interpreta como una señal del nivel de autonomía del agente. Si la mayoría de los PRs necesita cambios humanos significativos antes de integrarse, entonces los agentes todavía operan con una autonomía limitada y su uso implica un costo adicional de supervisión y corrección. Si, en cambio, una fracción importante de PRs puede integrarse sin cambios relevantes, eso sugiere que los agentes ya pueden actuar como contribuidores efectivos en ciertos contextos.
+El valor del estudio aparece cuando la intervención humana se interpreta como un indicador del nivel de autonomía del agente. Si la mayoría de los PRs necesita cambios humanos significativos antes de integrarse, entonces los agentes todavía operan con una autonomía limitada y su uso implica un costo adicional de supervisión y corrección. Si, en cambio, una fracción importante de PRs puede integrarse sin cambios relevantes, eso sugiere que los agentes ya pueden actuar como contribuidores efectivos en ciertos contextos.
 
 Además, es razonable esperar que este comportamiento no sea uniforme. La necesidad de intervención podría variar según el lenguaje, el tamaño del PR, el tipo de repositorio, la popularidad del proyecto o el agente que generó el cambio. Identificar esos contextos haría que los resultados fueran útiles tanto para investigadores como para equipos que evalúan incorporar agentes a sus flujos de desarrollo.
 
 ## Objetivo general
 
-Evaluar en qué medida los pull requests generados por agentes de IA pueden integrarse como contribuciones efectivas de software, usando la intervención humana como señal para estimar su autonomía práctica y sus límites actuales.
+Evaluar en qué medida los pull requests generados por agentes de IA pueden integrarse como contribuciones efectivas de software, usando la intervención humana como un indicador para estimar su autonomía práctica y sus límites actuales.
 
 ## Objetivos específicos
 
