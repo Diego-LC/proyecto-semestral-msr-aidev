@@ -1,0 +1,71 @@
+{
+  "dataset": "hao-li/AIDev",
+  "config": "all_pull_request",
+  "split": "train",
+  "features": [
+    "id",
+    "number",
+    "title",
+    "user",
+    "user_id",
+    "state",
+    "created_at",
+    "closed_at",
+    "merged_at",
+    "repo_url",
+    "repo_id",
+    "html_url",
+    "body",
+    "agent"
+  ],
+  "rows": [
+    {
+      "id": 3264016139,
+      "number": 1688,
+      "title": "`metta code` --> `metta clip` and additional polish",
+      "user": "jacklionheart",
+      "user_id": 37011,
+      "state": "closed",
+      "created_at": "2025-07-25T18:15:36Z",
+      "closed_at": "2025-07-25T19:17:23Z",
+      "merged_at": "2025-07-25T19:17:23Z",
+      "repo_url": "https://api.github.com/repos/Metta-AI/metta",
+      "repo_id": 843988367,
+      "html_url": "https://github.com/Metta-AI/metta/pull/1688",
+      "body": "Remove unused `root_key` variable to fix ruff linting error F841\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@ant...",
+      "agent": "Claude_Code"
+    },
+    {
+      "id": 3264021033,
+      "number": 41,
+      "title": "feat: Comprehensive ruff error resolution with version alignment and governance",
+      "user": "Draco3310",
+      "user_id": 131842369,
+      "state": "open",
+      "created_at": "2025-07-25T18:17:57Z",
+      "closed_at": null,
+      "merged_at": null,
+      "repo_url": "https://api.github.com/repos/Draco3310/Gal-Friday2",
+      "repo_id": 992063465,
+      "html_url": "https://github.com/Draco3310/Gal-Friday2/pull/41",
+      "body": "## 🎯 Mission Accomplished: 100% Ruff Error Resolution\n\n**Achievement**: Resolved all 80 ruff errors (100% success rate) through systematic version alignment ...",
+      "agent": "Claude_Code"
+    },
+    {
+      "id": 3264042289,
+      "number": 1600,
+      "title": "Add Evals frontend implementation plan and HTML prototype",
+      "user": "justicart",
+      "user_id": 6766889,
+      "state": "closed",
+      "created_at": "2025-07-25T18:26:15Z",
+      "closed_at": "2025-07-25T23:19:14Z",
+      "merged_at": null,
+      "repo_url": "https://api.github.com/repos/bolt-foundry/bolt-foundry",
+      "repo_id": 926711750,
+      "html_url": "https://github.com/bolt-foundry/bolt-foundry/pull/1600",
+      "body": "\nCreate comprehensive implementation plan for the Evals evaluation platform frontend,\ntransforming the existing HTML prototype into a production-ready React ...",
+      "agent": "Claude_Code"
+    }
+  ]
+}

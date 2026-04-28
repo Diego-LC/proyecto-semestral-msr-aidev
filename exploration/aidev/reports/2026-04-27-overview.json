@@ -1,0 +1,195 @@
+{
+  "dataset": "hao-li/AIDev",
+  "capabilities": {
+    "preview": true,
+    "viewer": true,
+    "search": true,
+    "filter": true,
+    "statistics": true
+  },
+  "config_count": 18,
+  "total_rows": 2456073,
+  "total_parquet_bytes": 964775076,
+  "configs": [
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "all_pull_request",
+      "num_bytes_original_files": 330776130,
+      "num_bytes_parquet_files": 330776130,
+      "num_bytes_memory": 723474100,
+      "num_rows": 932791,
+      "num_columns": 14,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "pr_commit_details",
+      "num_bytes_original_files": 485214032,
+      "num_bytes_parquet_files": 485214032,
+      "num_bytes_memory": 1645480115,
+      "num_rows": 711923,
+      "num_columns": 14,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "pr_timeline",
+      "num_bytes_original_files": 34108415,
+      "num_bytes_parquet_files": 34108415,
+      "num_bytes_memory": 78564349,
+      "num_rows": 325500,
+      "num_columns": 8,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "all_repository",
+      "num_bytes_original_files": 6136253,
+      "num_bytes_parquet_files": 6136253,
+      "num_bytes_memory": 11569290,
+      "num_rows": 116211,
+      "num_columns": 7,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "pr_commits",
+      "num_bytes_original_files": 8314097,
+      "num_bytes_parquet_files": 8314097,
+      "num_bytes_memory": 14177997,
+      "num_rows": 88576,
+      "num_columns": 5,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "all_user",
+      "num_bytes_original_files": 2511706,
+      "num_bytes_parquet_files": 2511706,
+      "num_bytes_memory": 3908567,
+      "num_rows": 72189,
+      "num_columns": 5,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "pr_comments",
+      "num_bytes_original_files": 25857243,
+      "num_bytes_parquet_files": 25857243,
+      "num_bytes_memory": 65816071,
+      "num_rows": 39122,
+      "num_columns": 7,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "pr_task_type",
+      "num_bytes_original_files": 2993264,
+      "num_bytes_parquet_files": 2993264,
+      "num_bytes_memory": 6623329,
+      "num_rows": 33596,
+      "num_columns": 6,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "pull_request",
+      "num_bytes_original_files": 16855612,
+      "num_bytes_parquet_files": 16855612,
+      "num_bytes_memory": 38077982,
+      "num_rows": 33596,
+      "num_columns": 14,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "pr_reviews",
+      "num_bytes_original_files": 7517041,
+      "num_bytes_parquet_files": 7517041,
+      "num_bytes_memory": 18226240,
+      "num_rows": 28875,
+      "num_columns": 7,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "pr_review_comments_v2",
+      "num_bytes_original_files": 21125785,
+      "num_bytes_parquet_files": 21125785,
+      "num_bytes_memory": 55646892,
+      "num_rows": 26868,
+      "num_columns": 15,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "pr_review_comments",
+      "num_bytes_original_files": 14728130,
+      "num_bytes_parquet_files": 14728130,
+      "num_bytes_memory": 36728654,
+      "num_rows": 19450,
+      "num_columns": 15,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "human_pr_task_type",
+      "num_bytes_original_files": 715969,
+      "num_bytes_parquet_files": 715969,
+      "num_bytes_memory": 1468635,
+      "num_rows": 6618,
+      "num_columns": 6,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "human_pull_request",
+      "num_bytes_original_files": 4387171,
+      "num_bytes_parquet_files": 4387171,
+      "num_bytes_memory": 13407693,
+      "num_rows": 6618,
+      "num_columns": 13,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "related_issue",
+      "num_bytes_original_files": 75579,
+      "num_bytes_parquet_files": 75579,
+      "num_bytes_memory": 92141,
+      "num_rows": 4923,
+      "num_columns": 3,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "issue",
+      "num_bytes_original_files": 3222463,
+      "num_bytes_parquet_files": 3222463,
+      "num_bytes_memory": 7157084,
+      "num_rows": 4614,
+      "num_columns": 9,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "repository",
+      "num_bytes_original_files": 167251,
+      "num_bytes_parquet_files": 167251,
+      "num_bytes_memory": 293211,
+      "num_rows": 2807,
+      "num_columns": 7,
+      "estimated_num_rows": null
+    },
+    {
+      "dataset": "hao-li/AIDev",
+      "config": "user",
+      "num_bytes_original_files": 68935,
+      "num_bytes_parquet_files": 68935,
+      "num_bytes_memory": 99625,
+      "num_rows": 1796,
+      "num_columns": 5,
+      "estimated_num_rows": null
+    }
+  ]
+}
