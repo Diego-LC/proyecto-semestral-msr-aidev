@@ -4,7 +4,7 @@ La recomendación para un grupo de `2 personas` es trabajar con el desafío de `
 
 ## Propuesta Seleccionada
 
-`¿Cómo intervienen los humanos para rescatar pull requests creados por agentes de IA antes de que sean aceptados?`
+`¿Qué revela la intervención humana sobre la autonomía de los agentes de IA como contribuidores de software?`
 
 Razones:
 
