@@ -17,9 +17,9 @@ state = closed
 merged_at IS NULL
 ```
 
-Es decir, PRs que fueron cerrados y no llegaron a merge. Desde esa población se debe extraer una muestra que sea aleatoria, pero también equilibrada. Si se toma una muestra aleatoria simple, existe el riesgo de que la muestra quede dominada por los agentes, lenguajes o repositorios más frecuentes. Eso puede ocultar motivos de rechazo menos comunes, pero importantes.
+Es decir, PRs que fueron cerrados y no llegaron a merge. Desde esa población se debe extraer una muestra que sea aleatoria, pero también equilibrada. Si se toma una muestra aleatoria simple, existe el riesgo de que la muestra quede dominada por los agentes o niveles de complejidad más frecuentes. Eso puede ocultar motivos de rechazo menos comunes, pero importantes.
 
-Por eso se recomienda usar `muestreo aleatorio estratificado` (dividir la población en grupos comparables y luego tomar casos al azar dentro de cada grupo). Cada grupo se llama `estrato`. Por ejemplo, un estrato podría estar formado por PRs del mismo agente, lenguaje y nivel de complejidad.
+Por eso se recomienda usar `muestreo aleatorio estratificado` (dividir la población en grupos comparables y luego tomar casos al azar dentro de cada grupo). Cada grupo se llama `estrato`. En esta versión, un estrato estará formado solamente por PRs del mismo agente.
 
 Variables de control recomendadas:
 
@@ -35,11 +35,13 @@ Variables de control recomendadas:
 1. Filtrar todos los PRs rechazados.
 2. Agregar a cada PR sus variables de control: agente, lenguaje, complejidad, popularidad, periodo y tipo de tarea.
 3. Convertir variables numéricas en grupos simples. Por ejemplo, la complejidad puede quedar como baja, media o alta.
-4. Crear estratos combinando variables clave. Una combinación inicial razonable es:
+4. Crear estratos usando solo la variable clave:
 
 ```text
-agent + language + change_complexity_bin + created_period
+agent
 ```
+
+El lenguaje, la complejidad, la popularidad, el periodo y el tipo de tarea ya no forman parte del estrato principal para evitar fragmentar demasiado la muestra. Se conservan como variables de control posterior para revisar si la muestra quedó sesgada.
 
 5. Tomar PRs al azar dentro de cada estrato usando una semilla fija:
 
@@ -67,15 +69,18 @@ En palabras simples: si un grupo representa cerca del 20% de los PRs rechazados,
 
 Si la suma final supera el tamaño de muestra deseado, se reducen los estratos más grandes manteniendo el mínimo de los estratos pequeños.
 
-### Método Alternativo Si Hay Demasiados Estratos
+### Validación De Población Ampliada
 
-Si combinar muchas variables produce grupos demasiado pequeños, se recomienda simplificar el muestreo usando solo:
+Además de los PRs rechazados, es viable construir una población ampliada que incluya PRs mergeados solo después de retrabajo. Operacionalmente, esos casos deben marcarse aparte como `merged_after_rework`, no mezclarse como rechazos directos.
 
-```text
-agent + language + change_complexity_bin
-```
+La inclusión es posible con las tablas del dataset porque existen señales de:
 
-En ese caso, `repo_popularity_bin`, `created_period` y `task_type` no se usan para formar la muestra, pero sí se revisan después para confirmar que la muestra no quedó sesgada. Este control posterior consiste en comparar porcentajes entre el dataset completo y la muestra.
+- merge final: `pull_request.merged_at`;
+- cantidad de cambios: `pr_commits` y, si se carga, `pr_commit_details`;
+- revisión previa: `pr_reviews.state`, incluyendo `CHANGES_REQUESTED`, `COMMENTED` y `APPROVED`;
+- cambios posteriores a revisión: eventos `committed` o `head_ref_force_pushed` en `pr_timeline`.
+
+Regla práctica recomendada: incluir un PR mergeado en esta población ampliada si está cerrado y mergeado, tiene más de un cambio de código o un cambio posterior a una revisión humana, y además presenta señales de feedback/review antes del merge. Estos casos sirven para estudiar contribuciones que no fueron aceptadas de inmediato, pero deben analizarse como comparación de retrabajo, no como motivos de rechazo definitivo.
 
 ### Control De Calidad De La Muestra
 
@@ -92,11 +97,11 @@ Si la muestra se aleja demasiado del dataset original, se repite la extracción 
 
 Tamaño recomendado:
 
-- `n = 150` tarjetas para card sorting abierto inicial.
-- `n = 250-300` para etiquetado cerrado posterior si el tiempo lo permite.
-- Con población aproximada de `9.575` PRs rechazados, `n = 150` da un margen de error cercano a `8%` con 95% de confianza. El margen de error indica cuánta variación podría existir entre la muestra y la población completa. Con `n = 300`, el margen baja a cerca de `5.6%`.
+- `n = 300` PRs como muestra inicial amplia.
+- Luego filtrar o descartar los peores casos antes del card sorting, priorizando los que tengan evidencia textual insuficiente, solo título/body como respaldo o señales de baja calidad.
+- Con población aproximada de `9.575` PRs rechazados, `n = 300` da un margen de error cercano a `5.6%` con 95% de confianza. El margen de error indica cuánta variación podría existir entre la muestra y la población completa.
 
-No se debe interpretar la frecuencia de categorías como verdad absoluta del fenómeno si el card sorting se hace solo sobre `150` casos. La frecuencia sirve como señal descriptiva, no como prueba causal.
+No se debe interpretar la frecuencia de categorías como verdad absoluta del fenómeno si después del filtro manual queda una muestra más pequeña. La frecuencia sirve como señal descriptiva, no como prueba causal.
 
 ## Preparación De Datos
 
@@ -105,7 +110,7 @@ La preparación de datos debe producir una tabla final llamada `rejection_cards`
 Pasos recomendados:
 
 1. Cargar las tablas necesarias del dataset: `pull_request`, `repository`, `pr_reviews`, `pr_review_comments`, `pr_comments`, `pr_commits`, `pr_commit_details`, `pr_task_type` y, si aplica, `pr_timeline`.
-2. Filtrar solo PRs rechazados usando `state = closed` y `merged_at IS NULL`.
+2. Filtrar PRs rechazados usando `state = closed` y `merged_at IS NULL`. Si se activa la población ampliada, agregar también PRs `merged_after_rework` bajo una columna separada `population_case_type`.
 3. Agregar contexto de cada PR: agente, lenguaje, repositorio, fecha de creación, fecha de cierre, cantidad de commits, tamaño del cambio y tipo de tarea.
 4. Extraer evidencia textual desde comentarios de revisión, comentarios inline, comentarios generales, título y descripción del PR.
 5. Crear tarjetas con identificador único. Si un PR tiene dos razones de rechazo claramente distintas, crear dos tarjetas con el mismo `pr_id` pero distinto `card_id`, por ejemplo `PR123-A` y `PR123-B`.
@@ -130,6 +135,23 @@ evidence_text
 evidence_source
 context_summary
 needs_manual_context_check
+evidence_quality_score
+discard_candidate_reason
+all_evidence_text
+changes_requested_text
+review_comment_text
+pr_comment_text
+timeline_text
+review_count
+human_review_count
+bot_review_count
+approved_review_count
+changes_requested_review_count
+commented_review_count
+review_comment_count
+pr_comment_count
+textual_evidence_count
+non_pr_textual_evidence_count
 ```
 
 Reglas de limpieza:
@@ -140,6 +162,7 @@ Reglas de limpieza:
 - Limpiar Markdown excesivo, logs largos, stack traces repetidos y texto generado automáticamente, pero conservar fragmentos técnicos que expliquen el rechazo.
 - Si un PR tiene varias evidencias, priorizar en este orden: `CHANGES_REQUESTED`, comentario humano inline, comentario humano general, comentario bot, body/título.
 - Guardar siempre el texto original y el texto limpio para trazabilidad.
+- Guardar columnas de calidad para filtrar la muestra inicial de 300: `discard_candidate_reason`, `evidence_quality_score`, `needs_manual_context_check` y conteos de evidencia textual.
 
 La tarjeta debe representar una sola idea principal. Esto facilita el card sorting, porque cada tarjeta se puede mover a una categoría sin mezclar varios problemas distintos.
 
@@ -260,7 +283,8 @@ Cautela metodológica:
 
 - Se usará card sorting abierto para descubrir categorías y etiquetado cerrado para validarlas.
 - La unidad primaria será una tarjeta por motivo de rechazo, no necesariamente una tarjeta por PR si hay múltiples motivos claros.
-- Se trabajará inicialmente con `n = 150` tarjetas y, si el tiempo alcanza, se extenderá a `n = 300`.
-- La muestra será estratificada por agente, lenguaje, complejidad, popularidad del repositorio y periodo temporal.
+- Se trabajará inicialmente con `n = 300` PRs y luego se filtrarán los casos con peor evidencia antes del card sorting final.
+- La muestra será estratificada solo por agente. Lenguaje, complejidad, popularidad del repositorio, periodo temporal y tipo de tarea serán variables de control posterior.
+- Es posible incluir PRs mergeados después de retrabajo, pero deben quedar marcados como `merged_after_rework` y analizarse separados de los rechazos definitivos.
 - `Labeling Machine` se usará como herramienta de registro y etiquetado, no como herramienta automática de descubrimiento de categorías.
 - La salida final será una taxonomía jerárquica, un dataset etiquetado y un análisis de patrones de rechazo y esfuerzo de corrección.
