@@ -1,0 +1,56 @@
+{
+  "input_csv": "exploration\\aidev\\preparation\\outputs\\rejection_cards_seed_20260510.csv",
+  "output_csv": "exploration\\aidev\\labeling_machine\\outputs\\rejection_cards_for_labeling_machine.csv",
+  "schema_json": "exploration\\aidev\\labeling_machine\\outputs\\labeling_machine_schema.json",
+  "summary_json": "exploration\\aidev\\labeling_machine\\outputs\\rejection_cards_for_labeling_machine_summary.json",
+  "row_count": 300,
+  "manual_context_check_count": 97,
+  "agent_counts": {
+    "Claude_Code": 4,
+    "Copilot": 72,
+    "Cursor": 14,
+    "Devin": 87,
+    "OpenAI_Codex": 123
+  },
+  "language_counts": {
+    "TypeScript": 96,
+    "Python": 50,
+    "Astro": 1,
+    "Rust": 14,
+    "PowerShell": 2,
+    "C#": 22,
+    "C++": 8,
+    "TypeSpec": 1,
+    "C": 4,
+    "Go": 52,
+    "": 1,
+    "CMake": 1,
+    "HTML": 4,
+    "Kotlin": 5,
+    "Shell": 2,
+    "JavaScript": 13,
+    "MDX": 2,
+    "Jupyter Notebook": 1,
+    "Ruby": 3,
+    "PHP": 2,
+    "Zig": 7,
+    "Java": 2,
+    "Swift": 1,
+    "Dart": 2,
+    "Elixir": 1,
+    "Circom": 1,
+    "QML": 1,
+    "Lua": 1
+  },
+  "complexity_counts": {
+    "low": 102,
+    "medium": 94,
+    "high": 104
+  },
+  "evidence_source_counts": {
+    "pr_review": 32,
+    "pr_comment": 143,
+    "pr_review_comment": 28,
+    "pull_request": 97
+  }
+}
