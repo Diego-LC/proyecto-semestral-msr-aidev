@@ -17,6 +17,9 @@ __pycache__/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# Local qualitative labeling drafts
+exploration/aidev/preparation/outputs/rejection_cards_seed_20260510_manual_categories.csv
+
 # VSCode
 .vscode/
 
