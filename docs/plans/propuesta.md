@@ -46,7 +46,7 @@ El análisis se centra en los PRs del subset `pull_request` del dataset `AIDev` 
 - `state = 'closed'`
 - `merged_at IS NULL` (rechazados, no mergeados)
 
-Con ~9.575 PRs rechazados, un análisis manual exhaustivo no es viable. Se tomará una **muestra aleatoria estratificada por agente** de aproximadamente **100–150 PRs**, lo que corresponde a un margen de error del ~10% con 95% de confianza sobre una población finita. Esta muestra es el universo del card sorting.
+Con ~9.575 PRs rechazados, un análisis manual exhaustivo no es viable. Se tomará una **muestra aleatoria estratificada solo por agente** de **300 PRs** como muestra inicial. Luego se filtrarán los casos con peor evidencia textual antes del card sorting final. Lenguaje, complejidad del cambio y tipo de tarea quedan como variables de control posterior, no como estratos.
 
 Las consultas de extracción se ejecutarán directamente en SQL sobre los archivos Parquet del dataset mediante DuckDB:
 
@@ -68,7 +68,7 @@ WHERE pr.state    = 'closed'
   AND pr.merged_at IS NULL
   AND r.body IS NOT NULL
 ORDER BY random()
-LIMIT 150;
+LIMIT 300;
 ```
 
 Para cada PR en la muestra se generará una **tarjeta** con:
@@ -80,6 +80,8 @@ Para cada PR en la muestra se generará una **tarjeta** con:
 | Fragmento del comentario de rechazo | `pr_reviews.body` o `pr_review_comments.body` |
 | URL en GitHub | `pull_request.html_url` |
 | Lenguaje del repositorio | `repository.language` |
+| Complejidad del cambio | `commit_count` o `pr_commit_details` agrupado en baja, media y alta |
+| Señales de calidad de evidencia | conteos de reviews/comentarios, `CHANGES_REQUESTED`, texto agregado y flag de descarte |
 
 Las tarjetas se exportan como CSV/JSON para ser cargadas en la herramienta de clasificación (ver sección siguiente).
 
@@ -89,7 +91,7 @@ Se aplica **card sorting abierto** (Zimmermann, "Card-sorting: From text to them
 
 #### Fase 1 — Preparación
 
-1. Extraer la muestra de PRs rechazados mediante la consulta SQL anterior.
+1. Extraer la muestra inicial de 300 PRs rechazados mediante la consulta SQL anterior.
 2. Revisar cada PR en GitHub para leer el contexto completo de la discusión (no solo el texto extraído del dataset).
 3. Generar una tarjeta por PR con el fragmento de texto más representativo de la razón de rechazo.
 4. Cargar las tarjetas en la herramienta de clasificación.
@@ -120,6 +122,8 @@ Para los PRs rechazados que **eventualmente fueron aceptados** (en el mismo PR r
 - Estas métricas se desglosan **por categoría de rechazo** obtenida del card sorting.
 
 La asociación entre un PR rechazado y su re-envío aceptado se realiza cruzando `related_issue.issue_id` y `repository.repo_id` para identificar PRs del mismo issue en el mismo repositorio.
+
+Además, es viable incluir en una población ampliada PRs que sí fueron mergeados, pero solo después de modificaciones al código. Estos casos se identifican con `pull_request.merged_at`, múltiples commits o eventos de `pr_timeline` posteriores a revisión, y señales de feedback en `pr_reviews` o comentarios. Deben marcarse como `merged_after_rework` y analizarse separados de los rechazos definitivos, porque no representan rechazo final sino aceptación no inmediata.
 
 ```sql
 -- Tiempo de resolución: del primer PR rechazado al merge final, por issue
@@ -179,7 +183,7 @@ La estructura final puede diferir sustancialmente de esta tabla inicial.
 
 ## Limitaciones
 
-- **Tamaño de la muestra**: la muestra de ~100–150 PRs es representativa con margen de error del 10%. Conclusiones sobre el universo completo deben tomarse con cautela.
+- **Tamaño de la muestra**: la muestra inicial de 300 PRs reduce el margen de error aproximado frente a 150, pero el filtro posterior puede disminuir el tamaño efectivo. Conclusiones sobre el universo completo deben tomarse con cautela.
 - **Inter-rater agreement**: sin métricas formales de acuerdo entre codificadores (Cohen's kappa), el riesgo de sesgo subjetivo en el card sorting es real. Se mitiga con calibración conjunta y revisión cruzada.
 - **PRs abandonados sin comentario**: un subconjunto de PRs rechazados no tiene texto de revisión disponible. Estos no son clasificables por card sorting y se reportarán como una categoría especial ("sin evidencia textual").
 - **Rastreo de re-envíos**: algunos PRs rechazados se re-envían como un PR nuevo en lugar de reabrirse. Trazar automáticamente esta relación depende de que ambos PRs estén asociados al mismo issue en `related_issue`, lo que no siempre ocurre.

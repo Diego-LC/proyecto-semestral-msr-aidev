@@ -17,10 +17,16 @@ Esto es suficiente para entender la estructura del dataset y decidir después si
 
 - [inspect_aidev.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/inspect_aidev.py): CLI para overview, preview, profile y search.
 - [pr_activity.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/pr_activity.py): helper para cargar URLs Parquet y resumir actividad por PR al cruzar `pull_request`, `pr_commits` y `pr_reviews`.
+- [sampling/README.md](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/sampling/README.md): primera implementación del muestreo aleatorio estratificado para PRs rechazados.
+- [preparation/README.md](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/preparation/README.md): preparación de `rejection_cards` con evidencia textual para card sorting.
+- [labeling_machine/README.md](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/labeling_machine/README.md): exportación e integración con Labeling Machine para etiquetar motivos de rechazo.
 - [notebooks/2026-04-27-pr-activity-exploration.ipynb](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/notebooks/2026-04-27-pr-activity-exploration.ipynb): notebook inicial con joins y gráficos básicos.
 - [requirements-notebook.txt](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/requirements-notebook.txt): dependencias para ejecutar el notebook.
 - [tests/test_inspect_aidev.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/tests/test_inspect_aidev.py): tests de la lógica de agregación.
 - [tests/test_pr_activity.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/tests/test_pr_activity.py): tests para el cruce entre PRs, commits y reviews.
+- [tests/test_stratified_sampler.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/tests/test_stratified_sampler.py): tests para cuotas, fallback y reproducibilidad del muestreo estratificado.
+- [tests/test_rejection_cards.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/tests/test_rejection_cards.py): tests para limpieza y selección de evidencia textual.
+- [tests/test_labeling_machine_adapter.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/tests/test_labeling_machine_adapter.py): tests del export compatible con Labeling Machine.
 - `reports/`: resultados de corridas reales guardadas como referencia.
 
 ## Fuentes

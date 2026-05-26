@@ -1,0 +1,151 @@
+{% extends "common_pages/common_layout.html" %}
+
+{% block headerStuff %}
+    <link href="{{ url_for('static', filename='css/artifact_common.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+    <div class="header">
+        <div style="">
+            <button class="btn btn-sm btn-outline-danger"
+                    type="submit"
+                    id="fpBtn"
+                    onclick="ToggleFlagBtn({{ artifact_id }})"
+                    title="This artifact is irrelevant to our aim"
+                    style="">Flag (?)
+            </button>
+
+            <button class="btn btn-sm btn-outline-info"
+                    type="submit"
+                    id="interestingBtn"
+                    onclick="ToggleInterestingBtn({{ artifact_id }})"
+                    title="This artifact seems a good example to be discussed in the paper"
+                    style="">Interesting (?)
+            </button>
+        </div>
+        <div style="width: 25%">
+            <div style="text-align: center; font-size: small;">
+                {{ overall_labeling_status['n_artifacts_labeled'] }}
+                out of
+                {{ overall_labeling_status['n_artifacts_to_be_labeled'] }} | <em>{{ overall_labeling_status['source_name'] }}</em>
+            </div>
+            <div class="progress">
+                <div id="top-progress-bar-status" class="progress-bar" role="progressbar" style="width: 0%;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-outline-success"
+                type="submit"
+                id="next-skip-btn"
+                onclick="skip_next_artifact()"
+                style="width: 15%"> Skip
+        </button>
+
+    </div>
+
+    <div class="headerPadding">
+        {% block artifact_content %}
+        {% endblock %}
+    </div>
+
+    <div class="lower-panel fixed-bottom">
+        <form id="form1">
+            <div class="form-row align-items-end">
+                <div class="form-group col-md-3 mb-2">
+                    <label for="category_parent" class="text-white mb-1">Main category</label>
+                    <input class="form-control" list="existing_categories" name="category_parent" id="category_parent"
+                           placeholder="e.g. insufficient tests">
+                    <datalist id="existing_categories">
+                        {% for item in existing_labeling_data %}
+                            <option value="{{ item }}"></option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label for="subcategory" class="text-white mb-1">Subcategory</label>
+                    <input class="form-control" name="subcategory" id="subcategory"
+                           placeholder="optional detail">
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label for="confidence" class="text-white mb-1">Confidence</label>
+                    <select class="form-control" name="confidence" id="confidence">
+                        <option value=""></option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3 mb-2">
+                    <label for="rationale" class="text-white mb-1">Rationale</label>
+                    <textarea class="form-control" name="rationale" id="rationale" rows="2"
+                              placeholder="short reason for this label"></textarea>
+                </div>
+                <div class="form-group col-md-1 mb-2 text-white">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="true" id="needs_discussion">
+                        <label class="form-check-label" for="needs_discussion">Discuss</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-1 mb-2">
+                    <button type="button" id="submit_btn" form="form1" class="btn btn-primary btn-block" disabled>
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scriptsStuff %}
+
+    <script>
+
+        function updateSubmitButton() {
+            let hasRequiredFields = $('#category_parent').val().trim() !== ""
+                && $('#confidence').val().trim() !== ""
+                && $('#rationale').val().trim() !== "";
+            if (hasRequiredFields)
+                $("#submit_btn").removeAttr('disabled');
+            else
+                $("#submit_btn").attr('disabled', "");
+        }
+
+        $(document).ready(function () {
+            window.startTime = (new Date()).getTime();
+            document.getElementById('navbar-labeling').classList.add('active');
+            document.getElementById('navbar-labeling').setAttribute('href', '#');
+            InitProgressbar({{ overall_labeling_status['n_artifacts_labeled'] }},
+                {{ overall_labeling_status['n_artifacts_to_be_labeled'] }});
+            InitFlagBtn({{ artifact_id }});
+            InitInterestingBtn({{ artifact_id }});
+
+            $('#category_parent, #confidence, #rationale').on('input change', updateSubmitButton);
+
+            $("#submit_btn").click(function () {
+                let data_json = {
+                    artifact_id: {{ artifact_id }},
+                    category_parent: $('#category_parent').val(),
+                    subcategory: $('#subcategory').val(),
+                    confidence: $('#confidence').val(),
+                    rationale: $('#rationale').val(),
+                    needs_discussion: $('#needs_discussion').is(':checked') ? 'true' : 'false',
+                    duration: get_elapsed_seconds()
+                };
+                $.post("/label", data_json, function (response) {
+                    ShowNotification(response['status'], "success");
+                    ChangeSkipToNext();
+                });
+            });
+
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/notification.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/header.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/commonFunc.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/bootstrap-confirmation.min.js') }}"></script>
+{% endblock %}

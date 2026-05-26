@@ -1,0 +1,63 @@
+{% extends "labeling_pages/labeling_layout.html" %}
+
+
+{% block artifact_content %}
+    <div class="container" style="max-width: 1100px; padding-bottom: 260px;">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+                <h1>Rejected PR Card {{ artifact_data.card_id }}</h1>
+                <p class="text-muted mb-1">Artifact {{ artifact_id }} · PR {{ artifact_data.pr_id }}</p>
+            </div>
+            {% if artifact_data.html_url %}
+                <a class="btn btn-outline-primary" href="{{ artifact_data.html_url }}" target="_blank">
+                    Open PR
+                </a>
+            {% endif %}
+        </div>
+
+        {% if all_taggers is not none and all_taggers | length > 0 %}
+            <div class="alert alert-secondary py-2">Already labeled by: {{ all_taggers }}</div>
+        {% endif %}
+
+        {% if artifact_data.needs_manual_context_check %}
+            <div class="alert alert-warning">
+                This card may require manual context review because the automatic evidence is weak or comes only from the PR description.
+            </div>
+        {% endif %}
+
+        <div class="card mb-3">
+            <div class="card-header">Evidence To Classify</div>
+            <div class="card-body">
+                <p style="white-space: pre-wrap; font-size: 1.05rem;">{{ artifact_data.evidence_text }}</p>
+                <hr>
+                <p class="mb-0"><strong>Context:</strong> {{ artifact_data.context_summary }}</p>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">Metadata</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4"><strong>Agent:</strong> {{ artifact_data.agent or "unknown" }}</div>
+                    <div class="col-md-4"><strong>Language:</strong> {{ artifact_data.language or "unknown" }}</div>
+                    <div class="col-md-4"><strong>Task:</strong> {{ artifact_data.task_type or "unknown" }}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4"><strong>Complexity:</strong> {{ artifact_data.complexity_bin or "unknown" }}</div>
+                    <div class="col-md-4"><strong>Popularity:</strong> {{ artifact_data.repo_popularity_bin or "unknown" }}</div>
+                    <div class="col-md-4"><strong>Commits:</strong> {{ artifact_data.commit_count or "unknown" }}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4"><strong>Evidence source:</strong> {{ artifact_data.evidence_source or "unknown" }}</div>
+                    <div class="col-md-4"><strong>Review state:</strong> {{ artifact_data.review_state or "unknown" }}</div>
+                    <div class="col-md-4"><strong>Evidence count:</strong> {{ artifact_data.evidence_count or "unknown" }}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4"><strong>Opened:</strong> {{ artifact_data.created_at or "unknown" }}</div>
+                    <div class="col-md-4"><strong>Closed:</strong> {{ artifact_data.closed_at or "unknown" }}</div>
+                    <div class="col-md-4"><strong>Evidence user:</strong> {{ artifact_data.evidence_user or "unknown" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
