@@ -264,3 +264,24 @@ Cautela metodológica:
 - La muestra será estratificada por agente, lenguaje, complejidad, popularidad del repositorio y periodo temporal.
 - `Labeling Machine` se usará como herramienta de registro y etiquetado, no como herramienta automática de descubrimiento de categorías.
 - La salida final será una taxonomía jerárquica, un dataset etiquetado y un análisis de patrones de rechazo y esfuerzo de corrección.
+
+
+### Comentarios del profesor 12-05
+- Proyecto
+- Metodologia
+    * Filtro de Datos: (Filtros, muestra (1000 -> 300 + 15 -> 315))
+    * Cómo analizarlo: (Cómo, 15 casos)
+
+Metodologia: 
+- Objetivos
+- Preguntas
+- Como respondo
+
+Goal standard: se tiene un conjunto de datos que antes no tenia etiquetas y ahora si. Se puede crear un modelo con la muestra inicial y al validarlo se puede hacer con el total de datos.
+
+Hacer clasificacion solo por agente, no por complejidad de cada agente independiente.
+Nos interesan dos casos: 
+- PR Rechazado? no se sabe si existe rechazo en primera instancia -> PR Aceptado (cuenta con: "created_at", "closed_at" y "merged_at")
+- PR Rechazado -> PR Rechazado (solo tenemos "created_at", "closed_at")
+
+deberiamos avanzar hasta llegar a los 15 casos de resultado.
