@@ -1,24 +1,25 @@
-# Rejection Cards Preparation
+# AIDev Cards Preparation
 
-Esta carpeta implementa la fase de preparación de datos para el card sorting de PRs rechazados.
+Esta carpeta implementa la fase de preparación de datos para el análisis manual de PRs de AIDev.
 
 Entrada principal:
 
-- `exploration/aidev/sampling/outputs/rejection_sample_seed_20260510.csv`
+- `exploration/aidev/sampling/outputs/merged_after_rework_sample.csv`
 
 Salida principal:
 
-- `exploration/aidev/preparation/outputs/rejection_cards_seed_20260510.csv`
-- `exploration/aidev/preparation/outputs/rejection_cards_seed_20260510_summary.json`
+- `exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv`
+- `exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json`
 
 ## Qué hace
 
 El script [rejection_cards.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/preparation/rejection_cards.py):
 
-- carga la muestra estratificada de PRs rechazados;
+- carga la muestra estratificada de PRs;
 - carga evidencia textual desde `pr_reviews`, `pr_review_comments`, `pr_comments` y `pr_timeline`;
 - selecciona la evidencia más útil para explicar el rechazo;
 - construye una fila tipo tarjeta por PR;
+- filtra la salida final a tarjetas con `human_comment_count > 0`;
 - agrega columnas con señales de revisión, comentarios y calidad de evidencia;
 - marca casos que requieren revisión manual de contexto o descarte.
 
@@ -114,9 +115,11 @@ evidence_count
 
 Para depurar la muestra inicial de 300 casos, revisar primero `discard_candidate_reason`, `evidence_quality_score`, `needs_manual_context_check` y `non_pr_textual_evidence_count`.
 
+La salida escrita por defecto conserva solo filas con `human_comment_count > 0`, porque esas tarjetas tienen al menos un comentario humano asociado al PR.
+
 ## Uso
 
-Para ejecutar la preparación usando la muestra ya generada:
+Para ejecutar la preparación usando la muestra por defecto ya generada:
 
 ```bash
 python3 exploration/aidev/preparation/rejection_cards.py

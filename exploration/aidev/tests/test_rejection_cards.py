@@ -6,6 +6,7 @@ from exploration.aidev.preparation.rejection_cards import (
     build_rejection_card,
     clean_evidence_text,
     evidence_for_pr,
+    filter_cards_with_human_comments,
     select_best_evidence,
 )
 
@@ -156,6 +157,19 @@ class BuildRejectionCardTests(unittest.TestCase):
 
         self.assertEqual(card["needs_manual_context_check"], "true")
         self.assertEqual(card["evidence_source"], "sin_evidencia_suficiente")
+
+
+class FilterCardsWithHumanCommentsTests(unittest.TestCase):
+    def test_filter_cards_with_human_comments_keeps_numeric_positive_counts(self):
+        cards = [
+            {"card_id": "1-A", "human_comment_count": "2"},
+            {"card_id": "2-A", "human_comment_count": "0"},
+            {"card_id": "3-A", "human_comment_count": ""},
+        ]
+
+        filtered = filter_cards_with_human_comments(cards)
+
+        self.assertEqual([card["card_id"] for card in filtered], ["1-A"])
 
 
 if __name__ == "__main__":
