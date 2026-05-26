@@ -26,7 +26,15 @@ DEFAULT_FALLBACK_STRATA_FIELDS = ["agent"]
 DEFAULT_MAX_LANGUAGE_VALUES = 8
 POPULATION_REJECTED = "rejected"
 POPULATION_REJECTED_OR_REWORKED_MERGED = "rejected-or-reworked-merged"
-DEFAULT_POPULATION_MODE = POPULATION_REJECTED
+POPULATION_MERGED_AFTER_REWORK = "merged-after-rework"
+POPULATION_NOT_IMMEDIATELY_ACCEPTED = "not-immediately-accepted"
+DEFAULT_POPULATION_MODE = POPULATION_MERGED_AFTER_REWORK
+DEFAULT_OUTPUT_CSV = Path(
+    "exploration/aidev/sampling/outputs/merged_after_rework_sample.csv"
+)
+DEFAULT_SUMMARY_JSON = Path(
+    "exploration/aidev/sampling/outputs/merged_after_rework_sample_summary.json"
+)
 UNKNOWN_VALUE = "unknown"
 OTHER_VALUE = "other"
 
@@ -109,11 +117,26 @@ def is_reworked_merged_pr(row: Dict) -> bool:
     return code_change_signal and review_or_feedback_signal
 
 
+def population_mode_includes_rejected(population_mode: str) -> bool:
+    return population_mode in {
+        POPULATION_REJECTED,
+        POPULATION_REJECTED_OR_REWORKED_MERGED,
+    }
+
+
+def population_mode_includes_reworked_merged(population_mode: str) -> bool:
+    return population_mode in {
+        POPULATION_REJECTED_OR_REWORKED_MERGED,
+        POPULATION_MERGED_AFTER_REWORK,
+        POPULATION_NOT_IMMEDIATELY_ACCEPTED,
+    }
+
+
 def classify_population_case(row: Dict, population_mode: str) -> str:
-    if is_rejected_pr(row):
+    if population_mode_includes_rejected(population_mode) and is_rejected_pr(row):
         return "rejected"
     if (
-        population_mode == POPULATION_REJECTED_OR_REWORKED_MERGED
+        population_mode_includes_reworked_merged(population_mode)
         and is_reworked_merged_pr(row)
     ):
         return "merged_after_rework"
@@ -603,7 +626,7 @@ def load_pr_population_from_aidev(
         ) from exc
 
     configs = ["pull_request", "repository", "pr_commits", "pr_reviews", "pr_task_type"]
-    if population_mode == POPULATION_REJECTED_OR_REWORKED_MERGED:
+    if population_mode_includes_reworked_merged(population_mode):
         configs.append("pr_timeline")
     if include_commit_details:
         configs.append("pr_commit_details")
@@ -763,12 +786,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-csv",
         type=Path,
-        default=Path("exploration/aidev/sampling/outputs/rejection_sample.csv"),
+        default=DEFAULT_OUTPUT_CSV,
     )
     parser.add_argument(
         "--summary-json",
         type=Path,
-        default=Path("exploration/aidev/sampling/outputs/rejection_sample_summary.json"),
+        default=DEFAULT_SUMMARY_JSON,
     )
     parser.add_argument("--sample-size", type=int, default=DEFAULT_SAMPLE_SIZE)
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
@@ -777,11 +800,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--fallback-strata", nargs="+", default=DEFAULT_FALLBACK_STRATA_FIELDS)
     parser.add_argument(
         "--population-mode",
-        choices=[POPULATION_REJECTED, POPULATION_REJECTED_OR_REWORKED_MERGED],
+        choices=[
+            POPULATION_REJECTED,
+            POPULATION_REJECTED_OR_REWORKED_MERGED,
+            POPULATION_MERGED_AFTER_REWORK,
+            POPULATION_NOT_IMMEDIATELY_ACCEPTED,
+        ],
         default=DEFAULT_POPULATION_MODE,
         help=(
-            "Use only closed non-merged PRs, or also include merged PRs with "
-            "review/rework signals."
+            "Use closed non-merged PRs, merged PRs with review/rework signals, "
+            "or both."
         ),
     )
     parser.add_argument(

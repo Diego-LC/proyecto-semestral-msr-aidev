@@ -1,6 +1,6 @@
-# Stratified Sampling for Rejected AIDev PRs
+# Stratified Sampling for AIDev PRs
 
-Esta carpeta implementa la primera parte de la actividad: extraer una muestra aleatoria estratificada de PRs rechazados para preparar el card sorting.
+Esta carpeta implementa la primera parte de la actividad: extraer una muestra aleatoria estratificada de PRs de AIDev para preparar el análisis manual.
 
 El muestreo se ubica dentro de `exploration/aidev` porque depende directamente del dataset `hao-li/AIDev` y reutiliza utilidades existentes para acceder a los Parquet oficiales.
 
@@ -8,7 +8,7 @@ El muestreo se ubica dentro de `exploration/aidev` porque depende directamente d
 
 El script [stratified_sampler.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/sampling/stratified_sampler.py):
 
-- filtra PRs rechazados (`state = closed` y `merged_at IS NULL`);
+- por defecto filtra PRs mergeados después de retrabajo (`population_case_type = merged_after_rework`);
 - agrega variables de control para revisar sesgos posteriores;
 - calcula cuotas proporcionales con mínimo por estrato;
 - mantiene lenguaje, popularidad, periodo y tipo de tarea como variables de control para revisar sesgos;
@@ -46,7 +46,7 @@ Si se fuerza manualmente una estratificación que incluya `language`, el script 
 
 ## Uso con AIDev
 
-Para generar una muestra real desde los Parquet oficiales:
+Para generar una muestra real desde los Parquet oficiales, usando la población por defecto `merged-after-rework`:
 
 ```bash
 python3 exploration/aidev/sampling/stratified_sampler.py \
@@ -54,8 +54,8 @@ python3 exploration/aidev/sampling/stratified_sampler.py \
   --sample-size 300 \
   --min-per-stratum 3 \
   --seed 20260510 \
-  --output-csv exploration/aidev/sampling/outputs/rejection_sample.csv \
-  --summary-json exploration/aidev/sampling/outputs/rejection_sample_summary.json
+  --output-csv exploration/aidev/sampling/outputs/merged_after_rework_sample.csv \
+  --summary-json exploration/aidev/sampling/outputs/merged_after_rework_sample_summary.json
 ```
 
 El script requiere `pandas` y `pyarrow` para leer Parquet. Si faltan:
@@ -84,9 +84,27 @@ id,state,merged_at,agent,created_at
 
 Si incluye `commit_count`, el script deriva `change_complexity_bin` para control posterior. Si incluye `language`, `stars` o `task_type`, esas variables se usan como controles en el resumen, no como estratos por defecto.
 
-## Población ampliada opcional
+## Modos de población
 
-Por defecto se usan solo PRs rechazados (`state = closed` y `merged_at IS NULL`). Para validar una población inicial más amplia que incluya PRs mergeados solo después de retrabajo, se puede usar:
+Por defecto se usan PRs que finalmente fueron mergeados, pero solo después de señales de retrabajo:
+
+```text
+--population-mode merged-after-rework
+```
+
+El script marca esos casos como `population_case_type = merged_after_rework` cuando hay merge, más de un cambio de código o cambio posterior a revisión, y señales de feedback/review antes de la aceptación.
+
+Para analizar solo PRs rechazados definitivos, usar:
+
+```bash
+python3 exploration/aidev/sampling/stratified_sampler.py \
+  --source aidev \
+  --population-mode rejected \
+  --sample-size 300 \
+  --dry-run
+```
+
+Para validar una población inicial más amplia que incluya PRs rechazados y PRs mergeados después de retrabajo, usar:
 
 ```bash
 python3 exploration/aidev/sampling/stratified_sampler.py \
@@ -96,7 +114,17 @@ python3 exploration/aidev/sampling/stratified_sampler.py \
   --dry-run
 ```
 
-El script marca esos casos como `population_case_type = merged_after_rework` cuando hay merge, más de un cambio de código o cambio posterior a revisión, y señales de feedback/review antes de la aceptación. Es una inclusión viable, pero metodológicamente debe analizarse como grupo separado de los `rejected`.
+El modo `not-immediately-accepted` queda disponible como alias de la población `merged-after-rework`:
+
+```bash
+python3 exploration/aidev/sampling/stratified_sampler.py \
+  --source aidev \
+  --population-mode not-immediately-accepted \
+  --sample-size 300 \
+  --dry-run
+```
+
+Este modo incluye únicamente casos `population_case_type = merged_after_rework`.
 
 ## Salidas
 

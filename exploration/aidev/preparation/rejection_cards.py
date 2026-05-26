@@ -18,13 +18,13 @@ from exploration.aidev.pr_activity import get_parquet_urls
 
 
 DEFAULT_SAMPLE_CSV = Path(
-    "exploration/aidev/sampling/outputs/rejection_sample.csv"
+    "exploration/aidev/sampling/outputs/merged_after_rework_sample.csv"
 )
 DEFAULT_OUTPUT_CSV = Path(
-    "exploration/aidev/preparation/outputs/rejection_cards_seed_20260510.csv"
+    "exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv"
 )
 DEFAULT_SUMMARY_JSON = Path(
-    "exploration/aidev/preparation/outputs/rejection_cards_seed_20260510_summary.json"
+    "exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json"
 )
 CARD_FIELDS = [
     "card_id",
@@ -728,9 +728,21 @@ def build_rejection_cards(sample_rows: Sequence[Dict], indexes: Dict[str, Dict[s
     return cards
 
 
-def summarize_cards(cards: Sequence[Dict]) -> Dict:
+def filter_cards_with_human_comments(cards: Sequence[Dict]) -> List[Dict]:
+    return [
+        dict(card)
+        for card in cards
+        if to_int(card.get("human_comment_count")) > 0
+    ]
+
+
+def summarize_cards(cards: Sequence[Dict], source_card_count: Optional[int] = None) -> Dict:
+    source_count = len(cards) if source_card_count is None else source_card_count
     return {
         "card_count": len(cards),
+        "source_card_count": source_count,
+        "filtered_out_without_human_comments": source_count - len(cards),
+        "filter_rule": "human_comment_count > 0",
         "manual_context_check_count": sum(
             1 for card in cards if card.get("needs_manual_context_check") == "true"
         ),
@@ -751,7 +763,7 @@ def summarize_cards(cards: Sequence[Dict]) -> Dict:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Prepare rejection card rows from a sampled set of rejected AIDev PRs."
+        description="Prepare card rows from a sampled set of AIDev PRs."
     )
     parser.add_argument("--sample-csv", type=Path, default=DEFAULT_SAMPLE_CSV)
     parser.add_argument("--output-csv", type=Path, default=DEFAULT_OUTPUT_CSV)
@@ -765,12 +777,13 @@ def main() -> None:
     sample_rows = load_csv_rows(args.sample_csv)
     tables = load_evidence_tables()
     indexes = build_evidence_indexes(tables)
-    cards = build_rejection_cards(sample_rows, indexes)
+    source_cards = build_rejection_cards(sample_rows, indexes)
+    cards = filter_cards_with_human_comments(source_cards)
     summary = {
         "sample_csv": str(args.sample_csv),
         "output_csv": str(args.output_csv),
         "summary_json": str(args.summary_json),
-        **summarize_cards(cards),
+        **summarize_cards(cards, source_card_count=len(source_cards)),
     }
 
     if args.dry_run:

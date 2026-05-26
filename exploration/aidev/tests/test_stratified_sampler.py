@@ -3,7 +3,9 @@ import unittest
 
 from exploration.aidev.sampling.stratified_sampler import (
     DEFAULT_FALLBACK_STRATA_FIELDS,
+    DEFAULT_POPULATION_MODE,
     DEFAULT_STRATA_FIELDS,
+    POPULATION_MERGED_AFTER_REWORK,
     allocate_stratified_quotas,
     build_stratum_key,
     choose_supported_strata_fields,
@@ -12,6 +14,7 @@ from exploration.aidev.sampling.stratified_sampler import (
     filter_rejected_prs,
     has_field_in_candidates,
     is_reworked_merged_pr,
+    population_mode_includes_reworked_merged,
     stratified_sample,
     unique_candidates,
 )
@@ -35,6 +38,9 @@ class StratumKeyTests(unittest.TestCase):
     def test_default_strata_use_agent_only(self):
         self.assertEqual(DEFAULT_STRATA_FIELDS, ["agent"])
         self.assertEqual(DEFAULT_FALLBACK_STRATA_FIELDS, ["agent"])
+
+    def test_default_population_uses_merged_after_rework(self):
+        self.assertEqual(DEFAULT_POPULATION_MODE, POPULATION_MERGED_AFTER_REWORK)
 
     def test_build_stratum_key_normalizes_missing_values(self):
         row = {"agent": "Claude_Code", "language": None, "change_complexity_bin": ""}
@@ -87,6 +93,29 @@ class PopulationFilterTests(unittest.TestCase):
             [row["population_case_type"] for row in population],
             ["rejected", "merged_after_rework"],
         )
+
+    def test_population_filter_can_select_only_not_immediately_accepted_prs(self):
+        rows = [
+            {"id": 1, "state": "closed", "merged_at": ""},
+            {
+                "id": 2,
+                "state": "closed",
+                "merged_at": "2025-07-01T00:00:00Z",
+                "commit_count": 3,
+                "human_review_count": 1,
+            },
+        ]
+
+        population = filter_population_prs(rows, "not-immediately-accepted")
+
+        self.assertEqual([row["id"] for row in population], [2])
+        self.assertEqual(population[0]["population_case_type"], "merged_after_rework")
+        self.assertEqual(population[0]["merged"], "true")
+
+    def test_population_mode_detects_reworked_merged_modes(self):
+        self.assertTrue(population_mode_includes_reworked_merged("merged-after-rework"))
+        self.assertTrue(population_mode_includes_reworked_merged("not-immediately-accepted"))
+        self.assertFalse(population_mode_includes_reworked_merged("rejected"))
 
 
 class QuotaAllocationTests(unittest.TestCase):
