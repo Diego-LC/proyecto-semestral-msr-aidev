@@ -15,12 +15,24 @@ Esto es suficiente para entender la estructura del dataset y decidir después si
 
 ## Estructura
 
+Orden recomendado (secuencial, de datos → tarjetas listas para clasificar):
+
+1. `inspect_aidev.py` + `notebooks/01_inspect_aidev.ipynb`: inspección rápida (API Dataset Viewer) y trazabilidad en `reports/`.
+2. `sampling/` + `notebooks/02_sampling_merged_after_rework.ipynb`: construir población `merged-after-rework` y muestreo estratificado por `agent` (CSV + summary).
+3. `preparation/` + `notebooks/03_prepare_cards_and_qc.ipynb`: construir tarjetas con evidencia textual y QC (cards CSV + summary).
+4. `taxonomy/initial/`: taxonomía inicial manual (CSV) para primera pasada y posterior agrupación/refinamiento.
+5. `labeling_machine/`: export e integración web (pendiente en notebooks; ver README local).
+
 - [inspect_aidev.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/inspect_aidev.py): CLI para overview, preview, profile y search.
 - [pr_activity.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/pr_activity.py): helper para cargar URLs Parquet y resumir actividad por PR al cruzar `pull_request`, `pr_commits` y `pr_reviews`.
 - [sampling/README.md](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/sampling/README.md): primera implementación del muestreo aleatorio estratificado para PRs rechazados.
 - [preparation/README.md](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/preparation/README.md): preparación de `rejection_cards` con evidencia textual para card sorting.
 - [labeling_machine/README.md](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/labeling_machine/README.md): exportación e integración con Labeling Machine para etiquetar motivos de rechazo.
-- [notebooks/2026-04-27-pr-activity-exploration.ipynb](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/notebooks/2026-04-27-pr-activity-exploration.ipynb): notebook inicial con joins y gráficos básicos.
+- [notebooks/00_setup_and_paths.ipynb](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/notebooks/00_setup_and_paths.ipynb): valida `.venv` y define rutas canónicas.
+- [notebooks/01_inspect_aidev.ipynb](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/notebooks/01_inspect_aidev.ipynb): corre consultas reales a la API del dataset viewer y escribe reports.
+- [notebooks/02_sampling_merged_after_rework.ipynb](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/notebooks/02_sampling_merged_after_rework.ipynb): sampling real `merged-after-rework` (sobrescribible).
+- [notebooks/03_prepare_cards_and_qc.ipynb](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/notebooks/03_prepare_cards_and_qc.ipynb): preparación real de tarjetas + QC (sobrescribible).
+- [notebooks/2026-04-27-pr-activity-exploration.ipynb](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/notebooks/2026-04-27-pr-activity-exploration.ipynb): notebook histórico de joins y gráficos básicos.
 - [requirements-notebook.txt](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/requirements-notebook.txt): dependencias para ejecutar el notebook.
 - [tests/test_inspect_aidev.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/tests/test_inspect_aidev.py): tests de la lógica de agregación.
 - [tests/test_pr_activity.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/tests/test_pr_activity.py): tests para el cruce entre PRs, commits y reviews.

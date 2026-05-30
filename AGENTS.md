@@ -2,7 +2,7 @@
 
 ## Reglas de Trabajo
 
-- Siempre preguntar si estoy de acuerdo con el mensaje de commit antes de ejecutarlo. Preguntar explicitamente si hacer push, rebase o cambios que afecten el repositorio.
+- Siempre preguntar si estoy de acuerdo con el mensaje de commit antes de ejecutarlo, este debe ser detallado pero no tan extenso. Preguntar explicitamente si hacer push, rebase o cambios que afecten el repositorio.
 - Siempre que hagas cambios en el código o en archivos, actualizar primero el archivo README.md.
 
 ## Repo Intent (AIDev / merged-after-rework)
