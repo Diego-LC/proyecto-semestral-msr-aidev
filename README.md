@@ -36,6 +36,22 @@ Notas:
 - `merged_after_rework` captura casos donde hubo iteración antes de integrarse.
 - El análisis de “rechazo definitivo” existe como variante (`rejected`), pero no es el foco operativo principal.
 
+## Metodología (resumen ejecutable)
+
+Basado en `docs/notas.md` y la propuesta en `docs/plans/propuesta.md`.
+
+1. **Fuente de datos**: dataset `hao-li/AIDev`.
+2. **Filtro de casos (población)**:
+   - PRs mergeados **después** de señales de retrabajo (cambio de código y/o interacción humana), marcados como `population_case_type = merged_after_rework`.
+3. **Muestreo**:
+   - Muestra aleatoria **estratificada por agente** (tamaño `n=300`, semilla fija para reproducibilidad).
+4. **Card sorting manual (2 evaluadores)**:
+   - Construir tarjetas con evidencia textual (reviews/comentarios/timeline) para cada PR.
+   - Clasificar manualmente para derivar categorías inductivas (taxonomía) y luego agrupar categorías similares.
+5. **Resultados a reportar**:
+   - Datos crudos y procesados: muestra, tarjetas, taxonomía inicial y taxonomía refinada.
+   - Análisis por categoría: distribución por agente/lenguaje/tipo de tarea y métricas de esfuerzo/tiempo hasta merge.
+
 ## Flujo del sistema (pipeline reproducible)
 
 El pipeline vive en `exploration/aidev/` y se ejecuta en 3 fases:

@@ -1,9 +1,18 @@
 # AGENTS.md
 
+## Reglas de Trabajo
+
+- Siempre preguntar si estoy de acuerdo con el mensaje de commit antes de ejecutarlo. Preguntar explicitamente si hacer push, rebase o cambios que afecten el repositorio.
+- Siempre que hagas cambios en el código o en archivos, actualizar primero el archivo README.md.
+
 ## Repo Intent (AIDev / merged-after-rework)
 
 - El foco operativo del proyecto es **solo** la población `merged-after-rework` (PRs mergeados tras señales de retrabajo). No optimizar ni documentar flujos para `rejected` salvo que se pida explícitamente.
 - El objetivo de investigación es entender cuándo PRs de agentes IA resultan contraproducentes y **cuánto esfuerzo/tiempo** toma integrarlos (taxonomía + métricas).
+
+## Metodología (en una línea)
+
+- Filtrar casos `merged_after_rework` → muestreo estratificado por `agent` (n=300) → construir tarjetas con evidencia → card sorting manual con 2 evaluadores → agrupar categorías similares → analizar distribución y esfuerzo/tiempo hasta merge.
 
 ## Quickstart (Comandos Reales)
 
