@@ -11,6 +11,10 @@ Salida principal:
 - `exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv`
 - `exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json`
 
+Taxonomía (manual, inicial):
+
+- `exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_template.csv`
+
 ## Qué hace
 
 El script [rejection_cards.py](/mnt/e/UFRO/5to-2026/mineria-repositorio/proyecto-semestral/exploration/aidev/preparation/rejection_cards.py):
@@ -116,6 +120,15 @@ evidence_count
 Para depurar la muestra inicial de 300 casos, revisar primero `discard_candidate_reason`, `evidence_quality_score`, `needs_manual_context_check` y `non_pr_textual_evidence_count`.
 
 La salida escrita por defecto conserva solo filas con `human_comment_count > 0`, porque esas tarjetas tienen al menos un comentario humano asociado al PR.
+
+## Taxonomía inicial (manual)
+
+Para una primera pasada rápida (antes o en paralelo a la herramienta web), se mantiene una
+plantilla CSV con una columna manual `categoria_retrabajo_pre_merge`.
+
+La convención del repo es guardar este trabajo en:
+
+- `exploration/aidev/taxonomy/initial/`
 
 ## Uso
 

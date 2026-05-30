@@ -1,0 +1,146 @@
+# Proyecto Semestral MSR: PRs “No Aceptados Inmediatamente” de Agentes IA (AIDev)
+
+Este repositorio implementa el flujo de datos y herramientas para responder:
+
+**¿En qué casos los agentes de IA resultan contraproducentes al abrir PRs y cuánto esfuerzo/iteraciones toma integrarlos efectivamente?**
+
+La fuente principal es el dataset **AIDev** (`hao-li/AIDev`). El núcleo metodológico es construir una **taxonomía inductiva** de motivos de retrabajo mediante **card sorting abierto** sobre una muestra reproducible, y luego analizar distribución y esfuerzo/tiempo de integración asociado.
+
+Referencias clave del diseño:
+- Propuesta completa: `docs/plans/propuesta.md`
+- Plan metodológico versionado: `docs/plans/2026-05-10-card-sorting-motivos-rechazo-prs.md`
+
+## Qué se busca responder y lograr
+
+**Resultado principal del proyecto**
+- Una taxonomía jerárquica (2 niveles) de motivos de *retrabajo pre-merge*: `categoria_padre` → `subcategoria`.
+- Un mapeo estructurado `pr_id → subcategoria → categoria_padre` para análisis cuantitativo posterior.
+
+**Preguntas de investigación (RQs)**
+1. **RQ1**: ¿Qué categorías de motivos de retrabajo (feedback/revisión) emergen del card sorting manual en PRs que no se aceptan de inmediato?
+2. **RQ2**: En esos casos, ¿cuánto tiempo pasa hasta el merge final y cuántas intervenciones humanas aparecen en el camino?
+3. **RQ3**: ¿Cómo se distribuyen las categorías por agente, lenguaje y tipo de tarea?
+4. **RQ4**: ¿Qué relación hay entre la categoría y el esfuerzo/tiempo requerido para llegar a aceptación?
+
+## Definiciones operacionales (cómo se “materializa” el fenómeno en datos)
+
+Este repositorio trabaja principalmente con:
+
+1. **Mergeado después de retrabajo** (`merged_after_rework`)
+   - PRs con `state = closed` y `merged_at NOT NULL`, con señales de que no fue aceptación inmediata.
+   - En el flujo actual se detecta por una combinación de:
+     - señales de cambio de código: `commit_count > 1` o `has_post_review_code_change` / `post_review_code_change_count > 0`.
+     - señales de feedback/review: conteos en reviews y/o comentarios.
+
+Notas:
+- `merged_after_rework` captura casos donde hubo iteración antes de integrarse.
+- El análisis de “rechazo definitivo” existe como variante (`rejected`), pero no es el foco operativo principal.
+
+## Flujo del sistema (pipeline reproducible)
+
+El pipeline vive en `exploration/aidev/` y se ejecuta en 3 fases:
+
+### 0) Setup
+
+Crear/usar entorno virtual del repo (`.venv`) e instalar dependencias de notebooks/parquet:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r exploration/aidev/requirements-notebook.txt
+```
+
+### 1) Muestreo estratificado por agente (Sampling)
+
+Script: `exploration/aidev/sampling/stratified_sampler.py`
+
+Función:
+- Construye la población objetivo (principalmente `merged-after-rework`).
+- Estratifica por `agent` (default) y asigna cuotas proporcionales con un mínimo por estrato.
+- Selecciona una muestra aleatoria reproducible (semilla fija).
+
+Ejemplo (población `merged-after-rework`, n=300):
+
+```bash
+.venv/bin/python exploration/aidev/sampling/stratified_sampler.py \
+  --source aidev \
+  --population-mode merged-after-rework \
+  --sample-size 300 \
+  --min-per-stratum 3 \
+  --seed 20260510 \
+  --output-csv exploration/aidev/sampling/outputs/merged_after_rework_sample.csv \
+  --summary-json exploration/aidev/sampling/outputs/merged_after_rework_sample_summary.json
+```
+
+Salida:
+- `exploration/aidev/sampling/outputs/*_sample.csv`: muestra seleccionada
+- `exploration/aidev/sampling/outputs/*_sample_summary.json`: resumen de control (seed, tamaños, cuotas, distribuciones)
+
+### 2) Preparación de “tarjetas” (Cards) con evidencia textual
+
+Script: `exploration/aidev/preparation/rejection_cards.py`
+
+Función:
+- Carga la muestra (CSV) y cruza evidencia textual desde tablas del dataset (reviews, comments, timeline).
+- Selecciona y limpia la evidencia más útil para justificar el motivo de rechazo/feedback.
+- Construye una tarjeta por PR con campos estandarizados.
+- Filtra por defecto a tarjetas con `human_comment_count > 0` (para asegurar evidencia humana mínima).
+
+Ejemplo:
+
+```bash
+.venv/bin/python exploration/aidev/preparation/rejection_cards.py \
+  --sample-csv exploration/aidev/sampling/outputs/merged_after_rework_sample.csv \
+  --output-csv exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv \
+  --summary-json exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json
+```
+
+Salida:
+- `exploration/aidev/preparation/outputs/*cards*.csv`: tarjetas para clasificar
+- `exploration/aidev/preparation/outputs/*summary*.json`: resumen y métricas de control
+- Plantilla de taxonomía inicial (manual): ver `exploration/aidev/taxonomy/initial/`
+
+### 3) Card sorting (manual) y exportación de etiquetas
+
+Hay dos caminos compatibles (se pueden combinar):
+
+1) **Labeling Machine (web)** (recomendado para colaboración y trazabilidad)
+   - Adaptación y flujo: `exploration/aidev/labeling_machine/README.md`
+   - Adaptador (convierte CSV de tarjetas a formato importable + schema):
+
+```bash
+.venv/bin/python exploration/aidev/labeling_machine/labeling_machine_adapter.py \
+  --input-csv exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv
+```
+
+2) **CSV manual (taxonomía inicial)**
+   - Para una primera pasada rápida, existe una plantilla con una columna de categorización manual.
+   - Ubicación recomendada para versionar el trabajo manual inicial:
+     - `exploration/aidev/taxonomy/initial/`
+
+Resultado esperado del card sorting:
+- Para cada tarjeta/PR: `categoria_padre`, `subcategoria` (y opcionalmente `confidence`, `rationale`, etc.).
+- Luego: agrupar/normalizar categorías similares para llegar a un set estable y reutilizable.
+
+## Dónde está el código
+
+- `exploration/aidev/inspect_aidev.py`: CLI de inspección rápida usando Dataset Viewer API.
+- `exploration/aidev/pr_activity.py`: helpers para URLs Parquet y agregaciones por PR.
+- `exploration/aidev/sampling/`: muestreo aleatorio estratificado y outputs.
+- `exploration/aidev/preparation/`: preparación de tarjetas (evidencia textual, cleaning, calidad).
+- `exploration/aidev/labeling_machine/`: integración opcional con Labeling Machine.
+
+## Tests
+
+```bash
+.venv/bin/python -m unittest \
+  exploration.aidev.tests.test_stratified_sampler \
+  exploration.aidev.tests.test_rejection_cards \
+  exploration.aidev.tests.test_labeling_machine_adapter \
+  exploration.aidev.tests.test_pr_activity \
+  exploration.aidev.tests.test_inspect_aidev
+```
+
+## Convención de outputs
+
+- Artefactos canónicos de sampling: `exploration/aidev/sampling/outputs/*_sample.csv` y `*_sample_summary.json` (sin sufijos `seed_*`).
+- Taxonomía inicial (manual): `exploration/aidev/taxonomy/initial/`.

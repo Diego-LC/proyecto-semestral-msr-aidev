@@ -16,7 +16,7 @@ from exploration.aidev.preparation.rejection_cards import CARD_FIELDS
 
 
 DEFAULT_INPUT_CSV = Path(
-    "exploration/aidev/preparation/outputs/rejection_cards_seed_20260510.csv"
+    "exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv"
 )
 DEFAULT_OUTPUT_CSV = Path(
     "exploration/aidev/labeling_machine/outputs/rejection_cards_for_labeling_machine.csv"

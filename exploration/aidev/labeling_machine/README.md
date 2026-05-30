@@ -1,4 +1,4 @@
-# Labeling Machine para card sorting de PRs rechazados
+# Labeling Machine para card sorting de PRs mergeados tras retrabajo
 
 Esta carpeta contiene la integración entre las tarjetas preparadas en
 `exploration/aidev/preparation` y la herramienta open source
@@ -6,7 +6,7 @@ Esta carpeta contiene la integración entre las tarjetas preparadas en
 
 El flujo es:
 
-1. Convertir `rejection_cards_seed_20260510.csv` al formato de importación.
+1. Convertir `merged_after_rework_cards_seed_20260510.csv` al formato de importación.
 2. Clonar Labeling Machine en una carpeta local de trabajo.
 3. Copiar el `overlay` de esta carpeta sobre el checkout de Labeling Machine.
 4. Inicializar la base SQLite con las tarjetas.
@@ -18,7 +18,7 @@ El flujo es:
 Desde la raíz del proyecto:
 
 ```bash
-python3 exploration/aidev/labeling_machine/labeling_machine_adapter.py
+.venv/bin/python exploration/aidev/labeling_machine/labeling_machine_adapter.py
 ```
 
 Salidas principales:
