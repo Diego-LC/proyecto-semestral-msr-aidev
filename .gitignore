@@ -19,6 +19,7 @@ __pycache__/
 
 # Local manual categorization drafts
 exploration/aidev/preparation/outputs/*manual_categories.csv
+merged_after_rework_manual_categories.csv
 
 # VSCode
 .vscode/
