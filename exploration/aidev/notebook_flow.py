@@ -265,10 +265,20 @@ def build_outputs_flow(artifacts: FlowArtifacts) -> pd.DataFrame:
 
 def build_template_preview(artifacts: FlowArtifacts) -> pd.DataFrame:
     trace_columns = ["card_id", "pr_id", "pr_state", "merged", "repo_id", "html_url"]
-    category_columns = [
-        column for column in artifacts.template_df.columns if "categoria" in column
+    manual_columns = [
+        "resumen_justificacion_categoria",
+        "horas_creacion_a_primera_aprobacion",
+        "horas_creacion_a_merge",
+        "horas_creacion_a_aceptacion",
+        "fuente_tiempo_aceptacion",
+        "categoria_retrabajo_pre_merge",
     ]
-    return artifacts.template_df[trace_columns + category_columns].head()
+    available_columns = [
+        column
+        for column in [*trace_columns, *manual_columns]
+        if column in artifacts.template_df.columns
+    ]
+    return artifacts.template_df[available_columns].head()
 
 
 def validate_flow(artifacts: FlowArtifacts) -> str:
