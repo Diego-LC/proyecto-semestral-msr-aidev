@@ -88,6 +88,10 @@ CARD_FIELDS = [
     "pr_title",
     "pr_body_text",
     "all_evidence_text",
+    "all_evidence_json",
+    "pr_reviews_json",
+    "pr_review_comments_json",
+    "pr_comments_json",
     "changes_requested_text",
     "review_comment_text",
     "pr_comment_text",
@@ -217,6 +221,44 @@ def evidence_texts_for(
         if text:
             texts.append(text)
     return join_limited(texts, max_length=max_length)
+
+
+def evidences_json_for(
+    evidences: Sequence[Dict],
+    source: Optional[str] = None,
+    max_text_length: int = 2000,
+) -> str:
+    records = []
+    for evidence in sorted(
+        evidences,
+        key=lambda item: (
+            to_int(item.get("source_rank"), default=999),
+            normalize_scalar(item.get("created_at")),
+            normalize_scalar(item.get("id")),
+        ),
+    ):
+        if source and evidence.get("source") != source:
+            continue
+        text = clean_evidence_text(evidence.get("body"), max_length=max_text_length)
+        records.append(
+            {
+                "source": normalize_scalar(evidence.get("source")),
+                "source_rank": to_int(evidence.get("source_rank"), default=999),
+                "state": normalize_scalar(evidence.get("state")),
+                "user": normalize_scalar(evidence.get("user")),
+                "user_type": normalize_scalar(evidence.get("user_type")),
+                "created_at": normalize_scalar(evidence.get("created_at")),
+                "id": normalize_scalar(evidence.get("id")),
+                "path": normalize_scalar(evidence.get("path")),
+                "diff_hunk": clean_evidence_text(
+                    evidence.get("diff_hunk"),
+                    max_length=800,
+                ),
+                "text": text,
+                "has_text": bool(text),
+            }
+        )
+    return json.dumps(records, ensure_ascii=False)
 
 
 def count_evidences(evidences: Sequence[Dict], **criteria) -> int:
@@ -504,6 +546,13 @@ def build_rejection_card(
             non_pr_textual_evidences,
             max_length=4000,
         ),
+        "all_evidence_json": evidences_json_for(all_evidences),
+        "pr_reviews_json": evidences_json_for(all_evidences, source="pr_review"),
+        "pr_review_comments_json": evidences_json_for(
+            all_evidences,
+            source="pr_review_comment",
+        ),
+        "pr_comments_json": evidences_json_for(all_evidences, source="pr_comment"),
         "changes_requested_text": evidence_texts_for(
             all_evidences,
             state="CHANGES_REQUESTED",
