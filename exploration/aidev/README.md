@@ -6,32 +6,31 @@ Este directorio contiene el flujo reproducible usado para analizar PRs de AIDev 
 
 Desde la raiz del repositorio:
 
-```powershell
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r exploration/aidev/requirements-notebook.txt
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -r exploration/aidev/requirements-notebook.txt
 ```
 
 ## Ejecucion
 
 Generar la muestra estratificada por agente:
 
-```powershell
-python exploration/aidev/sampling/stratified_sampler.py
+```bash
+.venv/bin/python exploration/aidev/sampling/stratified_sampler.py
 ```
 
 Generar tarjetas con evidencia y plantilla manual:
 
-```powershell
-python exploration/aidev/preparation/rejection_cards.py
+```bash
+.venv/bin/python exploration/aidev/preparation/rejection_cards.py
 ```
 
 Validar sin escribir archivos:
 
-```powershell
-python exploration/aidev/sampling/stratified_sampler.py --dry-run
-python exploration/aidev/preparation/rejection_cards.py --dry-run
+```bash
+.venv/bin/python exploration/aidev/sampling/stratified_sampler.py --dry-run
+.venv/bin/python exploration/aidev/preparation/rejection_cards.py --dry-run
 ```
 
 ## Artefactos vigentes

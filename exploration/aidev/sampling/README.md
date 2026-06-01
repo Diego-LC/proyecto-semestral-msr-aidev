@@ -4,8 +4,8 @@
 
 La estratificacion usada es solo por `agent`, con semilla fija `20260510` y tamano por defecto de 300 PRs.
 
-```powershell
-python exploration/aidev/sampling/stratified_sampler.py
+```bash
+.venv/bin/python exploration/aidev/sampling/stratified_sampler.py
 ```
 
 Salidas:
@@ -15,6 +15,6 @@ Salidas:
 
 Para revisar el resumen sin escribir archivos:
 
-```powershell
-python exploration/aidev/sampling/stratified_sampler.py --dry-run
+```bash
+.venv/bin/python exploration/aidev/sampling/stratified_sampler.py --dry-run
 ```

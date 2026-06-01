@@ -14,14 +14,14 @@ Salidas:
 
 Ejecucion:
 
-```powershell
-python exploration/aidev/preparation/rejection_cards.py
+```bash
+.venv/bin/python exploration/aidev/preparation/rejection_cards.py
 ```
 
 Validacion sin escribir archivos:
 
-```powershell
-python exploration/aidev/preparation/rejection_cards.py --dry-run
+```bash
+.venv/bin/python exploration/aidev/preparation/rejection_cards.py --dry-run
 ```
 
 La preparacion conserva una tarjeta por PR de la muestra y usa `human_comment_count > 0` como guardia de calidad. La evidencia se prioriza desde reviews con cambios solicitados, comentarios inline, comentarios generales, eventos de timeline y, como respaldo, titulo y descripcion del PR.
