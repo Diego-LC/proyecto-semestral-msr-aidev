@@ -76,7 +76,7 @@ Procedimiento:
 5. Refinar categorias cuando existan solapamientos o grupos demasiado amplios.
 6. Aplicar la taxonomia final sobre la muestra completa.
 
-La plantilla manual conserva una columna inicial `categoria_retrabajo_pre_merge`, que puede ampliarse durante el analisis si se requieren subcategorias, notas o codificacion por evaluador.
+La plantilla manual conserva tiempos de aceptacion y una columna final vacia `categoria_retrabajo_pre_merge`, que puede ampliarse durante el analisis si se requieren subcategorias, notas o codificacion por evaluador. La columna `fuente_tiempo_aceptacion` distingue si el tiempo de aceptacion proviene de la primera review aprobada o del merge cuando no existe aprobacion explicita.
 
 ## Analisis
 

@@ -37,6 +37,11 @@ MANUAL_TEMPLATE_FIELDS = [
     "merged",
     "repo_id",
     "html_url",
+    "resumen_justificacion_categoria",
+    "horas_creacion_a_primera_aprobacion",
+    "horas_creacion_a_merge",
+    "horas_creacion_a_aceptacion",
+    "fuente_tiempo_aceptacion",
     "categoria_retrabajo_pre_merge",
 ]
 CARD_FIELDS = [
@@ -154,6 +159,12 @@ def parse_github_datetime(value) -> Optional[datetime]:
 def duration_hours(start, end) -> str:
     start_dt = parse_github_datetime(start)
     end_dt = parse_github_datetime(end)
+    if start_dt is None or end_dt is None:
+        return ""
+    return f"{(end_dt - start_dt).total_seconds() / 3600.0:.3f}"
+
+
+def duration_hours_between(start_dt: Optional[datetime], end_dt: Optional[datetime]) -> str:
     if start_dt is None or end_dt is None:
         return ""
     return f"{(end_dt - start_dt).total_seconds() / 3600.0:.3f}"
@@ -607,13 +618,62 @@ def write_csv_rows(path: Path, rows: Sequence[Dict]) -> None:
             writer.writerow({field: row.get(field, "") for field in CARD_FIELDS})
 
 
+def first_approval_created_at(card: Dict) -> Optional[datetime]:
+    try:
+        reviews = json.loads(card.get("pr_reviews_json") or "[]")
+    except json.JSONDecodeError:
+        return None
+
+    approval_dates = [
+        parse_github_datetime(review.get("created_at"))
+        for review in reviews
+        if review.get("state") == "APPROVED"
+    ]
+    approval_dates = [value for value in approval_dates if value is not None]
+    return min(approval_dates) if approval_dates else None
+
+
+def manual_template_row(card: Dict) -> Dict:
+    created_at = parse_github_datetime(card.get("created_at"))
+    first_approval_at = first_approval_created_at(card)
+    merged_at = parse_github_datetime(card.get("merged_at"))
+    approval_hours = duration_hours_between(created_at, first_approval_at)
+    merge_hours = duration_hours_between(created_at, merged_at)
+
+    if approval_hours:
+        acceptance_hours = approval_hours
+        acceptance_source = "primera_review_aprobada"
+    elif merge_hours:
+        acceptance_hours = merge_hours
+        acceptance_source = "merge_sin_review_aprobada"
+    else:
+        acceptance_hours = ""
+        acceptance_source = "sin_fecha_disponible"
+
+    return {
+        "card_id": card.get("card_id", ""),
+        "pr_id": card.get("pr_id", ""),
+        "population_case_type": card.get("population_case_type", ""),
+        "pr_state": card.get("pr_state", ""),
+        "merged": card.get("merged", ""),
+        "repo_id": card.get("repo_id", ""),
+        "html_url": card.get("html_url", ""),
+        "resumen_justificacion_categoria": "",
+        "horas_creacion_a_primera_aprobacion": approval_hours,
+        "horas_creacion_a_merge": merge_hours,
+        "horas_creacion_a_aceptacion": acceptance_hours,
+        "fuente_tiempo_aceptacion": acceptance_source,
+        "categoria_retrabajo_pre_merge": "",
+    }
+
+
 def write_manual_template(path: Path, cards: Sequence[Dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=MANUAL_TEMPLATE_FIELDS)
         writer.writeheader()
         for card in cards:
-            writer.writerow({field: card.get(field, "") for field in MANUAL_TEMPLATE_FIELDS})
+            writer.writerow(manual_template_row(card))
 
 
 def index_rows(rows: Iterable[Dict], key_field: str) -> Dict[str, List[Dict]]:
