@@ -27,3 +27,5 @@ Validacion sin escribir archivos:
 La preparacion conserva una tarjeta por PR de la muestra y usa `human_comment_count > 0` como guardia de calidad. La evidencia se prioriza desde reviews con cambios solicitados, comentarios inline, comentarios generales, eventos de timeline y, como respaldo, titulo y descripcion del PR.
 
 El CSV final conserva columnas de lectura rapida, como `evidence_text`, `review_comment_text` y `pr_comment_text`, y tambien columnas JSON estructuradas para trazabilidad: `all_evidence_json`, `pr_reviews_json`, `pr_review_comments_json` y `pr_comments_json`.
+
+La plantilla manual incluye tiempos de aceptacion calculados desde `created_at`: primero intenta usar la primera review `APPROVED` y, si no existe, usa `merged_at` como respaldo. La columna `fuente_tiempo_aceptacion` indica si el tiempo viene de `primera_review_aprobada`, `merge_sin_review_aprobada` o `sin_fecha_disponible`. La columna `categoria_retrabajo_pre_merge` queda vacia y al final para completar manualmente.
