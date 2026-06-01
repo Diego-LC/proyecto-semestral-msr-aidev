@@ -1,0 +1,190 @@
+{
+  "seed": 20260510,
+  "population_mode": "merged-after-rework",
+  "population_size": 3166,
+  "sample_size": 300,
+  "requested_strata_fields": [
+    "agent"
+  ],
+  "used_strata_fields": [
+    "agent"
+  ],
+  "stratum_count": 5,
+  "stratum_sizes": {
+    "Claude_Code": 73,
+    "Copilot": 1526,
+    "Cursor": 180,
+    "Devin": 907,
+    "OpenAI_Codex": 480
+  },
+  "quotas": {
+    "Claude_Code": 7,
+    "Copilot": 145,
+    "Cursor": 17,
+    "Devin": 86,
+    "OpenAI_Codex": 45
+  },
+  "population_distributions": {
+    "population_case_type": {
+      "merged_after_rework": 3166
+    },
+    "agent": {
+      "Copilot": 1526,
+      "Devin": 907,
+      "OpenAI_Codex": 480,
+      "Cursor": 180,
+      "Claude_Code": 73
+    },
+    "language": {
+      "TypeScript": 946,
+      "Python": 518,
+      "C#": 465,
+      "Rust": 219,
+      "Go": 195,
+      "JavaScript": 143,
+      "Ruby": 100,
+      "Java": 85,
+      "C++": 73,
+      "unknown": 67,
+      "Dart": 39,
+      "C": 31,
+      "Zig": 31,
+      "PHP": 28,
+      "HTML": 26,
+      "MDX": 25,
+      "Kotlin": 24,
+      "PowerShell": 24,
+      "Jupyter Notebook": 22,
+      "Circom": 16,
+      "Scala": 11,
+      "Vue": 9,
+      "Makefile": 8,
+      "Swift": 8,
+      "F#": 7,
+      "Bicep": 6,
+      "Elixir": 4,
+      "MoonBit": 4,
+      "HCL": 3,
+      "Julia": 3,
+      "TypeSpec": 3,
+      "1C Enterprise": 2,
+      "CMake": 2,
+      "CSS": 2,
+      "Gherkin": 2,
+      "Markdown": 2,
+      "Solidity": 2,
+      "Assembly": 1,
+      "Astro": 1,
+      "CodeQL": 1,
+      "Dockerfile": 1,
+      "GAP": 1,
+      "JetBrains MPS": 1,
+      "Luau": 1,
+      "Nim": 1,
+      "RPM Spec": 1,
+      "ReScript": 1,
+      "Shell": 1
+    },
+    "change_complexity_bin": {
+      "low": 1056,
+      "high": 1055,
+      "medium": 1055
+    },
+    "repo_popularity_bin": {
+      "low": 1056,
+      "high": 1055,
+      "medium": 1055
+    },
+    "created_period": {
+      "old": 1056,
+      "middle": 1055,
+      "recent": 1055
+    },
+    "task_type": {
+      "feat": 1222,
+      "fix": 898,
+      "docs": 402,
+      "refactor": 271,
+      "chore": 137,
+      "test": 92,
+      "build": 65,
+      "ci": 40,
+      "perf": 25,
+      "style": 11,
+      "revert": 3
+    }
+  },
+  "sample_distributions": {
+    "population_case_type": {
+      "merged_after_rework": 300
+    },
+    "agent": {
+      "Copilot": 145,
+      "Devin": 86,
+      "OpenAI_Codex": 45,
+      "Cursor": 17,
+      "Claude_Code": 7
+    },
+    "language": {
+      "TypeScript": 89,
+      "Python": 53,
+      "C#": 42,
+      "Rust": 19,
+      "Go": 18,
+      "JavaScript": 18,
+      "Ruby": 11,
+      "unknown": 8,
+      "C++": 7,
+      "Java": 6,
+      "Dart": 5,
+      "Zig": 5,
+      "C": 3,
+      "HTML": 2,
+      "Kotlin": 2,
+      "MDX": 2,
+      "PowerShell": 2,
+      "Circom": 1,
+      "F#": 1,
+      "HCL": 1,
+      "Jupyter Notebook": 1,
+      "Nim": 1,
+      "PHP": 1,
+      "Scala": 1,
+      "Swift": 1
+    },
+    "change_complexity_bin": {
+      "high": 107,
+      "medium": 106,
+      "low": 87
+    },
+    "repo_popularity_bin": {
+      "low": 115,
+      "medium": 94,
+      "high": 91
+    },
+    "created_period": {
+      "old": 105,
+      "middle": 102,
+      "recent": 93
+    },
+    "task_type": {
+      "feat": 120,
+      "fix": 90,
+      "docs": 35,
+      "refactor": 20,
+      "chore": 15,
+      "ci": 6,
+      "test": 6,
+      "build": 5,
+      "perf": 3
+    }
+  },
+  "population_filter_counts": {
+    "all_pull_request": 33596,
+    "closed": 31284,
+    "merged": 24014,
+    "closed_unmerged": 7270,
+    "merged_with_additional_commits": 6884,
+    "merged_with_additional_commits_and_human_comments": 3166
+  }
+}

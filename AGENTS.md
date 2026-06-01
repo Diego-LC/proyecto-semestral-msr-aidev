@@ -24,22 +24,20 @@
 
 ```bash
 .venv/bin/python exploration/aidev/sampling/stratified_sampler.py \
-  --source aidev \
-  --population-mode merged-after-rework \
   --sample-size 300 \
   --min-per-stratum 3 \
   --seed 20260510 \
-  --output-csv exploration/aidev/sampling/outputs/merged_after_rework_sample.csv \
-  --summary-json exploration/aidev/sampling/outputs/merged_after_rework_sample_summary.json
+  --output-csv exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv \
+  --summary-json exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510_summary.json
 ```
 
-- Convención: outputs canónicos **sin** sufijos `seed_*`.
+- Convencion: outputs canónicos **con** sufijo `seed_<seed>` para trazabilidad/reproducibilidad.
 
 ### 2) Cards (evidencia textual)
 
 ```bash
 .venv/bin/python exploration/aidev/preparation/rejection_cards.py \
-  --sample-csv exploration/aidev/sampling/outputs/merged_after_rework_sample.csv \
+  --sample-csv exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv \
   --output-csv exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv \
   --summary-json exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json
 ```
@@ -51,19 +49,15 @@
 - Taxonomía inicial (manual) versionada aquí:
   - `exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_template.csv`
 
-- Labeling Machine (web): el adaptador por defecto toma `merged_after_rework_cards_seed_20260510.csv`:
-
-```bash
-.venv/bin/python exploration/aidev/labeling_machine/labeling_machine_adapter.py
-```
+- Plantilla manual generada por el flujo:
+  - `exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template.csv`
 
 ## Tests (rápidos y relevantes)
 
 ```bash
 .venv/bin/python -m unittest \
   exploration.aidev.tests.test_stratified_sampler \
-  exploration.aidev.tests.test_rejection_cards \
-  exploration.aidev.tests.test_labeling_machine_adapter
+  exploration.aidev.tests.test_rejection_cards
 ```
 
 ## Gotchas

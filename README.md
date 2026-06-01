@@ -7,8 +7,7 @@ Este repositorio implementa el flujo de datos y herramientas para responder:
 La fuente principal es el dataset **AIDev** (`hao-li/AIDev`). El núcleo metodológico es construir una **taxonomía inductiva** de motivos de retrabajo mediante **card sorting abierto** sobre una muestra reproducible, y luego analizar distribución y esfuerzo/tiempo de integración asociado.
 
 Referencias clave del diseño:
-- Propuesta completa: `docs/plans/propuesta.md`
-- Plan metodológico versionado: `docs/plans/2026-05-10-card-sorting-motivos-rechazo-prs.md`
+- Plan metodologico versionado: `docs/plans/plan-metodologico-card-sorting.md`
 
 ## Qué se busca responder y lograr
 
@@ -38,7 +37,7 @@ Notas:
 
 ## Metodología (resumen ejecutable)
 
-Basado en `docs/notas.md` y la propuesta en `docs/plans/propuesta.md`.
+Basado en `docs/notas.md`.
 
 1. **Fuente de datos**: dataset `hao-li/AIDev`.
 2. **Filtro de casos (población)**:
@@ -74,22 +73,20 @@ Función:
 - Estratifica por `agent` (default) y asigna cuotas proporcionales con un mínimo por estrato.
 - Selecciona una muestra aleatoria reproducible (semilla fija).
 
-Ejemplo (población `merged-after-rework`, n=300):
+Ejemplo (poblacion `merged-after-rework`, n=300, seed configurable):
 
 ```bash
 .venv/bin/python exploration/aidev/sampling/stratified_sampler.py \
-  --source aidev \
-  --population-mode merged-after-rework \
   --sample-size 300 \
   --min-per-stratum 3 \
   --seed 20260510 \
-  --output-csv exploration/aidev/sampling/outputs/merged_after_rework_sample.csv \
-  --summary-json exploration/aidev/sampling/outputs/merged_after_rework_sample_summary.json
+  --output-csv exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv \
+  --summary-json exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510_summary.json
 ```
 
 Salida:
-- `exploration/aidev/sampling/outputs/*_sample.csv`: muestra seleccionada
-- `exploration/aidev/sampling/outputs/*_sample_summary.json`: resumen de control (seed, tamaños, cuotas, distribuciones)
+- `exploration/aidev/sampling/outputs/*_sample_seed_<seed>.csv`: muestra seleccionada
+- `exploration/aidev/sampling/outputs/*_sample_seed_<seed>_summary.json`: resumen de control (seed, tamanos, cuotas, distribuciones)
 
 ### 2) Preparación de “tarjetas” (Cards) con evidencia textual
 
@@ -105,7 +102,7 @@ Ejemplo:
 
 ```bash
 .venv/bin/python exploration/aidev/preparation/rejection_cards.py \
-  --sample-csv exploration/aidev/sampling/outputs/merged_after_rework_sample.csv \
+  --sample-csv exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv \
   --output-csv exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv \
   --summary-json exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json
 ```
@@ -113,25 +110,16 @@ Ejemplo:
 Salida:
 - `exploration/aidev/preparation/outputs/*cards*.csv`: tarjetas para clasificar
 - `exploration/aidev/preparation/outputs/*summary*.json`: resumen y métricas de control
-- Plantilla de taxonomía inicial (manual): ver `exploration/aidev/taxonomy/initial/`
+- Plantilla manual (categorizacion): `exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template.csv`
+- Taxonomia inicial (manual, versionada): `exploration/aidev/taxonomy/initial/`
 
 ### 3) Card sorting (manual) y exportación de etiquetas
 
-Hay dos caminos compatibles (se pueden combinar):
+El card sorting se realiza de forma manual usando CSV:
 
-1) **Labeling Machine (web)** (recomendado para colaboración y trazabilidad)
-   - Adaptación y flujo: `exploration/aidev/labeling_machine/README.md`
-   - Adaptador (convierte CSV de tarjetas a formato importable + schema):
-
-```bash
-.venv/bin/python exploration/aidev/labeling_machine/labeling_machine_adapter.py \
-  --input-csv exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv
-```
-
-2) **CSV manual (taxonomía inicial)**
-   - Para una primera pasada rápida, existe una plantilla con una columna de categorización manual.
-   - Ubicación recomendada para versionar el trabajo manual inicial:
-     - `exploration/aidev/taxonomy/initial/`
+- Plantilla producida por el flujo: `exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template.csv`
+- Ubicacion recomendada para versionar el trabajo manual inicial:
+  - `exploration/aidev/taxonomy/initial/`
 
 Resultado esperado del card sorting:
 - Para cada tarjeta/PR: `categoria_padre`, `subcategoria` (y opcionalmente `confidence`, `rationale`, etc.).
@@ -139,24 +127,18 @@ Resultado esperado del card sorting:
 
 ## Dónde está el código
 
-- `exploration/aidev/inspect_aidev.py`: CLI de inspección rápida usando Dataset Viewer API.
-- `exploration/aidev/pr_activity.py`: helpers para URLs Parquet y agregaciones por PR.
+- `exploration/aidev/aidev_data.py`: helpers minimos para acceder a manifests/URLs Parquet.
 - `exploration/aidev/sampling/`: muestreo aleatorio estratificado y outputs.
 - `exploration/aidev/preparation/`: preparación de tarjetas (evidencia textual, cleaning, calidad).
-- `exploration/aidev/labeling_machine/`: integración opcional con Labeling Machine.
+- `exploration/aidev/notebook_flow.py`: helpers para notebooks del flujo merged-after-rework.
 
 ## Tests
 
 ```bash
-.venv/bin/python -m unittest \
-  exploration.aidev.tests.test_stratified_sampler \
-  exploration.aidev.tests.test_rejection_cards \
-  exploration.aidev.tests.test_labeling_machine_adapter \
-  exploration.aidev.tests.test_pr_activity \
-  exploration.aidev.tests.test_inspect_aidev
+.venv/bin/python -m unittest
 ```
 
 ## Convención de outputs
 
-- Artefactos canónicos de sampling: `exploration/aidev/sampling/outputs/*_sample.csv` y `*_sample_summary.json` (sin sufijos `seed_*`).
-- Taxonomía inicial (manual): `exploration/aidev/taxonomy/initial/`.
+- Artefactos canónicos de sampling: `exploration/aidev/sampling/outputs/*_sample_seed_<seed>.csv` y `*_sample_seed_<seed>_summary.json`.
+- Taxonomia inicial (manual): `exploration/aidev/taxonomy/initial/`.

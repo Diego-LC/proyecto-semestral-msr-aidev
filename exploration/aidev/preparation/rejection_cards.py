@@ -14,11 +14,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from exploration.aidev.pr_activity import get_parquet_urls
+from exploration.aidev.aidev_data import get_parquet_urls
 
 
 DEFAULT_SAMPLE_CSV = Path(
-    "exploration/aidev/sampling/outputs/merged_after_rework_sample.csv"
+    "exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv"
 )
 DEFAULT_OUTPUT_CSV = Path(
     "exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv"
@@ -26,6 +26,19 @@ DEFAULT_OUTPUT_CSV = Path(
 DEFAULT_SUMMARY_JSON = Path(
     "exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json"
 )
+DEFAULT_TEMPLATE_CSV = Path(
+    "exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template.csv"
+)
+MANUAL_TEMPLATE_FIELDS = [
+    "card_id",
+    "pr_id",
+    "population_case_type",
+    "pr_state",
+    "merged",
+    "repo_id",
+    "html_url",
+    "categoria_retrabajo_pre_merge",
+]
 CARD_FIELDS = [
     "card_id",
     "pr_id",
@@ -545,6 +558,15 @@ def write_csv_rows(path: Path, rows: Sequence[Dict]) -> None:
             writer.writerow({field: row.get(field, "") for field in CARD_FIELDS})
 
 
+def write_manual_template(path: Path, cards: Sequence[Dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=MANUAL_TEMPLATE_FIELDS)
+        writer.writeheader()
+        for card in cards:
+            writer.writerow({field: card.get(field, "") for field in MANUAL_TEMPLATE_FIELDS})
+
+
 def index_rows(rows: Iterable[Dict], key_field: str) -> Dict[str, List[Dict]]:
     index: Dict[str, List[Dict]] = defaultdict(list)
     for row in rows:
@@ -763,11 +785,12 @@ def summarize_cards(cards: Sequence[Dict], source_card_count: Optional[int] = No
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Prepare card rows from a sampled set of AIDev PRs."
+        description="Prepare card rows from the merged-after-rework AIDev sample."
     )
     parser.add_argument("--sample-csv", type=Path, default=DEFAULT_SAMPLE_CSV)
     parser.add_argument("--output-csv", type=Path, default=DEFAULT_OUTPUT_CSV)
     parser.add_argument("--summary-json", type=Path, default=DEFAULT_SUMMARY_JSON)
+    parser.add_argument("--template-csv", type=Path, default=DEFAULT_TEMPLATE_CSV)
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -783,6 +806,7 @@ def main() -> None:
         "sample_csv": str(args.sample_csv),
         "output_csv": str(args.output_csv),
         "summary_json": str(args.summary_json),
+        "template_csv": str(args.template_csv),
         **summarize_cards(cards, source_card_count=len(source_cards)),
     }
 
@@ -791,12 +815,22 @@ def main() -> None:
         return
 
     write_csv_rows(args.output_csv, cards)
+    write_manual_template(args.template_csv, cards)
     args.summary_json.parent.mkdir(parents=True, exist_ok=True)
     args.summary_json.write_text(
         json.dumps(summary, indent=2, ensure_ascii=False),
         encoding="utf-8",
     )
-    print(json.dumps({"output_csv": str(args.output_csv), "summary_json": str(args.summary_json)}))
+    print(
+        json.dumps(
+            {
+                "output_csv": str(args.output_csv),
+                "summary_json": str(args.summary_json),
+                "template_csv": str(args.template_csv),
+            },
+            ensure_ascii=False,
+        )
+    )
 
 
 if __name__ == "__main__":
