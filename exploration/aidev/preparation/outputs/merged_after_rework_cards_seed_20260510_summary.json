@@ -1,62 +1,62 @@
 {
-  "sample_csv": "exploration\\aidev\\sampling\\outputs\\merged_after_rework_sample.csv",
+  "sample_csv": "exploration\\aidev\\sampling\\outputs\\merged_after_rework_sample_seed_20260510.csv",
   "output_csv": "exploration\\aidev\\preparation\\outputs\\merged_after_rework_cards_seed_20260510.csv",
   "summary_json": "exploration\\aidev\\preparation\\outputs\\merged_after_rework_cards_seed_20260510_summary.json",
-  "card_count": 186,
+  "template_csv": "exploration\\aidev\\preparation\\outputs\\merged_after_rework_manual_categories_template.csv",
+  "card_count": 300,
   "source_card_count": 300,
-  "filtered_out_without_human_comments": 114,
+  "filtered_out_without_human_comments": 0,
   "filter_rule": "human_comment_count > 0",
   "manual_context_check_count": 0,
   "discard_candidate_reason_counts": {
-    "": 186
+    "": 300
   },
   "evidence_source_counts": {
-    "pr_review_comment": 118,
-    "pr_comment": 33,
-    "pr_review": 35
+    "pr_review_comment": 160,
+    "pr_comment": 89,
+    "pr_review": 51
   },
   "review_state_counts": {
-    "COMMENTED": 153,
-    "APPROVED": 15,
-    "CHANGES_REQUESTED": 17,
+    "COMMENTED": 256,
+    "CHANGES_REQUESTED": 18,
+    "APPROVED": 25,
     "DISMISSED": 1
   },
   "population_case_type_counts": {
-    "merged_after_rework": 186
+    "merged_after_rework": 300
   },
   "agent_counts": {
-    "Claude_Code": 4,
-    "Copilot": 93,
-    "Cursor": 13,
-    "Devin": 53,
-    "OpenAI_Codex": 23
+    "Claude_Code": 7,
+    "Copilot": 145,
+    "Cursor": 17,
+    "Devin": 86,
+    "OpenAI_Codex": 45
   },
   "language_counts": {
-    "Python": 27,
-    "Go": 12,
-    "C#": 25,
-    "F#": 1,
+    "Go": 18,
+    "Ruby": 11,
+    "Zig": 5,
+    "TypeScript": 89,
+    "Python": 53,
+    "C#": 42,
     "PowerShell": 2,
-    "TypeScript": 70,
+    "C++": 7,
+    "": 8,
+    "HCL": 1,
     "C": 3,
-    "Luau": 1,
-    "": 7,
-    "Java": 2,
-    "Kotlin": 1,
-    "C++": 1,
-    "PHP": 2,
-    "JavaScript": 8,
-    "1C Enterprise": 1,
-    "Ruby": 3,
-    "JetBrains MPS": 1,
-    "Jupyter Notebook": 1,
+    "Kotlin": 2,
+    "Scala": 1,
+    "Java": 6,
+    "PHP": 1,
+    "Rust": 19,
+    "JavaScript": 18,
+    "F#": 1,
     "MDX": 2,
-    "Rust": 9,
-    "Elixir": 1,
+    "Dart": 5,
+    "Jupyter Notebook": 1,
     "Swift": 1,
-    "HTML": 1,
-    "Assembly": 1,
-    "Circom": 2,
-    "Dart": 1
+    "HTML": 2,
+    "Nim": 1,
+    "Circom": 1
   }
 }

@@ -1,1 +1,1 @@
-"""Data preparation utilities for rejection card sorting."""
+"""Data preparation utilities for merged-after-rework card sorting."""

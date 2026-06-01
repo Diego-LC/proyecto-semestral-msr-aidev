@@ -14,11 +14,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from exploration.aidev.pr_activity import get_parquet_urls
+from exploration.aidev.aidev_data import get_parquet_urls
 
 
 DEFAULT_SAMPLE_CSV = Path(
-    "exploration/aidev/sampling/outputs/merged_after_rework_sample.csv"
+    "exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv"
 )
 DEFAULT_OUTPUT_CSV = Path(
     "exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv"
@@ -26,6 +26,19 @@ DEFAULT_OUTPUT_CSV = Path(
 DEFAULT_SUMMARY_JSON = Path(
     "exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json"
 )
+DEFAULT_TEMPLATE_CSV = Path(
+    "exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template.csv"
+)
+MANUAL_TEMPLATE_FIELDS = [
+    "card_id",
+    "pr_id",
+    "population_case_type",
+    "pr_state",
+    "merged",
+    "repo_id",
+    "html_url",
+    "categoria_retrabajo_pre_merge",
+]
 CARD_FIELDS = [
     "card_id",
     "pr_id",
@@ -75,6 +88,10 @@ CARD_FIELDS = [
     "pr_title",
     "pr_body_text",
     "all_evidence_text",
+    "all_evidence_json",
+    "pr_reviews_json",
+    "pr_review_comments_json",
+    "pr_comments_json",
     "changes_requested_text",
     "review_comment_text",
     "pr_comment_text",
@@ -204,6 +221,44 @@ def evidence_texts_for(
         if text:
             texts.append(text)
     return join_limited(texts, max_length=max_length)
+
+
+def evidences_json_for(
+    evidences: Sequence[Dict],
+    source: Optional[str] = None,
+    max_text_length: int = 2000,
+) -> str:
+    records = []
+    for evidence in sorted(
+        evidences,
+        key=lambda item: (
+            to_int(item.get("source_rank"), default=999),
+            normalize_scalar(item.get("created_at")),
+            normalize_scalar(item.get("id")),
+        ),
+    ):
+        if source and evidence.get("source") != source:
+            continue
+        text = clean_evidence_text(evidence.get("body"), max_length=max_text_length)
+        records.append(
+            {
+                "source": normalize_scalar(evidence.get("source")),
+                "source_rank": to_int(evidence.get("source_rank"), default=999),
+                "state": normalize_scalar(evidence.get("state")),
+                "user": normalize_scalar(evidence.get("user")),
+                "user_type": normalize_scalar(evidence.get("user_type")),
+                "created_at": normalize_scalar(evidence.get("created_at")),
+                "id": normalize_scalar(evidence.get("id")),
+                "path": normalize_scalar(evidence.get("path")),
+                "diff_hunk": clean_evidence_text(
+                    evidence.get("diff_hunk"),
+                    max_length=800,
+                ),
+                "text": text,
+                "has_text": bool(text),
+            }
+        )
+    return json.dumps(records, ensure_ascii=False)
 
 
 def count_evidences(evidences: Sequence[Dict], **criteria) -> int:
@@ -491,6 +546,13 @@ def build_rejection_card(
             non_pr_textual_evidences,
             max_length=4000,
         ),
+        "all_evidence_json": evidences_json_for(all_evidences),
+        "pr_reviews_json": evidences_json_for(all_evidences, source="pr_review"),
+        "pr_review_comments_json": evidences_json_for(
+            all_evidences,
+            source="pr_review_comment",
+        ),
+        "pr_comments_json": evidences_json_for(all_evidences, source="pr_comment"),
         "changes_requested_text": evidence_texts_for(
             all_evidences,
             state="CHANGES_REQUESTED",
@@ -543,6 +605,15 @@ def write_csv_rows(path: Path, rows: Sequence[Dict]) -> None:
         writer.writeheader()
         for row in rows:
             writer.writerow({field: row.get(field, "") for field in CARD_FIELDS})
+
+
+def write_manual_template(path: Path, cards: Sequence[Dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=MANUAL_TEMPLATE_FIELDS)
+        writer.writeheader()
+        for card in cards:
+            writer.writerow({field: card.get(field, "") for field in MANUAL_TEMPLATE_FIELDS})
 
 
 def index_rows(rows: Iterable[Dict], key_field: str) -> Dict[str, List[Dict]]:
@@ -763,11 +834,12 @@ def summarize_cards(cards: Sequence[Dict], source_card_count: Optional[int] = No
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Prepare card rows from a sampled set of AIDev PRs."
+        description="Prepare card rows from the merged-after-rework AIDev sample."
     )
     parser.add_argument("--sample-csv", type=Path, default=DEFAULT_SAMPLE_CSV)
     parser.add_argument("--output-csv", type=Path, default=DEFAULT_OUTPUT_CSV)
     parser.add_argument("--summary-json", type=Path, default=DEFAULT_SUMMARY_JSON)
+    parser.add_argument("--template-csv", type=Path, default=DEFAULT_TEMPLATE_CSV)
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -783,6 +855,7 @@ def main() -> None:
         "sample_csv": str(args.sample_csv),
         "output_csv": str(args.output_csv),
         "summary_json": str(args.summary_json),
+        "template_csv": str(args.template_csv),
         **summarize_cards(cards, source_card_count=len(source_cards)),
     }
 
@@ -791,12 +864,22 @@ def main() -> None:
         return
 
     write_csv_rows(args.output_csv, cards)
+    write_manual_template(args.template_csv, cards)
     args.summary_json.parent.mkdir(parents=True, exist_ok=True)
     args.summary_json.write_text(
         json.dumps(summary, indent=2, ensure_ascii=False),
         encoding="utf-8",
     )
-    print(json.dumps({"output_csv": str(args.output_csv), "summary_json": str(args.summary_json)}))
+    print(
+        json.dumps(
+            {
+                "output_csv": str(args.output_csv),
+                "summary_json": str(args.summary_json),
+                "template_csv": str(args.template_csv),
+            },
+            ensure_ascii=False,
+        )
+    )
 
 
 if __name__ == "__main__":

@@ -1,1 +1,1 @@
-"""Sampling utilities for AIDev rejection studies."""
+"""Sampling utilities for the AIDev merged-after-rework flow."""
