@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -15,6 +16,7 @@ from exploration.aidev.preparation.rejection_cards import (
     DEFAULT_SUMMARY_JSON as DEFAULT_PREPARATION_SUMMARY_JSON,
     DEFAULT_TEMPLATE_CSV,
     MANUAL_TEMPLATE_FIELDS,
+    write_manual_template,
 )
 from exploration.aidev.sampling.stratified_sampler import (
     DEFAULT_OUTPUT_CSV as DEFAULT_SAMPLE_CSV,
@@ -56,6 +58,64 @@ def read_json(path: Path) -> dict:
         return json.load(json_file)
 
 
+def is_missing_or_empty(path: Path) -> bool:
+    return not path.exists() or path.stat().st_size == 0
+
+
+def run_flow_script(root: Path, script_path: Path) -> None:
+    result = subprocess.run(
+        [sys.executable, str(resolve_repo_path(root, script_path))],
+        cwd=root,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(
+            "Fallo la ejecucion del flujo\n"
+            f"script: {script_path}\n"
+            f"stdout:\n{result.stdout}\n"
+            f"stderr:\n{result.stderr}"
+        )
+
+
+def load_or_rebuild_template(template_csv_path: Path, cards_df: pd.DataFrame) -> pd.DataFrame:
+    def rebuild() -> pd.DataFrame:
+        card_rows = cards_df.to_dict("records")
+        write_manual_template(template_csv_path, card_rows)
+        return pd.read_csv(template_csv_path)
+
+    try:
+        template_df = pd.read_csv(template_csv_path)
+    except (FileNotFoundError, pd.errors.EmptyDataError):
+        return rebuild()
+
+    expected_columns = list(MANUAL_TEMPLATE_FIELDS)
+    if list(template_df.columns) != expected_columns or len(template_df) != len(cards_df):
+        return rebuild()
+
+    return template_df
+
+
+def ensure_flow_outputs(root: Optional[Path] = None, force: bool = False) -> FlowArtifacts:
+    repo_root = find_repo_root(root)
+    sampling_summary_path = resolve_repo_path(repo_root, DEFAULT_SAMPLING_SUMMARY_JSON)
+    sample_csv_path = resolve_repo_path(repo_root, DEFAULT_SAMPLE_CSV)
+    preparation_summary_path = resolve_repo_path(repo_root, DEFAULT_PREPARATION_SUMMARY_JSON)
+    cards_csv_path = resolve_repo_path(repo_root, DEFAULT_CARDS_CSV)
+    template_csv_path = resolve_repo_path(repo_root, DEFAULT_TEMPLATE_CSV)
+
+    sampling_paths = [sampling_summary_path, sample_csv_path]
+    preparation_paths = [preparation_summary_path, cards_csv_path, template_csv_path]
+
+    if force or any(is_missing_or_empty(path) for path in sampling_paths):
+        run_flow_script(repo_root, Path("exploration/aidev/sampling/stratified_sampler.py"))
+
+    if force or any(is_missing_or_empty(path) for path in preparation_paths):
+        run_flow_script(repo_root, Path("exploration/aidev/preparation/rejection_cards.py"))
+
+    return load_flow_artifacts(repo_root)
+
+
 def load_flow_artifacts(root: Optional[Path] = None) -> FlowArtifacts:
     repo_root = find_repo_root(root)
     sampling_summary_path = resolve_repo_path(repo_root, DEFAULT_SAMPLING_SUMMARY_JSON)
@@ -69,23 +129,6 @@ def load_flow_artifacts(root: Optional[Path] = None) -> FlowArtifacts:
     sample_df = pd.read_csv(sample_csv_path)
     cards_df = pd.read_csv(cards_csv_path)
 
-    def load_template() -> pd.DataFrame:
-        try:
-            df = pd.read_csv(template_csv_path)
-            if df.empty or list(df.columns) == []:
-                raise pd.errors.EmptyDataError()
-            return df
-        except (FileNotFoundError, pd.errors.EmptyDataError):
-            from exploration.aidev.preparation.rejection_cards import write_manual_template
-
-            rows = [
-                {field: card.get(field, "") for field in MANUAL_TEMPLATE_FIELDS}
-                for card in cards_df.to_dict("records")
-            ]
-            template_csv_path.parent.mkdir(parents=True, exist_ok=True)
-            write_manual_template(template_csv_path, rows)
-            return pd.read_csv(template_csv_path)
-
     return FlowArtifacts(
         root=repo_root,
         sampling_summary_path=sampling_summary_path,
@@ -97,7 +140,7 @@ def load_flow_artifacts(root: Optional[Path] = None) -> FlowArtifacts:
         preparation_summary=preparation_summary,
         sample_df=sample_df,
         cards_df=cards_df,
-        template_df=load_template(),
+        template_df=load_or_rebuild_template(template_csv_path, cards_df),
     )
 
 
@@ -334,4 +377,16 @@ def validate_flow(artifacts: FlowArtifacts) -> str:
     assert artifacts.preparation_summary["source_card_count"] == len(artifacts.sample_df)
     assert artifacts.preparation_summary["filtered_out_without_human_comments"] == 0
     assert (pd.to_numeric(artifacts.cards_df["human_comment_count"], errors="raise") > 0).all()
+    assert list(artifacts.template_df.columns) == MANUAL_TEMPLATE_FIELDS
+    assert MANUAL_TEMPLATE_FIELDS[-1] == "categoria_retrabajo_pre_merge"
+    assert artifacts.template_df["categoria_retrabajo_pre_merge"].fillna("").eq("").all()
+    assert pd.to_numeric(
+        artifacts.template_df["horas_creacion_a_merge"], errors="coerce"
+    ).notna().all()
+    assert pd.to_numeric(
+        artifacts.template_df["horas_creacion_a_aceptacion"], errors="coerce"
+    ).notna().all()
+    assert artifacts.template_df["fuente_tiempo_aceptacion"].isin(
+        {"primera_review_aprobada", "merge_sin_review_aprobada"}
+    ).all()
     return "Validaciones completadas"
