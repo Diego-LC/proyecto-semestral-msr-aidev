@@ -14,6 +14,7 @@ from exploration.aidev.preparation.rejection_cards import (
     DEFAULT_OUTPUT_CSV as DEFAULT_CARDS_CSV,
     DEFAULT_SUMMARY_JSON as DEFAULT_PREPARATION_SUMMARY_JSON,
     DEFAULT_TEMPLATE_CSV,
+    MANUAL_TEMPLATE_FIELDS,
 )
 from exploration.aidev.sampling.stratified_sampler import (
     DEFAULT_OUTPUT_CSV as DEFAULT_SAMPLE_CSV,
@@ -63,6 +64,28 @@ def load_flow_artifacts(root: Optional[Path] = None) -> FlowArtifacts:
     cards_csv_path = resolve_repo_path(repo_root, DEFAULT_CARDS_CSV)
     template_csv_path = resolve_repo_path(repo_root, DEFAULT_TEMPLATE_CSV)
 
+    sampling_summary = read_json(sampling_summary_path)
+    preparation_summary = read_json(preparation_summary_path)
+    sample_df = pd.read_csv(sample_csv_path)
+    cards_df = pd.read_csv(cards_csv_path)
+
+    def load_template() -> pd.DataFrame:
+        try:
+            df = pd.read_csv(template_csv_path)
+            if df.empty or list(df.columns) == []:
+                raise pd.errors.EmptyDataError()
+            return df
+        except (FileNotFoundError, pd.errors.EmptyDataError):
+            from exploration.aidev.preparation.rejection_cards import write_manual_template
+
+            rows = [
+                {field: card.get(field, "") for field in MANUAL_TEMPLATE_FIELDS}
+                for card in cards_df.to_dict("records")
+            ]
+            template_csv_path.parent.mkdir(parents=True, exist_ok=True)
+            write_manual_template(template_csv_path, rows)
+            return pd.read_csv(template_csv_path)
+
     return FlowArtifacts(
         root=repo_root,
         sampling_summary_path=sampling_summary_path,
@@ -70,11 +93,11 @@ def load_flow_artifacts(root: Optional[Path] = None) -> FlowArtifacts:
         preparation_summary_path=preparation_summary_path,
         cards_csv_path=cards_csv_path,
         template_csv_path=template_csv_path,
-        sampling_summary=read_json(sampling_summary_path),
-        preparation_summary=read_json(preparation_summary_path),
-        sample_df=pd.read_csv(sample_csv_path),
-        cards_df=pd.read_csv(cards_csv_path),
-        template_df=pd.read_csv(template_csv_path),
+        sampling_summary=sampling_summary,
+        preparation_summary=preparation_summary,
+        sample_df=sample_df,
+        cards_df=cards_df,
+        template_df=load_template(),
     )
 
 
