@@ -18,6 +18,10 @@ from exploration.aidev.preparation.rejection_cards import (
     MANUAL_TEMPLATE_FIELDS,
     write_manual_template,
 )
+from exploration.aidev.sampling.population_filter import (
+    DEFAULT_POPULATION_CSV,
+    DEFAULT_SUMMARY_JSON as DEFAULT_POPULATION_SUMMARY_JSON,
+)
 from exploration.aidev.sampling.stratified_sampler import (
     DEFAULT_OUTPUT_CSV as DEFAULT_SAMPLE_CSV,
     DEFAULT_SUMMARY_JSON as DEFAULT_SAMPLING_SUMMARY_JSON,
@@ -27,13 +31,17 @@ from exploration.aidev.sampling.stratified_sampler import (
 @dataclass
 class FlowArtifacts:
     root: Path
+    population_summary_path: Path
     sampling_summary_path: Path
+    population_csv_path: Path
     sample_csv_path: Path
     preparation_summary_path: Path
     cards_csv_path: Path
     template_csv_path: Path
+    population_summary: dict
     sampling_summary: dict
     preparation_summary: dict
+    population_df: pd.DataFrame
     sample_df: pd.DataFrame
     cards_df: pd.DataFrame
     template_df: pd.DataFrame
@@ -98,19 +106,31 @@ def load_or_rebuild_template(template_csv_path: Path, cards_df: pd.DataFrame) ->
 
 def ensure_flow_outputs(root: Optional[Path] = None, force: bool = False) -> FlowArtifacts:
     repo_root = find_repo_root(root)
+    population_summary_path = resolve_repo_path(repo_root, DEFAULT_POPULATION_SUMMARY_JSON)
     sampling_summary_path = resolve_repo_path(repo_root, DEFAULT_SAMPLING_SUMMARY_JSON)
+    population_csv_path = resolve_repo_path(repo_root, DEFAULT_POPULATION_CSV)
     sample_csv_path = resolve_repo_path(repo_root, DEFAULT_SAMPLE_CSV)
     preparation_summary_path = resolve_repo_path(repo_root, DEFAULT_PREPARATION_SUMMARY_JSON)
     cards_csv_path = resolve_repo_path(repo_root, DEFAULT_CARDS_CSV)
     template_csv_path = resolve_repo_path(repo_root, DEFAULT_TEMPLATE_CSV)
 
+    population_paths = [population_summary_path, population_csv_path]
     sampling_paths = [sampling_summary_path, sample_csv_path]
     preparation_paths = [preparation_summary_path, cards_csv_path, template_csv_path]
 
-    if force or any(is_missing_or_empty(path) for path in sampling_paths):
+    rebuild_population = force or any(is_missing_or_empty(path) for path in population_paths)
+    if rebuild_population:
+        run_flow_script(repo_root, Path("exploration/aidev/sampling/population_filter.py"))
+
+    rebuild_sampling = (
+        force
+        or rebuild_population
+        or any(is_missing_or_empty(path) for path in sampling_paths)
+    )
+    if rebuild_sampling:
         run_flow_script(repo_root, Path("exploration/aidev/sampling/stratified_sampler.py"))
 
-    if force or any(is_missing_or_empty(path) for path in preparation_paths):
+    if force or rebuild_sampling or any(is_missing_or_empty(path) for path in preparation_paths):
         run_flow_script(repo_root, Path("exploration/aidev/preparation/rejection_cards.py"))
 
     return load_flow_artifacts(repo_root)
@@ -118,26 +138,34 @@ def ensure_flow_outputs(root: Optional[Path] = None, force: bool = False) -> Flo
 
 def load_flow_artifacts(root: Optional[Path] = None) -> FlowArtifacts:
     repo_root = find_repo_root(root)
+    population_summary_path = resolve_repo_path(repo_root, DEFAULT_POPULATION_SUMMARY_JSON)
     sampling_summary_path = resolve_repo_path(repo_root, DEFAULT_SAMPLING_SUMMARY_JSON)
+    population_csv_path = resolve_repo_path(repo_root, DEFAULT_POPULATION_CSV)
     sample_csv_path = resolve_repo_path(repo_root, DEFAULT_SAMPLE_CSV)
     preparation_summary_path = resolve_repo_path(repo_root, DEFAULT_PREPARATION_SUMMARY_JSON)
     cards_csv_path = resolve_repo_path(repo_root, DEFAULT_CARDS_CSV)
     template_csv_path = resolve_repo_path(repo_root, DEFAULT_TEMPLATE_CSV)
 
+    population_summary = read_json(population_summary_path)
     sampling_summary = read_json(sampling_summary_path)
     preparation_summary = read_json(preparation_summary_path)
+    population_df = pd.read_csv(population_csv_path)
     sample_df = pd.read_csv(sample_csv_path)
     cards_df = pd.read_csv(cards_csv_path)
 
     return FlowArtifacts(
         root=repo_root,
+        population_summary_path=population_summary_path,
         sampling_summary_path=sampling_summary_path,
+        population_csv_path=population_csv_path,
         sample_csv_path=sample_csv_path,
         preparation_summary_path=preparation_summary_path,
         cards_csv_path=cards_csv_path,
         template_csv_path=template_csv_path,
+        population_summary=population_summary,
         sampling_summary=sampling_summary,
         preparation_summary=preparation_summary,
+        population_df=population_df,
         sample_df=sample_df,
         cards_df=cards_df,
         template_df=load_or_rebuild_template(template_csv_path, cards_df),
@@ -150,37 +178,88 @@ def relative_path(path: Path, root: Path) -> str:
 
 def build_raw_overview(summary: dict) -> pd.DataFrame:
     counts = summary["population_filter_counts"]
+    rows = [
+        {
+            "metrica": "PRs totales en pull_request",
+            "definicion": "Todos los registros del parquet pull_request",
+            "total": counts["all_pull_request"],
+        },
+        {
+            "metrica": "PRs cerrados",
+            "definicion": "state = closed",
+            "total": counts["closed"],
+        },
+        {
+            "metrica": "PRs mergeados",
+            "definicion": "merged_at no nulo",
+            "total": counts["merged"],
+        },
+        {
+            "metrica": "PRs cerrados sin merge",
+            "definicion": "state = closed y merged_at nulo",
+            "total": counts["closed_unmerged"],
+        },
+        {
+            "metrica": "PRs mergeados con commits adicionales",
+            "definicion": "merged_at no nulo y commit_count > 1",
+            "total": counts["merged_with_additional_commits"],
+        },
+        {
+            "metrica": "Poblacion operacional",
+            "definicion": "merged_at no nulo, commit_count > 1 y human_comment_count > 0",
+            "total": counts["merged_with_additional_commits_and_human_comments"],
+        },
+    ]
+    overview = pd.DataFrame(rows)
+    total = counts["all_pull_request"]
+    overview["porcentaje_del_universo"] = overview["total"] / total
+    overview["perdida_acumulada"] = 1 - overview["porcentaje_del_universo"]
+    return overview
+
+
+def build_population_filter_table(artifacts: FlowArtifacts) -> pd.DataFrame:
+    overview = build_raw_overview(artifacts.population_summary)
+    return overview.assign(
+        porcentaje_del_universo=overview["porcentaje_del_universo"].map(
+            lambda value: f"{value:.2%}"
+        ),
+        perdida_acumulada=overview["perdida_acumulada"].map(lambda value: f"{value:.2%}"),
+    )
+
+
+def build_population_artifact_table(artifacts: FlowArtifacts) -> pd.DataFrame:
     return pd.DataFrame(
         [
             {
-                "metrica": "PRs totales en pull_request",
-                "definicion": "Todos los registros del parquet pull_request",
-                "total": counts["all_pull_request"],
+                "artefacto": "Resumen de filtros poblacionales",
+                "ruta": relative_path(artifacts.population_summary_path, artifacts.root),
+                "filas": 1,
+                "uso": "metricas del embudo antes de estratificar",
             },
             {
-                "metrica": "PRs cerrados",
-                "definicion": "state = closed",
-                "total": counts["closed"],
+                "artefacto": "Poblacion operacional pre-muestreo",
+                "ruta": relative_path(artifacts.population_csv_path, artifacts.root),
+                "filas": len(artifacts.population_df),
+                "uso": "entrada del paso 1 para cuotas y seleccion estratificada",
+            }
+        ]
+    )
+
+
+def build_sampling_artifact_table(artifacts: FlowArtifacts) -> pd.DataFrame:
+    return pd.DataFrame(
+        [
+            {
+                "artefacto": "Resumen de muestreo estratificado",
+                "ruta": relative_path(artifacts.sampling_summary_path, artifacts.root),
+                "filas": 1,
+                "uso": "cuotas, seed, tamanos de estrato y distribuciones de control",
             },
             {
-                "metrica": "PRs mergeados",
-                "definicion": "merged_at no nulo",
-                "total": counts["merged"],
-            },
-            {
-                "metrica": "PRs cerrados sin merge",
-                "definicion": "state = closed y merged_at nulo",
-                "total": counts["closed_unmerged"],
-            },
-            {
-                "metrica": "PRs mergeados con commits adicionales",
-                "definicion": "merged_at no nulo y commit_count > 1",
-                "total": counts["merged_with_additional_commits"],
-            },
-            {
-                "metrica": "Poblacion operacional",
-                "definicion": "merged_at no nulo, commit_count > 1 y human_comment_count > 0",
-                "total": counts["merged_with_additional_commits_and_human_comments"],
+                "artefacto": "Muestra estratificada",
+                "ruta": relative_path(artifacts.sample_csv_path, artifacts.root),
+                "filas": len(artifacts.sample_df),
+                "uso": "entrada del paso 2 para generar tarjetas con evidencia",
             },
         ]
     )
@@ -190,8 +269,16 @@ def build_files_table(artifacts: FlowArtifacts) -> pd.DataFrame:
     return pd.DataFrame(
         [
             {
+                "artefacto": "Resumen de filtros poblacionales",
+                "ruta": relative_path(artifacts.population_summary_path, artifacts.root),
+            },
+            {
                 "artefacto": "Resumen de muestreo",
                 "ruta": relative_path(artifacts.sampling_summary_path, artifacts.root),
+            },
+            {
+                "artefacto": "Poblacion operacional",
+                "ruta": relative_path(artifacts.population_csv_path, artifacts.root),
             },
             {
                 "artefacto": "Muestra estratificada",
@@ -214,7 +301,7 @@ def build_files_table(artifacts: FlowArtifacts) -> pd.DataFrame:
 
 
 def build_funnel(artifacts: FlowArtifacts) -> pd.DataFrame:
-    counts = artifacts.sampling_summary["population_filter_counts"]
+    counts = artifacts.population_summary["population_filter_counts"]
     total = counts["all_pull_request"]
     rows = [
         ("Universo bruto AIDev", "Todos los PRs en pull_request", total),
@@ -227,7 +314,7 @@ def build_funnel(artifacts: FlowArtifacts) -> pd.DataFrame:
         (
             "Poblacion antes de estratificar",
             "commit_count > 1 y human_comment_count > 0",
-            artifacts.sampling_summary["population_size"],
+            artifacts.population_summary["population_size"],
         ),
         (
             "Muestra estratificada por agente",
@@ -349,18 +436,41 @@ def build_template_preview(artifacts: FlowArtifacts) -> pd.DataFrame:
 
 def validate_flow(artifacts: FlowArtifacts) -> str:
     summary = artifacts.sampling_summary
-    filter_counts = summary["population_filter_counts"]
+    population_summary = artifacts.population_summary
+    filter_counts = population_summary["population_filter_counts"]
 
+    assert population_summary["population_mode"] == "merged-after-rework"
     assert summary["population_mode"] == "merged-after-rework"
     assert summary["requested_strata_fields"] == ["agent"]
     assert summary["used_strata_fields"] == ["agent"]
     assert (
         summary["population_size"]
+        == population_summary["population_size"]
         == filter_counts["merged_with_additional_commits_and_human_comments"]
+        == len(artifacts.population_df)
     )
+    assert population_summary["population_csv"].replace("\\", "/") == relative_path(
+        artifacts.population_csv_path, artifacts.root
+    )
+    assert artifacts.sampling_summary["population_csv"].replace("\\", "/") == relative_path(
+        artifacts.population_csv_path, artifacts.root
+    )
+    assert artifacts.sampling_summary["population_summary_json"].replace(
+        "\\", "/"
+    ) == relative_path(artifacts.population_summary_path, artifacts.root)
     assert summary["population_distributions"]["population_case_type"] == {
         "merged_after_rework": summary["population_size"]
     }
+    assert population_summary["population_distributions"]["population_case_type"] == {
+        "merged_after_rework": population_summary["population_size"]
+    }
+    assert artifacts.population_df["pr_id"].nunique() == len(artifacts.population_df)
+    assert (
+        pd.to_numeric(artifacts.population_df["commit_count"], errors="raise") > 1
+    ).all()
+    assert (
+        pd.to_numeric(artifacts.population_df["human_comment_count"], errors="raise") > 0
+    ).all()
     assert summary["sample_distributions"]["population_case_type"] == {
         "merged_after_rework": len(artifacts.sample_df)
     }

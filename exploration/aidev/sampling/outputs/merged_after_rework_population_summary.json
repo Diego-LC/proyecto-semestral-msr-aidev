@@ -1,31 +1,18 @@
 {
-  "seed": 20260510,
   "population_mode": "merged-after-rework",
+  "population_case_type": "merged_after_rework",
   "population_csv": "exploration\\aidev\\sampling\\outputs\\merged_after_rework_population.csv",
-  "population_summary_json": "exploration\\aidev\\sampling\\outputs\\merged_after_rework_population_summary.json",
+  "source_pull_request_count": 33596,
   "population_size": 3166,
-  "sample_size": 300,
-  "requested_strata_fields": [
-    "agent"
+  "control_fields": [
+    "population_case_type",
+    "agent",
+    "language",
+    "change_complexity_bin",
+    "repo_popularity_bin",
+    "created_period",
+    "task_type"
   ],
-  "used_strata_fields": [
-    "agent"
-  ],
-  "stratum_count": 5,
-  "stratum_sizes": {
-    "Claude_Code": 73,
-    "Copilot": 1526,
-    "Cursor": 180,
-    "Devin": 907,
-    "OpenAI_Codex": 480
-  },
-  "quotas": {
-    "Claude_Code": 7,
-    "Copilot": 145,
-    "Cursor": 17,
-    "Devin": 86,
-    "OpenAI_Codex": 45
-  },
   "population_distributions": {
     "population_case_type": {
       "merged_after_rework": 3166
@@ -114,71 +101,6 @@
       "perf": 25,
       "style": 11,
       "revert": 3
-    }
-  },
-  "sample_distributions": {
-    "population_case_type": {
-      "merged_after_rework": 300
-    },
-    "agent": {
-      "Copilot": 145,
-      "Devin": 86,
-      "OpenAI_Codex": 45,
-      "Cursor": 17,
-      "Claude_Code": 7
-    },
-    "language": {
-      "TypeScript": 89,
-      "Python": 53,
-      "C#": 42,
-      "Rust": 19,
-      "Go": 18,
-      "JavaScript": 18,
-      "Ruby": 11,
-      "unknown": 8,
-      "C++": 7,
-      "Java": 6,
-      "Dart": 5,
-      "Zig": 5,
-      "C": 3,
-      "HTML": 2,
-      "Kotlin": 2,
-      "MDX": 2,
-      "PowerShell": 2,
-      "Circom": 1,
-      "F#": 1,
-      "HCL": 1,
-      "Jupyter Notebook": 1,
-      "Nim": 1,
-      "PHP": 1,
-      "Scala": 1,
-      "Swift": 1
-    },
-    "change_complexity_bin": {
-      "high": 107,
-      "medium": 106,
-      "low": 87
-    },
-    "repo_popularity_bin": {
-      "low": 115,
-      "medium": 94,
-      "high": 91
-    },
-    "created_period": {
-      "old": 105,
-      "middle": 102,
-      "recent": 93
-    },
-    "task_type": {
-      "feat": 120,
-      "fix": 90,
-      "docs": 35,
-      "refactor": 20,
-      "chore": 15,
-      "ci": 6,
-      "test": 6,
-      "build": 5,
-      "perf": 3
     }
   },
   "population_filter_counts": {
