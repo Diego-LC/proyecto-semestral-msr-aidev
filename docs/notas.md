@@ -22,3 +22,7 @@ b. Muestreo
 6. **Resultados**
    Aca se cuenta lo que se logró, los datos crudos y procesados (taxonomia y analisis)
    leer paper del campus para tener una idea de como se hace.
+
+
+   Escribir escritura tecnica en primera persona. no en tercera persona.
+El enfoque metodologico debe seguir la referencia. (3 etapas no 5) debe adaptarse a nuestro contexto y datos. Poner resultados de perdida en porcentaje desde la fuente de datos total. Clarificar criterios de inclusion y exclusión, en los filtros. Definir y demostrar el metodo o formula usado en la estratificación. Confianza (%) y error no mayor a 5%. Definir la tabla con menos columna a la hora de categorizar, e incluir una que tenga la cita textual de la razon de rechazo de cada pr, en caso de que exista. Las respuestas o justificaciones deben responder a la pregunta planteada. (Aplicar Soundness.) Hacer una presentación.

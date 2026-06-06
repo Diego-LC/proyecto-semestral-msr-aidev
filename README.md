@@ -7,15 +7,18 @@ Este repositorio implementa el flujo de datos y herramientas para responder:
 La fuente principal es el dataset **AIDev** (`hao-li/AIDev`). El núcleo metodológico es construir una **taxonomía inductiva** de motivos de retrabajo mediante **card sorting abierto** sobre una muestra reproducible, y luego analizar distribución y esfuerzo/tiempo de integración asociado.
 
 Referencias clave del diseño:
+
 - Plan metodologico versionado: `docs/plans/plan-metodologico-card-sorting.md`
 
 ## Qué se busca responder y lograr
 
 **Resultado principal del proyecto**
+
 - Una taxonomía jerárquica (2 niveles) de motivos de *retrabajo pre-merge*: `categoria_padre` → `subcategoria`.
 - Un mapeo estructurado `pr_id → subcategoria → categoria_padre` para análisis cuantitativo posterior.
 
 **Preguntas de investigación (RQs)**
+
 1. **RQ1**: ¿Qué categorías de motivos de retrabajo (feedback/revisión) emergen del card sorting manual en PRs que no se aceptan de inmediato?
 2. **RQ2**: En esos casos, ¿cuánto tiempo pasa hasta el merge final y cuántas intervenciones humanas aparecen en el camino?
 3. **RQ3**: ¿Cómo se distribuyen las categorías por agente, lenguaje y tipo de tarea?
@@ -32,6 +35,7 @@ Este repositorio trabaja principalmente con:
      - señales de feedback/review: conteos en reviews y/o comentarios.
 
 Notas:
+
 - `merged_after_rework` captura casos donde hubo iteración antes de integrarse.
 - El análisis de “rechazo definitivo” existe como variante (`rejected`), pero no es el foco operativo principal.
 
@@ -69,6 +73,7 @@ python3 -m venv .venv
 Script: `exploration/aidev/sampling/stratified_sampler.py`
 
 Función:
+
 - Construye la población objetivo (principalmente `merged-after-rework`).
 - Estratifica por `agent` (default) y asigna cuotas proporcionales con un mínimo por estrato.
 - Selecciona una muestra aleatoria reproducible (semilla fija).
@@ -85,6 +90,7 @@ Ejemplo (poblacion `merged-after-rework`, n=300, seed configurable):
 ```
 
 Salida:
+
 - `exploration/aidev/sampling/outputs/*_sample_seed_<seed>.csv`: muestra seleccionada
 - `exploration/aidev/sampling/outputs/*_sample_seed_<seed>_summary.json`: resumen de control (seed, tamanos, cuotas, distribuciones)
 
@@ -93,6 +99,7 @@ Salida:
 Script: `exploration/aidev/preparation/rejection_cards.py`
 
 Función:
+
 - Carga la muestra (CSV) y cruza evidencia textual desde tablas del dataset (reviews, comments, timeline).
 - Selecciona y limpia la evidencia más útil para justificar el motivo de rechazo/feedback.
 - Construye una tarjeta por PR con campos estandarizados.
@@ -108,6 +115,7 @@ Ejemplo:
 ```
 
 Salida:
+
 - `exploration/aidev/preparation/outputs/*cards*.csv`: tarjetas para clasificar
 - `exploration/aidev/preparation/outputs/*summary*.json`: resumen y métricas de control
 - Plantilla manual (categorizacion): `exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template.csv`
@@ -122,6 +130,7 @@ El card sorting se realiza de forma manual usando CSV:
   - `exploration/aidev/taxonomy/initial/`
 
 Resultado esperado del card sorting:
+
 - Para cada tarjeta/PR: `categoria_padre`, `subcategoria` (y opcionalmente `confidence`, `rationale`, etc.).
 - Luego: agrupar/normalizar categorías similares para llegar a un set estable y reutilizable.
 
