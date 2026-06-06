@@ -138,6 +138,8 @@ Resultado esperado del card sorting:
 .venv/bin/python -m unittest
 ```
 
+Para sesiones OpenCode, las instrucciones operativas compactas viven en `AGENTS.md`.
+
 ## Convención de outputs
 
 - Artefactos canónicos de sampling: `exploration/aidev/sampling/outputs/*_sample_seed_<seed>.csv` y `*_sample_seed_<seed>_summary.json`.

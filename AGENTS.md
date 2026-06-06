@@ -1,67 +1,53 @@
 # AGENTS.md
 
-## Reglas de Trabajo
+## Reglas de trabajo
 
-- Siempre preguntar si estoy de acuerdo con el mensaje de commit antes de ejecutarlo, este debe ser detallado pero no tan extenso. Preguntar explicitamente si hacer push, rebase o cambios que afecten el repositorio.
-- Siempre que hagas cambios en el código o en archivos, actualizar primero el archivo README.md.
+- Antes de cualquier cambio en código o archivos, actualiza primero `README.md`.
+- Pregunta antes de `git commit`, `git push`, `git rebase` o cambios que afecten ramas/remotos. Propón el comando exacto.
+- Commits en español, Conventional Commits y con cuerpo breve; ver `.agents/workflows/commits.md`.
 
-## Repo Intent (AIDev / merged-after-rework)
+## Foco del repo
 
-- El foco operativo del proyecto es **solo** la población `merged-after-rework` (PRs mergeados tras señales de retrabajo). No optimizar ni documentar flujos para `rejected` salvo que se pida explícitamente.
-- El objetivo de investigación es entender cuándo PRs de agentes IA resultan contraproducentes y **cuánto esfuerzo/tiempo** toma integrarlos (taxonomía + métricas).
+- El flujo operativo es `merged_after_rework`: PRs AIDev mergeados tras retrabajo. No revivas ni optimices flujos `rejected` salvo pedido explícito.
+- Pregunta de investigación: cuándo PRs de agentes IA resultan contraproducentes y cuánto esfuerzo/tiempo toma integrarlos.
+- Pipeline: población `merged_after_rework` → muestra estratificada por `agent` (n=300, seed `20260510`) → tarjetas con evidencia → card sorting manual → taxonomía + métricas.
 
-## Metodología (en una línea)
+## Entorno y comandos reales
 
-- Filtrar casos `merged_after_rework` → muestreo estratificado por `agent` (n=300) → construir tarjetas con evidencia → card sorting manual con 2 evaluadores → agrupar categorías similares → analizar distribución y esfuerzo/tiempo hasta merge.
+- Usa siempre `.venv/bin/python`; con `/usr/bin/python3` pueden faltar `pandas`/`pyarrow`.
+- Instalar dependencias mínimas:
+  ```bash
+  .venv/bin/python -m pip install -r exploration/aidev/requirements-notebook.txt
+  ```
+- Muestreo canónico:
+  ```bash
+  .venv/bin/python exploration/aidev/sampling/stratified_sampler.py \
+    --sample-size 300 \
+    --min-per-stratum 3 \
+    --seed 20260510 \
+    --output-csv exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv \
+    --summary-json exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510_summary.json
+  ```
+- Tarjetas canónicas:
+  ```bash
+  .venv/bin/python exploration/aidev/preparation/rejection_cards.py \
+    --sample-csv exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv \
+    --output-csv exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv \
+    --summary-json exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json
+  ```
+- Validación sin escribir archivos: agrega `--dry-run` a cualquiera de esos dos scripts.
 
-## Quickstart (Comandos Reales)
+## Estructura que importa
 
-- Usar el venv del repo: `.venv/bin/python`.
-- Dependencias mínimas para Parquet/AIDev:
-  - `.venv/bin/python -m pip install -r exploration/aidev/requirements-notebook.txt`
+- `exploration/aidev/aidev_data.py`: resuelve URLs Parquet del dataset `hao-li/AIDev` vía Hugging Face.
+- `exploration/aidev/sampling/stratified_sampler.py`: arma la población y muestra; los outputs canónicos llevan `seed_<seed>`.
+- `exploration/aidev/preparation/rejection_cards.py`: cruza muestra con reviews/comentarios/timeline; filtra por defecto tarjetas con `human_comment_count > 0` y escribe también la plantilla manual.
+- `exploration/aidev/notebook_flow.py`: helpers del notebook principal `notebooks/2026-05-26-merged-after-rework-flow.ipynb`.
+- Taxonomía manual versionada: `exploration/aidev/taxonomy/initial/`. No tocar resultados manuales sin confirmación.
 
-### 1) Sampling (estratificado por agente)
+## Verificación y gotchas
 
-```bash
-.venv/bin/python exploration/aidev/sampling/stratified_sampler.py \
-  --sample-size 300 \
-  --min-per-stratum 3 \
-  --seed 20260510 \
-  --output-csv exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv \
-  --summary-json exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510_summary.json
-```
-
-- Convencion: outputs canónicos **con** sufijo `seed_<seed>` para trazabilidad/reproducibilidad.
-
-### 2) Cards (evidencia textual)
-
-```bash
-.venv/bin/python exploration/aidev/preparation/rejection_cards.py \
-  --sample-csv exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv \
-  --output-csv exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv \
-  --summary-json exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json
-```
-
-- El script filtra por defecto a tarjetas con `human_comment_count > 0`.
-
-### 3) Card Sorting (dos vías)
-
-- Taxonomía inicial (manual) versionada aquí:
-  - `exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_template.csv`
-
-- Plantilla manual generada por el flujo:
-  - `exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template.csv`
-
-## Tests (rápidos y relevantes)
-
-```bash
-.venv/bin/python -m unittest \
-  exploration.aidev.tests.test_stratified_sampler \
-  exploration.aidev.tests.test_rejection_cards
-```
-
-## Gotchas
-
-- Si ejecutas scripts con `/usr/bin/python3` puede faltar `pandas`/`pyarrow`. Usa siempre `.venv/bin/python`.
-- `--sample-size` debe ser compatible con `--min-per-stratum` y el número de estratos (agente). Si reduces `sample-size`, reduce también `--min-per-stratum`.
-- No borrar outputs “históricos” a menos que sean duplicados verificables; los resultados manuales en `exploration/aidev/taxonomy/` no deben tocarse sin pedirlo.
+- No hay CI ni suite de tests versionada actualmente; `exploration/aidev/tests/` no contiene tests. Usa `--dry-run` como verificación rápida del pipeline.
+- `--sample-size` debe ser compatible con `--min-per-stratum` y la cantidad de agentes; si bajas el tamaño de muestra, baja también el mínimo por estrato.
+- No borres outputs históricos salvo que confirmes que son duplicados verificables.
+- `.gitignore` ignora borradores locales `exploration/aidev/preparation/outputs/*manual_categories.csv`, pero no la plantilla canónica `*_manual_categories_template.csv`.
