@@ -1,16 +1,17 @@
 # Proyecto Semestral MSR: PRs “No Aceptados Inmediatamente” de Agentes IA (AIDev)
 
-Este repositorio implementa el flujo de datos y herramientas para responder:
+En este repositorio construimos un flujo reproducible para responder:
 
 **¿En qué casos los agentes de IA resultan contraproducentes al abrir PRs y cuánto esfuerzo/iteraciones toma integrarlos efectivamente?**
 
-La fuente principal es el dataset **AIDev** (`hao-li/AIDev`). El núcleo metodológico es construir una **taxonomía inductiva** de motivos de retrabajo mediante **card sorting abierto** sobre una muestra reproducible, y luego analizar distribución y esfuerzo/tiempo de integración asociado.
+Usamos como fuente principal el dataset **AIDev** (`hao-li/AIDev`). El núcleo metodológico es construir una **taxonomía inductiva** de motivos de retrabajo mediante **card sorting abierto** sobre una muestra reproducible, y luego analizar distribución y esfuerzo/tiempo de integración asociado.
 
 Referencias clave del diseño:
 
 - Plan metodologico versionado: `docs/plans/plan-metodologico-card-sorting.md`
+- Referencia metodológica de card sorting: `docs/card-sorting.pdf`
 
-## Qué se busca responder y lograr
+## Qué buscamos responder y lograr
 
 **Resultado principal del proyecto**
 
@@ -26,7 +27,7 @@ Referencias clave del diseño:
 
 ## Definiciones operacionales (cómo se “materializa” el fenómeno en datos)
 
-Este repositorio trabaja principalmente con:
+Trabajamos principalmente con:
 
 1. **Mergeado después de retrabajo** (`merged_after_rework`)
    - PRs con `state = closed` y `merged_at NOT NULL`, con señales de que no fue aceptación inmediata.
@@ -39,21 +40,82 @@ Notas:
 - `merged_after_rework` captura casos donde hubo iteración antes de integrarse.
 - El análisis de “rechazo definitivo” existe como variante (`rejected`), pero no es el foco operativo principal.
 
-## Metodología (resumen ejecutable)
+## Metodología: card sorting en tres etapas
 
-Basado en `docs/notas.md`.
+Adaptamos la estructura de Zimmermann en `docs/card-sorting.pdf`: **Preparation**, **Execution** y **Analysis**. Usamos primera persona técnica plural para dejar claro qué decisión metodológica tomamos en cada etapa.
 
-1. **Fuente de datos**: dataset `hao-li/AIDev`.
-2. **Filtro de casos (población)**:
-   - PRs mergeados **después** de señales de retrabajo (cambio de código y/o interacción humana), marcados como `population_case_type = merged_after_rework`.
-3. **Muestreo**:
-   - Muestra aleatoria **estratificada por agente** (tamaño `n=300`, semilla fija para reproducibilidad).
-4. **Card sorting manual (2 evaluadores)**:
-   - Construir tarjetas con evidencia textual (reviews/comentarios/timeline) para cada PR.
-   - Clasificar manualmente para derivar categorías inductivas (taxonomía) y luego agrupar categorías similares.
-5. **Resultados a reportar**:
-   - Datos crudos y procesados: muestra, tarjetas, taxonomía inicial y taxonomía refinada.
-   - Análisis por categoría: distribución por agente/lenguaje/tipo de tarea y métricas de esfuerzo/tiempo hasta merge.
+### 1) Preparation
+
+- Cargamos el dataset `hao-li/AIDev` y construimos la población operacional `merged_after_rework`.
+- Incluimos solo PRs mergeados con retrabajo observable: `merged_at` no nulo, `commit_count > 1` y `human_comment_count > 0`.
+- Extraemos una muestra aleatoria estratificada por `agent` y generamos una tarjeta por PR con identificador, contexto mínimo, tiempos de aceptación y evidencia textual humana.
+
+### 2) Execution
+
+- Clasificamos manualmente las tarjetas mediante **card sorting abierto**: no imponemos categorías previas, sino que agrupamos tarjetas por similitud temática.
+- Usamos títulos descriptivos para los grupos, separamos tarjetas ambiguas o descartables y calibramos criterios entre evaluadores antes de congelar categorías.
+- La tabla de categorización debe ser reducida y trazable: `card_id`, `pr_id`, `agent`, `html_url`, `cita_textual_retrabajo`, `categoria_retrabajo_pre_merge`, `justificacion_breve`.
+
+### 3) Analysis
+
+- Revisamos consistencia dentro de los grupos, consolidamos categorías similares y construimos una taxonomía jerárquica.
+- Cruzamos la categoría con métricas de agente, lenguaje, tipo de tarea, comentarios humanos y tiempo hasta aceptación.
+- Aplicamos soundness: cada categoría debe responder directamente a la pregunta de investigación y estar respaldada por una cita textual cuando exista evidencia humana.
+
+## Criterios de inclusión y exclusión
+
+Incluimos PRs que cumplen todos estos criterios:
+
+- pertenecen al dataset `hao-li/AIDev`;
+- están cerrados y mergeados (`merged_at` no nulo);
+- tienen commits adicionales (`commit_count > 1`);
+- tienen evidencia textual humana (`human_comment_count > 0`);
+- pertenecen al caso operacional `merged_after_rework`.
+
+Excluimos PRs abiertos, PRs cerrados sin merge, PRs mergeados sin commits adicionales, casos sin comentarios humanos observables y casos `rejected`, porque el foco es retrabajo antes del merge, no rechazo definitivo.
+
+## Embudo desde el universo total
+
+Estos totales provienen del resumen canónico de muestreo con seed `20260510`.
+
+| Paso | Total | Retención vs universo | Pérdida vs universo |
+|---|---:|---:|---:|
+| Universo bruto AIDev | 33.596 | 100,00% | 0,00% |
+| PRs mergeados | 24.014 | 71,48% | 28,52% |
+| PRs mergeados con commits adicionales | 6.884 | 20,49% | 79,51% |
+| Población operacional | 3.166 | 9,42% | 90,58% |
+| Muestra estratificada vigente | 300 | 0,89% | 99,11% |
+
+## Muestreo estratificado y error muestral
+
+Usamos asignación proporcional por agente. Para cada estrato `h`:
+
+```text
+n_h = round((N_h / N) * n)
+```
+
+donde `N_h` es el tamaño del estrato, `N` la población operacional total, `n` el tamaño de muestra objetivo y `n_h` la cuota del agente. Con `N = 3.166` y `n = 300`, las cuotas vigentes son: Copilot 145, Devin 86, OpenAI_Codex 45, Cursor 17 y Claude_Code 7.
+
+Con corrección por población finita, 95% de confianza (`z = 1,96`) y máxima varianza (`p = 0,5`), la muestra vigente `n = 300` produce un error aproximado de ±5,38%. Para cumplir error ≤ 5%, debemos aumentar la muestra a aproximadamente `n = 343`:
+
+```text
+n = (N * z^2 * p * (1-p)) / (e^2 * (N-1) + z^2 * p * (1-p))
+```
+
+## Plan de mejora metodológica
+
+1. Reescribir notebook y presentación en primera persona técnica.
+2. Mostrar la metodología en las tres etapas de Zimmermann: Preparation, Execution y Analysis.
+3. Reportar pérdidas porcentuales desde el universo total en cada filtro.
+4. Dejar explícitos criterios de inclusión/exclusión y fórmula de estratificación.
+5. Ajustar el tamaño muestral a `n ≈ 343` si se exige error ≤ 5% al 95%.
+6. Usar una tabla manual reducida con cita textual de retrabajo y justificación breve.
+7. Validar soundness: categoría, cita y justificación deben responder la pregunta planteada.
+8. Preparar una presentación con problema, dataset, embudo, muestreo, card sorting, soundness y resultados esperados.
+
+La hoja manual de Javier se corrige sin perder categorías ya asignadas: se restauran tiempos con decimales desde la plantilla canónica y se agregan columnas de trazabilidad (`agent`, `cita_textual_retrabajo`, `evidence_source`, `evidence_created_at`, `merged_at`, `justificacion_breve`). La columna `cita_textual_retrabajo` queda vacía para que los evaluadores copien manualmente la cita que sustenta cada categoría; la evidencia sugerida sigue disponible en `cards.csv`.
+
+En el notebook, los criterios de inclusión/exclusión se reportan integrados en la tabla dinámica de embudo junto con los porcentajes de pérdida; esa tabla debe generarse por código, no como texto fijo.
 
 ## Flujo del sistema (pipeline reproducible)
 
@@ -131,7 +193,7 @@ El card sorting se realiza de forma manual usando CSV:
 
 Resultado esperado del card sorting:
 
-- Para cada tarjeta/PR: `categoria_padre`, `subcategoria` (y opcionalmente `confidence`, `rationale`, etc.).
+- Para cada tarjeta/PR: cita textual de retrabajo, categoría, justificación breve y trazabilidad `card_id → pr_id → evidencia → categoría`.
 - Luego: agrupar/normalizar categorías similares para llegar a un set estable y reutilizable.
 
 ## Dónde está el código
