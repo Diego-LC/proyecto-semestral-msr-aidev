@@ -1,6 +1,30 @@
 # Sampling
 
-`stratified_sampler.py` genera la muestra vigente del proyecto: PRs `merged_after_rework`, es decir, PRs cerrados y mergeados con `commit_count > 1` y `human_comment_count > 0`.
+El flujo de sampling queda separado en dos pasos ejecutables e importables:
+
+1. `population_filter.py`: construye la poblacion operacional `merged_after_rework`.
+2. `stratified_sampler.py`: lee esa poblacion y genera la muestra estratificada.
+
+## Paso 0: poblacion operacional
+
+`population_filter.py` filtra PRs cerrados y mergeados con `commit_count > 1` y `human_comment_count > 0`.
+
+```bash
+.venv/bin/python exploration/aidev/sampling/population_filter.py
+```
+
+Salidas:
+
+- `outputs/merged_after_rework_population.csv`
+- `outputs/merged_after_rework_population_summary.json`
+
+Para revisar el resumen sin escribir archivos:
+
+```bash
+.venv/bin/python exploration/aidev/sampling/population_filter.py --dry-run
+```
+
+## Paso 1: muestra estratificada
 
 La estratificacion usada es solo por `agent`, con semilla fija `20260510` y tamano por defecto de 300 PRs.
 

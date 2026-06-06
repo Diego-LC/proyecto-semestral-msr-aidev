@@ -14,7 +14,13 @@ python3 -m venv .venv
 
 ## Ejecucion
 
-Generar la muestra estratificada por agente:
+Construir la poblacion operacional antes de estratificar:
+
+```bash
+.venv/bin/python exploration/aidev/sampling/population_filter.py
+```
+
+Generar la muestra estratificada por agente desde el CSV poblacional:
 
 ```bash
 .venv/bin/python exploration/aidev/sampling/stratified_sampler.py
@@ -29,12 +35,15 @@ Generar tarjetas con evidencia y plantilla manual:
 Validar sin escribir archivos:
 
 ```bash
+.venv/bin/python exploration/aidev/sampling/population_filter.py --dry-run
 .venv/bin/python exploration/aidev/sampling/stratified_sampler.py --dry-run
 .venv/bin/python exploration/aidev/preparation/rejection_cards.py --dry-run
 ```
 
 ## Artefactos vigentes
 
+- `sampling/outputs/merged_after_rework_population.csv`
+- `sampling/outputs/merged_after_rework_population_summary.json`
 - `sampling/outputs/merged_after_rework_sample_seed_20260510.csv`
 - `sampling/outputs/merged_after_rework_sample_seed_20260510_summary.json`
 - `preparation/outputs/merged_after_rework_cards_seed_20260510.csv`
@@ -44,6 +53,7 @@ Validar sin escribir archivos:
 
 ## Flujo
 
-1. `sampling/stratified_sampler.py` descarga los Parquet oficiales desde Hugging Face, construye la poblacion `merged_after_rework` y extrae una muestra de 300 PRs estratificada por `agent`.
-2. `preparation/rejection_cards.py` carga la muestra, recupera evidencia desde reviews, comentarios y timeline, y produce una tarjeta por PR.
-3. El notebook principal documenta el embudo, las distribuciones y las validaciones importando helpers de los scripts del flujo.
+1. `sampling/population_filter.py` descarga los Parquet oficiales desde Hugging Face, aplica filtros y escribe la poblacion `merged_after_rework`.
+2. `sampling/stratified_sampler.py` carga `merged_after_rework_population.csv` y extrae una muestra de 300 PRs estratificada por `agent`.
+3. `preparation/rejection_cards.py` carga la muestra, recupera evidencia desde reviews, comentarios y timeline, y produce una tarjeta por PR.
+4. El notebook principal documenta el embudo, las distribuciones y las validaciones importando helpers de los scripts del flujo.

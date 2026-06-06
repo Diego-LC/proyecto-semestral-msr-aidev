@@ -32,6 +32,80 @@ La muestra vigente usa:
 - estratificacion: `agent`;
 - controles posteriores: lenguaje, complejidad del cambio, popularidad del repositorio, periodo de creacion y tipo de tarea.
 
+### Tamano muestral y cuotas
+
+El flujo usa dos calculos distintos que no deben confundirse.
+
+Primero, el tamano total de muestra se estima con correccion por poblacion finita:
+
+```text
+n = (N * Z^2 * p * q) / (e^2 * (N - 1) + Z^2 * p * q)
+```
+
+Donde:
+
+- `N`: tamano de la poblacion operacional;
+- `Z`: valor critico para el nivel de confianza;
+- `p` y `q`: varianza maxima esperada, usando `p = 0.5` y `q = 0.5`;
+- `e`: error maximo tolerado.
+
+Para la poblacion vigente `merged_after_rework`:
+
+```text
+N = 3166
+Z = 1.96
+p = 0.5
+q = 0.5
+e = 0.05
+n = 342.69
+```
+
+Por lo tanto, si se exige 95% de confianza y error maximo de 5%, el tamano recomendado es:
+
+```text
+n recomendado = 343 PRs
+```
+
+La muestra recomendada de `n = 300` no alcanza estrictamente el umbral de error `<= 5%`. Con `N = 3166`, `n = 300` produce un margen aproximado de:
+
+```text
+error aproximado = +/- 5.38%
+```
+
+Segundo, una vez definido el tamano total `n`, las cuotas por agente se calculan con asignacion proporcional:
+
+```text
+n_h = max(m, round(n * N_h / N))
+```
+
+Donde:
+
+- `n_h`: cantidad de PRs del estrato `h`;
+- `N_h`: cantidad de PRs de ese agente en la poblacion operacional;
+- `N`: poblacion operacional total;
+- `n`: tamano total de muestra;
+- `m`: minimo por estrato, si se decide aplicarlo.
+
+Con la muestra vigente `n = 300`, las cuotas son:
+
+| Agente | N_h | n_h |
+|---|---:|---:|
+| Copilot | 1526 | 145 |
+| Devin | 907 | 86 |
+| OpenAI_Codex | 480 | 45 |
+| Cursor | 180 | 17 |
+| Claude_Code | 73 | 7 |
+
+Si se ampliara la muestra al tamano recomendado `n = 343`, las cuotas proporcionales serian:
+
+| Agente | N_h | n_h |
+|---|---:|---:|
+| Copilot | 1526 | 165 |
+| Devin | 907 | 98 |
+| OpenAI_Codex | 480 | 52 |
+| Cursor | 180 | 20 |
+| Claude_Code | 73 | 8 |
+
 El muestreo produce:
 
 - `exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv`;

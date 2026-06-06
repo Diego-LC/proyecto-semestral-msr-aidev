@@ -119,7 +119,7 @@ En el notebook, los criterios de inclusión/exclusión se reportan integrados en
 
 ## Flujo del sistema (pipeline reproducible)
 
-El pipeline vive en `exploration/aidev/` y se ejecuta en 3 fases:
+El pipeline vive en `exploration/aidev/` y se ejecuta en fases separadas para que el notebook muestre el flujo de datos sin mezclar filtros poblacionales con muestreo:
 
 ### 0) Setup
 
@@ -130,20 +130,42 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r exploration/aidev/requirements-notebook.txt
 ```
 
-### 1) Muestreo estratificado por agente (Sampling)
+### 1) Filtros poblacionales
+
+Script: `exploration/aidev/sampling/population_filter.py`
+
+Función:
+
+- Construye la población objetivo `merged_after_rework`.
+- Aplica el filtro operacional: PR mergeado, `commit_count > 1` y `human_comment_count > 0`.
+- Escribe un CSV intermedio con los 3.166 PRs antes de estratificar.
+
+Ejemplo:
+
+```bash
+.venv/bin/python exploration/aidev/sampling/population_filter.py
+```
+
+Salida:
+
+- `exploration/aidev/sampling/outputs/merged_after_rework_population.csv`
+- `exploration/aidev/sampling/outputs/merged_after_rework_population_summary.json`
+
+### 2) Muestreo estratificado por agente
 
 Script: `exploration/aidev/sampling/stratified_sampler.py`
 
 Función:
 
-- Construye la población objetivo (principalmente `merged-after-rework`).
-- Estratifica por `agent` (default) y asigna cuotas proporcionales con un mínimo por estrato.
-- Selecciona una muestra aleatoria reproducible (semilla fija).
+- Lee la población ya filtrada desde `merged_after_rework_population.csv`.
+- Estratifica por `agent` y asigna cuotas proporcionales con un mínimo por estrato.
+- Selecciona una muestra aleatoria reproducible con semilla fija.
 
-Ejemplo (poblacion `merged-after-rework`, n=300, seed configurable):
+Ejemplo:
 
 ```bash
 .venv/bin/python exploration/aidev/sampling/stratified_sampler.py \
+  --population-csv exploration/aidev/sampling/outputs/merged_after_rework_population.csv \
   --sample-size 300 \
   --min-per-stratum 3 \
   --seed 20260510 \
@@ -156,7 +178,7 @@ Salida:
 - `exploration/aidev/sampling/outputs/*_sample_seed_<seed>.csv`: muestra seleccionada
 - `exploration/aidev/sampling/outputs/*_sample_seed_<seed>_summary.json`: resumen de control (seed, tamanos, cuotas, distribuciones)
 
-### 2) Preparación de “tarjetas” (Cards) con evidencia textual
+### 3) Preparación de “tarjetas” (Cards) con evidencia textual
 
 Script: `exploration/aidev/preparation/rejection_cards.py`
 
@@ -183,7 +205,7 @@ Salida:
 - Plantilla manual (categorizacion): `exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template.csv`
 - Taxonomia inicial (manual, versionada): `exploration/aidev/taxonomy/initial/`
 
-### 3) Card sorting (manual) y exportación de etiquetas
+### 4) Card sorting (manual) y exportación de etiquetas
 
 El card sorting se realiza de forma manual usando CSV:
 
@@ -199,19 +221,18 @@ Resultado esperado del card sorting:
 ## Dónde está el código
 
 - `exploration/aidev/aidev_data.py`: helpers minimos para acceder a manifests/URLs Parquet.
-- `exploration/aidev/sampling/`: muestreo aleatorio estratificado y outputs.
+- `exploration/aidev/sampling/`: filtros poblacionales, muestreo aleatorio estratificado y outputs.
 - `exploration/aidev/preparation/`: preparación de tarjetas (evidencia textual, cleaning, calidad).
 - `exploration/aidev/notebook_flow.py`: helpers para notebooks del flujo merged-after-rework.
 
 ## Tests
 
-```bash
-.venv/bin/python -m unittest
-```
+No hay suite de tests versionada actualmente. Para validación rápida se usan `compileall`, `--dry-run` en sampling/preparation y ejecución del notebook principal.
 
 Para sesiones OpenCode, las instrucciones operativas compactas viven en `AGENTS.md`.
 
 ## Convención de outputs
 
+- Artefactos canónicos de población: `exploration/aidev/sampling/outputs/merged_after_rework_population.csv` y `merged_after_rework_population_summary.json`.
 - Artefactos canónicos de sampling: `exploration/aidev/sampling/outputs/*_sample_seed_<seed>.csv` y `*_sample_seed_<seed>_summary.json`.
 - Taxonomia inicial (manual): `exploration/aidev/taxonomy/initial/`.
