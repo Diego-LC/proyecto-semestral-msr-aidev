@@ -513,9 +513,60 @@ def prepare_population_rows(rows: Iterable[Dict]) -> List[Dict]:
     population = add_created_period(population)
 
     for row in population:
-        row.setdefault("task_type", UNKNOWN_VALUE)
-        row.setdefault("language", UNKNOWN_VALUE)
+        if is_missing(row.get("task_type")):
+            row["task_type"] = UNKNOWN_VALUE
+        if is_missing(row.get("language")):
+            row["language"] = UNKNOWN_VALUE
+        row.pop("_created_at_rank", None)
     return population
+
+
+def validate_population_rows(population_rows: Sequence[Dict]) -> None:
+    if not population_rows:
+        raise ValueError("Population is empty after applying merged-after-rework filters")
+
+    required_fields = [
+        "pr_id",
+        "agent",
+        "state",
+        "merged_at",
+        "commit_count",
+        "human_comment_count",
+        *CONTROL_FIELDS,
+    ]
+    missing_fields = sorted(
+        {
+            field
+            for field in required_fields
+            if any(field not in row for row in population_rows)
+        }
+    )
+    if missing_fields:
+        raise ValueError(f"Population rows are missing fields: {', '.join(missing_fields)}")
+
+    duplicate_pr_ids = [
+        pr_id
+        for pr_id, count in Counter(normalize_value(row.get("pr_id")) for row in population_rows).items()
+        if pr_id != UNKNOWN_VALUE and count > 1
+    ]
+    if duplicate_pr_ids:
+        raise ValueError(f"Population has duplicated pr_id values: {duplicate_pr_ids[:5]}")
+
+    invalid_rows = [
+        row.get("pr_id")
+        for row in population_rows
+        if not (
+            is_merged(row)
+            and to_int(row.get("commit_count")) > 1
+            and to_int(row.get("human_comment_count")) > 0
+            and normalize_value(row.get("population_case_type")) == POPULATION_CASE_TYPE
+        )
+    ]
+    if invalid_rows:
+        raise ValueError(
+            "Population contains rows outside merged-after-rework definition; "
+            f"examples: {invalid_rows[:5]}"
+        )
 
 
 def value_counts(rows: Iterable[Dict], field: str) -> Dict[str, int]:
@@ -567,6 +618,7 @@ def main() -> None:
     source_rows = load_pull_request_population().to_dict("records")
     filter_counts = summarize_population_filters(source_rows)
     population_rows = prepare_population_rows(source_rows)
+    validate_population_rows(population_rows)
     summary = build_population_summary(
         source_rows,
         population_rows,

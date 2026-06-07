@@ -32,8 +32,9 @@ Trabajamos principalmente con:
 1. **Mergeado después de retrabajo** (`merged_after_rework`)
    - PRs con `state = closed` y `merged_at NOT NULL`, con señales de que no fue aceptación inmediata.
    - En el flujo actual se detecta por una combinación de:
-     - señales de cambio de código: `commit_count > 1` o `has_post_review_code_change` / `post_review_code_change_count > 0`.
-     - señales de feedback/review: conteos en reviews y/o comentarios.
+     - señales de cambio de código: `commit_count > 1`.
+     - señales de feedback textual humano: `human_comment_count > 0`.
+   - Las métricas de reviews, comentarios, agente, lenguaje, tipo de tarea y bins de control se conservan para caracterizar población y muestra, pero no reemplazan esos criterios de inclusión.
 
 Notas:
 
@@ -138,6 +139,7 @@ Función:
 
 - Construye la población objetivo `merged_after_rework`.
 - Aplica el filtro operacional: PR mergeado, `commit_count > 1` y `human_comment_count > 0`.
+- Calcula métricas de control antes del muestreo: reviews/comentarios humanos y bot, bins de complejidad, popularidad del repositorio, periodo de creación y tipo de tarea.
 - Escribe un CSV intermedio con los 3.166 PRs antes de estratificar.
 
 Ejemplo:
@@ -158,6 +160,7 @@ Script: `exploration/aidev/sampling/stratified_sampler.py`
 Función:
 
 - Lee la población ya filtrada desde `merged_after_rework_population.csv`.
+- No reconstruye la población ni vuelve a descargar Parquets; solo consume el artefacto poblacional auditable.
 - Estratifica por `agent` y asigna cuotas proporcionales con un mínimo por estrato.
 - Selecciona una muestra aleatoria reproducible con semilla fija.
 
@@ -236,3 +239,7 @@ Para sesiones OpenCode, las instrucciones operativas compactas viven en `AGENTS.
 - Artefactos canónicos de población: `exploration/aidev/sampling/outputs/merged_after_rework_population.csv` y `merged_after_rework_population_summary.json`.
 - Artefactos canónicos de sampling: `exploration/aidev/sampling/outputs/*_sample_seed_<seed>.csv` y `*_sample_seed_<seed>_summary.json`.
 - Taxonomia inicial (manual): `exploration/aidev/taxonomy/initial/`.
+
+## Informes de integración
+
+- Integración selectiva de población/muestreo y mejoras técnicas de Javier: `docs/integracion-poblacion-muestreo-javier.md`.

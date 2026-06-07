@@ -53,7 +53,7 @@ Validar sin escribir archivos:
 
 ## Flujo
 
-1. `sampling/population_filter.py` descarga los Parquet oficiales desde Hugging Face, aplica filtros y escribe la poblacion `merged_after_rework`.
-2. `sampling/stratified_sampler.py` carga `merged_after_rework_population.csv` y extrae una muestra de 300 PRs estratificada por `agent`.
+1. `sampling/population_filter.py` descarga los Parquet oficiales desde Hugging Face, calcula métricas de reviews/comentarios y controles, aplica filtros y escribe la poblacion `merged_after_rework`.
+2. `sampling/stratified_sampler.py` carga `merged_after_rework_population.csv` y extrae una muestra de 300 PRs estratificada por `agent`, sin reconstruir la poblacion.
 3. `preparation/rejection_cards.py` carga la muestra, recupera evidencia desde reviews, comentarios y timeline, y produce una tarjeta por PR.
 4. El notebook principal documenta el embudo, las distribuciones y las validaciones importando helpers de los scripts del flujo.

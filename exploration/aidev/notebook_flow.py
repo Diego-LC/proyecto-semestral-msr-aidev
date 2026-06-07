@@ -474,6 +474,20 @@ def validate_flow(artifacts: FlowArtifacts) -> str:
     assert summary["sample_distributions"]["population_case_type"] == {
         "merged_after_rework": len(artifacts.sample_df)
     }
+    expected_control_fields = {
+        "population_case_type",
+        "agent",
+        "language",
+        "change_complexity_bin",
+        "repo_popularity_bin",
+        "created_period",
+        "task_type",
+    }
+    assert expected_control_fields.issubset(population_summary["population_distributions"])
+    assert expected_control_fields.issubset(summary["population_distributions"])
+    assert expected_control_fields.issubset(summary["sample_distributions"])
+    assert expected_control_fields.issubset(set(artifacts.population_df.columns))
+    assert expected_control_fields.issubset(set(artifacts.sample_df.columns))
     assert len(artifacts.sample_df) == summary["sample_size"] == 300
     assert (pd.to_numeric(artifacts.sample_df["commit_count"], errors="raise") > 1).all()
     assert (

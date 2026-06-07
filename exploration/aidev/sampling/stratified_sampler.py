@@ -68,6 +68,31 @@ def read_json_optional(path: Path) -> Dict:
         return json.load(json_file)
 
 
+def validate_population_input(rows: Sequence[Dict], population_summary: Dict) -> None:
+    if not rows:
+        raise ValueError("Population CSV is empty; run population_filter.py first")
+
+    missing_strata_fields = [
+        field for field in STRATA_FIELDS if any(field not in row for row in rows)
+    ]
+    if missing_strata_fields:
+        raise ValueError(
+            f"Population CSV is missing strata fields: {', '.join(missing_strata_fields)}"
+        )
+
+    if population_summary:
+        expected_size = population_summary.get("population_size")
+        if expected_size is not None and int(expected_size) != len(rows):
+            raise ValueError(
+                "Population summary size does not match CSV rows: "
+                f"summary={expected_size}, csv={len(rows)}"
+            )
+
+    pr_ids = [normalize_value(row.get("pr_id")) for row in rows if not is_missing(row.get("pr_id"))]
+    if len(pr_ids) != len(set(pr_ids)):
+        raise ValueError("Population CSV contains duplicated pr_id values")
+
+
 def build_stratum_key(row: Dict) -> str:
     return "|".join(normalize_value(row.get(field)) for field in STRATA_FIELDS)
 
@@ -153,6 +178,14 @@ def stratified_sample(
             enriched["_sample_seed"] = seed
             sampled_rows.append(enriched)
 
+    sampled_ids = [
+        normalize_value(row.get("pr_id"))
+        for row in sampled_rows
+        if not is_missing(row.get("pr_id"))
+    ]
+    if len(sampled_ids) != len(set(sampled_ids)):
+        raise ValueError("Sample contains duplicated pr_id values")
+
     sampled_rows.sort(key=lambda row: (row["_stratum_key"], stable_row_id(row)))
     return SamplingResult(
         rows=sampled_rows,
@@ -215,6 +248,7 @@ def main() -> None:
     args = parse_args()
     population_rows = load_csv_rows(args.population_csv)
     population_summary = read_json_optional(args.population_summary_json)
+    validate_population_input(population_rows, population_summary)
     result = stratified_sample(
         population_rows,
         target_size=args.sample_size,

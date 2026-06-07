@@ -7,7 +7,7 @@ El flujo de sampling queda separado en dos pasos ejecutables e importables:
 
 ## Paso 0: poblacion operacional
 
-`population_filter.py` filtra PRs cerrados y mergeados con `commit_count > 1` y `human_comment_count > 0`.
+`population_filter.py` filtra PRs cerrados y mergeados con `commit_count > 1` y `human_comment_count > 0`. También calcula las métricas que se auditan antes del muestreo: conteos de reviews/comentarios humanos y bot, bins de complejidad del cambio, popularidad del repositorio, periodo de creación y tipo de tarea.
 
 ```bash
 .venv/bin/python exploration/aidev/sampling/population_filter.py
@@ -27,6 +27,7 @@ Para revisar el resumen sin escribir archivos:
 ## Paso 1: muestra estratificada
 
 La estratificacion usada es solo por `agent`, con semilla fija `20260510` y tamano por defecto de 300 PRs.
+Este paso no descarga Parquets ni recalcula filtros poblacionales; consume el CSV producido por `population_filter.py`.
 
 ```bash
 .venv/bin/python exploration/aidev/sampling/stratified_sampler.py
