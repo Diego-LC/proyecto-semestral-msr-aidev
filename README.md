@@ -11,6 +11,24 @@ Referencias clave del diseño:
 - Plan metodologico versionado: `docs/plans/plan-metodologico-card-sorting.md`
 - Referencia metodológica de card sorting: `docs/card-sorting.pdf`
 
+## Guía rápida para el criterio de entrega
+
+Este repositorio contiene los tres componentes solicitados en la entrega. Las rutas principales son:
+
+| Criterio solicitado | Estado | Dónde revisarlo |
+|---|---|---|
+| 1. Conjunto de datos listo para tomar la muestra en CSV | Completo: población operacional `merged_after_rework` con 3.166 PRs | `exploration/aidev/sampling/outputs/merged_after_rework_population.csv` y resumen en `exploration/aidev/sampling/outputs/merged_after_rework_population_summary.json` |
+| 2. Definición de muestra + script + muestra CSV | Completo: muestra estratificada por `agent`, `n = 300`, seed `20260510` | Definición en este README y `exploration/aidev/sampling/README.md`; script en `exploration/aidev/sampling/stratified_sampler.py`; muestra en `exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv` |
+| 3. Card sorting inicial con 15-30 casos | Completo y sobre el mínimo: 50 casos con cita textual y justificación breve | Tarjetas base en `exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv`; avance manual en `exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template_Javier.csv` |
+
+Para reproducir/verificar sin sobrescribir archivos canónicos:
+
+```bash
+.venv/bin/python exploration/aidev/sampling/population_filter.py --dry-run
+.venv/bin/python exploration/aidev/sampling/stratified_sampler.py --dry-run
+.venv/bin/python exploration/aidev/preparation/rejection_cards.py --dry-run
+```
+
 ## Qué buscamos responder y lograr
 
 **Resultado principal del proyecto**
@@ -114,7 +132,7 @@ n = (N * z^2 * p * (1-p)) / (e^2 * (N-1) + z^2 * p * (1-p))
 7. Validar soundness: categoría, cita y justificación deben responder la pregunta planteada.
 8. Preparar una presentación con problema, dataset, embudo, muestreo, card sorting, soundness y resultados esperados.
 
-La hoja manual de Javier se corrige sin perder categorías ya asignadas: se restauran tiempos con decimales desde la plantilla canónica y se agregan columnas de trazabilidad (`agent`, `cita_textual_retrabajo`, `evidence_source`, `evidence_created_at`, `merged_at`, `justificacion_breve`). La columna `cita_textual_retrabajo` queda vacía para que los evaluadores copien manualmente la cita que sustenta cada categoría; la evidencia sugerida sigue disponible en `cards.csv`.
+La hoja manual de Javier conserva las categorías ya asignadas, tiempos con decimales y columnas de trazabilidad (`agent`, `cita_textual_retrabajo`, `evidence_source`, `evidence_created_at`, `merged_at`, `justificacion_breve`). El avance vigente contiene 50 casos con cita textual y justificación breve; la evidencia sugerida completa sigue disponible en `cards.csv`.
 
 En el notebook, los criterios de inclusión/exclusión se reportan integrados en la tabla dinámica de embudo junto con los porcentajes de pérdida; esa tabla debe generarse por código, no como texto fijo.
 
