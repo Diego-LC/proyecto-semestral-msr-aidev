@@ -261,3 +261,8 @@ Para sesiones OpenCode, las instrucciones operativas compactas viven en `AGENTS.
 ## Informes de integración
 
 - Integración selectiva de población/muestreo y mejoras técnicas de Javier: `docs/integracion-poblacion-muestreo-javier.md`.
+
+## Contraste entre evaluadores
+
+- Reporte de contraste Diego vs Javier sobre tarjetas completadas en común: `docs/contraste-categorizacion-diego-javier.md`.
+- CSV derivado para reconciliación de categorías: `exploration/aidev/taxonomy/analysis/merged_after_rework_diego_javier_contrast.csv`.
