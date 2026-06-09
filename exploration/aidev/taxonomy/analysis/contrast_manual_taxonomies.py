@@ -258,25 +258,11 @@ def main() -> None:
             "card_id": card_id,
             "pr_id": diego_row.get("pr_id", ""),
             "agent": diego_row.get("agent", ""),
-            "html_url": diego_row.get("html_url", ""),
             "diego_categoria": diego_category,
             "javier_categoria": javier_category,
             "diego_familia_sugerida": diego_family,
             "javier_familia_sugerida": javier_family_name,
             "coincide_familia": "si" if diego_family == javier_family_name else "no",
-            "diego_tiene_cita": "si" if has_text(diego_row.get("cita_textual_retrabajo")) else "no",
-            "javier_tiene_cita": "si" if has_text(javier_row.get("cita_textual_retrabajo")) else "no",
-            "diego_tiene_justificacion": "si"
-            if has_text(diego_row.get("justificacion_breve"))
-            else "no",
-            "javier_tiene_justificacion": "si"
-            if has_text(javier_row.get("justificacion_breve"))
-            else "no",
-            "diego_justificacion_breve": (diego_row.get("justificacion_breve") or "").strip(),
-            "javier_justificacion_breve": (javier_row.get("justificacion_breve") or "").strip(),
-            "observacion": "alineacion_semantica_parcial"
-            if diego_family == javier_family_name
-            else "diferencia_de_nivel_analitico",
         }
         contrast_rows.append(row)
 
@@ -287,7 +273,11 @@ def main() -> None:
 
     args.output_csv.parent.mkdir(parents=True, exist_ok=True)
     with args.output_csv.open("w", newline="", encoding="utf-8") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=list(contrast_rows[0].keys()))
+        writer = csv.DictWriter(
+            csv_file,
+            fieldnames=list(contrast_rows[0].keys()),
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(contrast_rows)
 

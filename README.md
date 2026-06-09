@@ -268,7 +268,7 @@ Para sesiones OpenCode, las instrucciones operativas compactas viven en `AGENTS.
 ## Contraste entre evaluadores
 
 - Reporte de contraste Diego vs Javier sobre tarjetas completadas en común: `docs/contraste-categorizacion-diego-javier.md`.
-- CSV derivado para reconciliación de categorías: `exploration/aidev/taxonomy/analysis/merged_after_rework_diego_javier_contrast.csv`.
+- CSV derivado en formato intermedio, centrado en coincidencia de familia: `exploration/aidev/taxonomy/analysis/merged_after_rework_diego_javier_contrast.csv`.
 - Script reproducible para regenerar ambos artefactos: `exploration/aidev/taxonomy/analysis/contrast_manual_taxonomies.py`.
 
 Ejemplo de regeneración:
