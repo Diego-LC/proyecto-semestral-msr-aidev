@@ -269,3 +269,14 @@ Para sesiones OpenCode, las instrucciones operativas compactas viven en `AGENTS.
 
 - Reporte de contraste Diego vs Javier sobre tarjetas completadas en común: `docs/contraste-categorizacion-diego-javier.md`.
 - CSV derivado para reconciliación de categorías: `exploration/aidev/taxonomy/analysis/merged_after_rework_diego_javier_contrast.csv`.
+- Script reproducible para regenerar ambos artefactos: `exploration/aidev/taxonomy/analysis/contrast_manual_taxonomies.py`.
+
+Ejemplo de regeneración:
+
+```bash
+.venv/bin/python exploration/aidev/taxonomy/analysis/contrast_manual_taxonomies.py \
+  --diego-csv exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_diego.csv \
+  --javier-csv exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_Javier.csv \
+  --output-csv exploration/aidev/taxonomy/analysis/merged_after_rework_diego_javier_contrast.csv \
+  --report-md docs/contraste-categorizacion-diego-javier.md
+```

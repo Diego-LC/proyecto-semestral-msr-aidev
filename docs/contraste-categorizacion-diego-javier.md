@@ -5,7 +5,7 @@
 - `exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_diego.csv`
 - `exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_Javier.csv`
 
-> Nota operativa: al momento de generar este contraste, estos CSV fueron tomados desde el árbol principal actual provisto por el usuario. La rama `feature/integracion-poblacion-muestreo-javier` todavía no versiona esas dos hojas manuales de origen.
+> Este reporte y el CSV derivado fueron generados con `exploration/aidev/taxonomy/analysis/contrast_manual_taxonomies.py`.
 
 ## Objetivo
 
@@ -132,6 +132,12 @@ Esto indica que, antes de cualquier análisis conjunto de tiempos, los valores d
 
 - Diego tiene 2 casos compartidos sin cita o sin justificación completa: 3075024592-A, 3269741497-A.
 - Javier tiene 1 casos compartidos sin cita o sin justificación completa: 3095409522-A.
+
+### 3. Diferencia estructural de cobertura
+
+- Diego completó 300 tarjetas con categoría.
+- Javier completó 51 tarjetas con categoría.
+- El solapamiento utilizable hoy es de 51 tarjetas.
 
 ## Recomendación de reconciliación
 
