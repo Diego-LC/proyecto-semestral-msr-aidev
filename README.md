@@ -19,7 +19,7 @@ Este repositorio contiene los tres componentes solicitados en la entrega. Las ru
 |---|---|---|
 | 1. Conjunto de datos listo para tomar la muestra en CSV | Completo: población operacional `merged_after_rework` con 3.166 PRs | `exploration/aidev/sampling/outputs/merged_after_rework_population.csv` y resumen en `exploration/aidev/sampling/outputs/merged_after_rework_population_summary.json` |
 | 2. Definición de muestra + script + muestra CSV | Completo: muestra estratificada por `agent`, `n = 300`, seed `20260510` | Definición en este README y `exploration/aidev/sampling/README.md`; script en `exploration/aidev/sampling/stratified_sampler.py`; muestra en `exploration/aidev/sampling/outputs/merged_after_rework_sample_seed_20260510.csv` |
-| 3. Card sorting inicial con 15-30 casos | Completo y sobre el mínimo: 50 casos con cita textual y justificación breve | Tarjetas base en `exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv`; avance manual en `exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template_Javier.csv` |
+| 3. Card sorting inicial con 15-30 casos | Completo y sobre el mínimo: 50 casos con cita textual y justificación breve | Tarjetas base en `exploration/aidev/preparation/outputs/merged_after_rework_cards_seed_20260510.csv`; avances manuales en `exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_Javier.csv` y `exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_diego.csv` |
 
 Para reproducir/verificar sin sobrescribir archivos canónicos:
 
@@ -132,7 +132,7 @@ n = (N * z^2 * p * (1-p)) / (e^2 * (N-1) + z^2 * p * (1-p))
 7. Validar soundness: categoría, cita y justificación deben responder la pregunta planteada.
 8. Preparar una presentación con problema, dataset, embudo, muestreo, card sorting, soundness y resultados esperados.
 
-La hoja manual de Javier conserva las categorías ya asignadas, tiempos con decimales y columnas de trazabilidad (`agent`, `cita_textual_retrabajo`, `evidence_source`, `evidence_created_at`, `merged_at`, `justificacion_breve`). El avance vigente contiene 50 casos con cita textual y justificación breve; la evidencia sugerida completa sigue disponible en `cards.csv`.
+Las hojas manuales de Javier y Diego viven en `exploration/aidev/taxonomy/initial/` y conservan las mismas filas/columnas de trazabilidad (`agent`, `cita_textual_retrabajo`, `evidence_source`, `evidence_created_at`, `merged_at`, `justificacion_breve`). Los valores editados manualmente pueden diferir entre evaluadores; la evidencia sugerida completa sigue disponible en `cards.csv`.
 
 En el notebook, los criterios de inclusión/exclusión se reportan integrados en la tabla dinámica de embudo junto con los porcentajes de pérdida; esa tabla debe generarse por código, no como texto fijo.
 
@@ -233,6 +233,9 @@ El card sorting se realiza de forma manual usando CSV:
 - Plantilla producida por el flujo: `exploration/aidev/preparation/outputs/merged_after_rework_manual_categories_template.csv`
 - Ubicacion recomendada para versionar el trabajo manual inicial:
   - `exploration/aidev/taxonomy/initial/`
+- Archivos manuales vigentes:
+  - `exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_Javier.csv`
+  - `exploration/aidev/taxonomy/initial/merged_after_rework_manual_categories_diego.csv`
 
 Resultado esperado del card sorting:
 
@@ -256,7 +259,7 @@ Para sesiones OpenCode, las instrucciones operativas compactas viven en `AGENTS.
 
 - Artefactos canónicos de población: `exploration/aidev/sampling/outputs/merged_after_rework_population.csv` y `merged_after_rework_population_summary.json`.
 - Artefactos canónicos de sampling: `exploration/aidev/sampling/outputs/*_sample_seed_<seed>.csv` y `*_sample_seed_<seed>_summary.json`.
-- Taxonomia inicial (manual): `exploration/aidev/taxonomy/initial/`.
+- Taxonomia inicial/manual: `exploration/aidev/taxonomy/initial/`, incluyendo los CSV por evaluador `merged_after_rework_manual_categories_<evaluador>.csv`.
 
 ## Informes de integración
 

@@ -49,6 +49,8 @@ Validar sin escribir archivos:
 - `preparation/outputs/merged_after_rework_cards_seed_20260510.csv`
 - `preparation/outputs/merged_after_rework_cards_seed_20260510_summary.json`
 - `preparation/outputs/merged_after_rework_manual_categories_template.csv`
+- `taxonomy/initial/merged_after_rework_manual_categories_Javier.csv`
+- `taxonomy/initial/merged_after_rework_manual_categories_diego.csv`
 - `notebooks/2026-05-26-merged-after-rework-flow.ipynb`
 
 ## Flujo
