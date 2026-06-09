@@ -9,7 +9,8 @@
 ## Foco del repo
 
 - El flujo operativo es `merged_after_rework`: PRs AIDev mergeados tras retrabajo. No revivas ni optimices flujos `rejected` salvo pedido explícito.
-- Pregunta de investigación: cuándo PRs de agentes IA resultan contraproducentes y cuánto esfuerzo/tiempo toma integrarlos.
+- Pregunta principal de investigación: qué motivos de retrabajo humano emergen en PRs de agentes IA antes de su integración.
+- Pregunta complementaria: cómo se relacionan esos motivos con el esfuerzo y el tiempo requeridos hasta el merge.
 - Pipeline: población `merged_after_rework` → muestra estratificada por `agent` (n=300, seed `20260510`) → tarjetas con evidencia → card sorting manual → taxonomía + métricas.
 
 ## Entorno y comandos reales

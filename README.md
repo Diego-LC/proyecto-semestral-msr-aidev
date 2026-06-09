@@ -2,7 +2,9 @@
 
 En este repositorio construimos un flujo reproducible para responder:
 
-**¿En qué casos los agentes de IA resultan contraproducentes al abrir PRs y cuánto esfuerzo/iteraciones toma integrarlos efectivamente?**
+**Pregunta principal:** ¿Qué motivos de retrabajo humano emergen en pull requests de agentes de IA antes de su integración?
+
+**Pregunta complementaria:** ¿Cómo se relacionan esos motivos con el esfuerzo y el tiempo requeridos hasta el merge?
 
 Usamos como fuente principal el dataset **AIDev** (`hao-li/AIDev`). El núcleo metodológico es construir una **taxonomía inductiva** de motivos de retrabajo mediante **card sorting abierto** sobre una muestra reproducible, y luego analizar distribución y esfuerzo/tiempo de integración asociado.
 
@@ -38,10 +40,9 @@ Para reproducir/verificar sin sobrescribir archivos canónicos:
 
 **Preguntas de investigación (RQs)**
 
-1. **RQ1**: ¿Qué categorías de motivos de retrabajo (feedback/revisión) emergen del card sorting manual en PRs que no se aceptan de inmediato?
-2. **RQ2**: En esos casos, ¿cuánto tiempo pasa hasta el merge final y cuántas intervenciones humanas aparecen en el camino?
-3. **RQ3**: ¿Cómo se distribuyen las categorías por agente, lenguaje y tipo de tarea?
-4. **RQ4**: ¿Qué relación hay entre la categoría y el esfuerzo/tiempo requerido para llegar a aceptación?
+1. **RQ1**: ¿Qué motivos de retrabajo humano emergen del card sorting manual en pull requests de agentes de IA antes de su integración?
+2. **RQ2**: ¿Cómo se relacionan esos motivos con el esfuerzo y el tiempo requeridos hasta el merge?
+3. **RQ3**: ¿Cómo se distribuyen esos motivos por agente, lenguaje y tipo de tarea?
 
 ## Definiciones operacionales (cómo se “materializa” el fenómeno en datos)
 
