@@ -243,6 +243,27 @@ Resultado esperado del card sorting:
 - Para cada tarjeta/PR: cita textual de retrabajo, categoría, justificación breve y trazabilidad `card_id → pr_id → evidencia → categoría`.
 - Luego: agrupar/normalizar categorías similares para llegar a un set estable y reutilizable.
 
+### 5) Clasificacion asistida por Codex para revision humana
+
+El flujo puede generar un borrador local separado con propuestas de clasificacion para
+las 300 tarjetas, sin modificar las taxonomias manuales versionadas:
+
+```bash
+.venv/bin/python exploration/aidev/taxonomy/analysis/build_codex_review.py
+```
+
+Salida local ignorada por Git:
+
+- `exploration/aidev/preparation/outputs/merged_after_rework_codex_review_manual_categories.csv`
+
+El borrador conserva las categorias originales de Javier como antecedente narrativo,
+pero clasifica desde la evidencia disponible en `cards.csv`. Propone una categoria
+padre y una subcategoria reutilizable, extrae una cita textual y deja todas las filas
+con `decision_humana = pendiente`. No consulta la clasificacion de Diego ni reemplaza
+ningun archivo manual canonico. La metodologia, el catalogo, la confianza y las
+validaciones de este borrador se documentan en
+`docs/clasificacion-asistida-codex.md`.
+
 ## Dónde está el código
 
 - `exploration/aidev/aidev_data.py`: helpers minimos para acceder a manifests/URLs Parquet.
