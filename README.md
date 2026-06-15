@@ -245,14 +245,14 @@ Resultado esperado del card sorting:
 
 ### 5) Clasificacion asistida por Codex para revision humana
 
-El flujo puede generar un borrador local separado con propuestas de clasificacion para
-las 300 tarjetas, sin modificar las taxonomias manuales versionadas:
+El flujo puede generar un borrador versionado y separado con propuestas de clasificacion
+para las 300 tarjetas, sin modificar las taxonomias manuales versionadas:
 
 ```bash
 .venv/bin/python exploration/aidev/taxonomy/analysis/build_codex_review.py
 ```
 
-Salida local ignorada por Git:
+Salida versionada para revision humana:
 
 - `exploration/aidev/preparation/outputs/merged_after_rework_codex_review_manual_categories.csv`
 

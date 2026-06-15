@@ -17,9 +17,9 @@ Este CSV es un **borrador revisable**, no una taxonomia final. Todas sus filas p
 con `decision_humana = pendiente`; las categorias propuestas solo se consideran
 aceptadas cuando Javier las revise.
 
-El archivo se encuentra ignorado por Git mediante la regla existente
-`exploration/aidev/preparation/outputs/*manual_categories.csv`. El CSV manual original
-de Javier no se sobrescribe.
+El archivo se versiona como borrador revisable mediante una excepcion especifica en
+`.gitignore`; los demas borradores `*manual_categories.csv` permanecen ignorados. El
+CSV manual original de Javier no se sobrescribe.
 
 ## Entradas, exclusiones y trazabilidad
 
@@ -260,7 +260,7 @@ En la generacion documentada tambien se comprobo que:
 - las 300 citas fueron verificadas contra la evidencia local;
 - el CSV original de Javier mantuvo su hash sin cambios;
 - ni el script ni el borrador contienen referencias a Diego;
-- el nuevo CSV permanece ignorado por Git.
+- el nuevo CSV queda versionado mediante una excepcion especifica en `.gitignore`.
 
 ## Limitaciones y amenazas a la validez
 
