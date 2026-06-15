@@ -23,6 +23,33 @@ b. Muestreo
    Aca se cuenta lo que se logró, los datos crudos y procesados (taxonomia y analisis)
    leer paper del campus para tener una idea de como se hace.
 
-
    Escribir escritura tecnica en primera persona. no en tercera persona.
-El enfoque metodologico debe seguir la referencia. (3 etapas no 5) debe adaptarse a nuestro contexto y datos. Poner resultados de perdida en porcentaje desde la fuente de datos total. Clarificar criterios de inclusion y exclusión, en los filtros. Definir y demostrar el metodo o formula usado en la estratificación. Confianza (%) y error no mayor a 5%. Definir la tabla con menos columna a la hora de categorizar, e incluir una que tenga la cita textual de la razon de rechazo de cada pr, en caso de que exista. Las respuestas o justificaciones deben responder a la pregunta planteada. (Aplicar Soundness.) Hacer una presentación.
+   El enfoque metodologico debe seguir la referencia. (3 etapas no 5) debe adaptarse a nuestro contexto y datos. Poner resultados de perdida en porcentaje desde la fuente de datos total. Clarificar criterios de inclusion y exclusión, en los filtros. Definir y demostrar el metodo o formula usado en la estratificación. Confianza (%) y error no mayor a 5%. Definir la tabla con menos columna a la hora de categorizar, e incluir una que tenga la cita textual de la razon de rechazo de cada pr, en caso de que exista. Las respuestas o justificaciones deben responder a la pregunta planteada. (Aplicar Soundness.) Hacer una presentación.
+
+
+PPT de problema resumir un poco en (revisar en codigo), solo 3 objetivos especificos, metodologia en español, tabla del embudo con el mismo alineado con el orden de la tabla y el grafico.
+
+Informe maximo 4 paginas, latex IEEE,
+
+poster, graficos de representacion y resultado de taxonomias, la idea es narrar una historia y poder responder preguntas. Por categoria X deberia tener una definicion y 2 ejemplos con citas textuales. Cantidad y porcentaje de cada categoria padre. 
+
+Discutir (constraste: referencia bibliograficas, conferencias (FCSE, FSE, ASE, ICSME, MSR) y journal (JOSEM, JSS, TSE) cientificas) sobre lo que se hizo/ o pasaba antes de la IA (comparacion) en caso de que descubramos algo que antes no ocurria. Descartado MPDI de forma inmediata.
+
+Implicancias: recomendaciones o advertencias para los siguientes, esto es incluso mas importante que alcanzar el objetivo. Importante incluir al poster ->
+
+* Devs
+* Reserders (investigadores)
+* Tool Builders
+
+Historia de resumen para el poster (Tesis):
+
+1. Contexto
+2. Problema
+3. Propuesta
+4. Metodologia -> obj -> pregunta -> respuesta (racionalidad)
+5. Resultados
+6. Discutir
+7. Limitaciones y amenazas a la validez (reproducibilidad y aplicable a todos los casos)
+
+No aplica la generalidad en estos casos de medicion cualitativa.
+el excel debe tener taxonomia previa, contraste e implicancia.
