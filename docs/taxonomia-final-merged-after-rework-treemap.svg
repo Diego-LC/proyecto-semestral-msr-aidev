@@ -1,0 +1,203 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1400" viewBox="0 0 2400 1400" role="img" aria-label="Treemap de taxonomia final merged_after_rework">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="40.0" y="48.0" font-family="Inter, Arial, sans-serif" font-size="36" font-weight="700" fill="#111111" text-anchor="start">Taxonomia final de motivos de retrabajo humano</text>
+<text x="40.0" y="86.0" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="400" fill="#444444" text-anchor="start">Treemap jerarquico: categoria padre -&gt; subcategoria, area proporcional a n (300 tarjetas)</text>
+<rect x="40.0" y="110.0" width="895.2" height="807.5" fill="#deebfc" stroke="#ffffff" stroke-width="8"/>
+<rect x="44.0" y="114.0" width="887.2" height="52.0" fill="#2f80ed" rx="8" ry="8"/>
+<text x="56.0" y="145.0" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">P1 Validacion, calidad y CI</text>
+<text x="919.2" y="154.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="end">104 (34,7%)</text>
+<rect x="50.0" y="172.0" width="530.1" height="735.5" fill="#69a4f2" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P1 Validacion, calidad y CI / S1 fallos ci build o tests: 63 casos (21,0%)</title></rect>
+<text x="62.0" y="198.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">fallos ci build o tests</text>
+<text x="62.0" y="893.5" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=63 | 21,0%</text>
+<rect x="580.1" y="172.0" width="345.0" height="609.9" fill="#69a4f2" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P1 Validacion, calidad y CI / S2 lint formato o estilo: 34 casos (11,3%)</title></rect>
+<text x="592.1" y="198.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">lint formato o estilo</text>
+<text x="592.1" y="767.9" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=34 | 11,3%</text>
+<rect x="580.1" y="781.9" width="345.0" height="125.6" fill="#69a4f2" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P1 Validacion, calidad y CI / S15 pruebas faltantes o insuficientes: 7 casos (2,3%)</title></rect>
+<text x="592.1" y="807.9" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">pruebas faltantes o insuficientes</text>
+<text x="592.1" y="893.5" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=7 | 2,3%</text>
+<rect x="40.0" y="917.5" width="895.2" height="442.5" fill="#fdefe2" stroke="#ffffff" stroke-width="8"/>
+<rect x="44.0" y="921.5" width="887.2" height="52.0" fill="#f2994a" rx="8" ry="8"/>
+<text x="56.0" y="952.5" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">P2 Implementacion y logica</text>
+<text x="919.2" y="961.5" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="end">57 (19,0%)</text>
+<rect x="50.0" y="979.5" width="307.1" height="370.5" fill="#f6b67d" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P2 Implementacion y logica / S4 manejo errores o casos borde: 20 casos (6,7%)</title></rect>
+<text x="62.0" y="1005.5" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">manejo errores o casos borde</text>
+<text x="62.0" y="1336.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=20 | 6,7%</text>
+<rect x="357.1" y="979.5" width="168.9" height="370.5" fill="#f6b67d" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P2 Implementacion y logica / S11 compatibilidad o migracion: 11 casos (3,7%)</title></rect>
+<text x="441.5" y="1170.7" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#111111" text-anchor="middle">S11</text>
+<text x="441.5" y="1340.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#111111" text-anchor="middle">n=11 | 3,7%</text>
+<rect x="526.0" y="979.5" width="168.9" height="370.5" fill="#f6b67d" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P2 Implementacion y logica / S12 rendimiento concurrencia o recursos: 11 casos (3,7%)</title></rect>
+<text x="610.4" y="1170.7" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#111111" text-anchor="middle">S12</text>
+<text x="610.4" y="1340.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#111111" text-anchor="middle">n=11 | 3,7%</text>
+<rect x="694.9" y="979.5" width="230.3" height="247.0" fill="#f6b67d" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P2 Implementacion y logica / S14 ui ux o frontend: 10 casos (3,3%)</title></rect>
+<text x="706.9" y="1005.5" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">ui ux o frontend</text>
+<text x="706.9" y="1212.5" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=10 | 3,3%</text>
+<rect x="694.9" y="1226.5" width="230.3" height="123.5" fill="#f6b67d" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P2 Implementacion y logica / S17 correccion funcional: 5 casos (1,7%)</title></rect>
+<text x="706.9" y="1252.5" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">correccion funcional</text>
+<text x="706.9" y="1336.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=5 | 1,7%</text>
+<rect x="935.2" y="110.0" width="426.8" height="602.5" fill="#efe3fa" stroke="#ffffff" stroke-width="8"/>
+<rect x="939.2" y="114.0" width="418.8" height="52.0" fill="#9b51e0" rx="8" ry="8"/>
+<text x="951.2" y="145.0" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">P3 Arquitectura y diseno</text>
+<text x="1346.0" y="154.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="end">37 (12,3%)</text>
+<rect x="945.2" y="172.0" width="406.8" height="229.4" fill="#b782e9" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P3 Arquitectura y diseno / S6 duplicacion o falta de reutilizacion: 16 casos (5,3%)</title></rect>
+<text x="957.2" y="198.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">duplicacion o falta de reutilizacion</text>
+<text x="957.2" y="387.4" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=16 | 5,3%</text>
+<rect x="945.2" y="401.4" width="309.9" height="301.1" fill="#b782e9" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P3 Arquitectura y diseno / S7 reduccion alcance o sobrecodigo: 16 casos (5,3%)</title></rect>
+<text x="957.2" y="427.4" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">reduccion alcance o sobrecodigo</text>
+<text x="957.2" y="688.5" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=16 | 5,3%</text>
+<rect x="1255.1" y="401.4" width="96.9" height="301.1" fill="#b782e9" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P3 Arquitectura y diseno / S16 diseno api modelo o arquitectura: 5 casos (1,7%)</title></rect>
+<text x="1303.5" y="558.0" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#111111" text-anchor="middle">S16</text>
+<text x="1303.5" y="692.5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#111111" text-anchor="middle">n=5 | 1,7%</text>
+<rect x="1362.0" y="110.0" width="346.0" height="602.5" fill="#fce4e4" stroke="#ffffff" stroke-width="8"/>
+<rect x="1366.0" y="114.0" width="338.0" height="52.0" fill="#eb5757" rx="8" ry="8"/>
+<text x="1378.0" y="140.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="start">P4 Proceso y</text>
+<text x="1378.0" y="158.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="start">gobernanza</text>
+<text x="1692.0" y="163.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="end">30 (10,0%)</text>
+<rect x="1372.0" y="172.0" width="326.0" height="265.3" fill="#f18686" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P4 Proceso y gobernanza / S9 requisito formal o gobernanza: 15 casos (5,0%)</title></rect>
+<text x="1384.0" y="198.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">requisito formal o gobernanza</text>
+<text x="1384.0" y="423.3" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=15 | 5,0%</text>
+<rect x="1372.0" y="437.3" width="260.8" height="265.3" fill="#f18686" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P4 Proceso y gobernanza / S10 dependencia u orden de merge: 12 casos (4,0%)</title></rect>
+<text x="1384.0" y="463.3" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">dependencia u orden de</text>
+<text x="1384.0" y="482.3" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">merge</text>
+<text x="1384.0" y="688.5" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=12 | 4,0%</text>
+<rect x="1632.8" y="437.3" width="65.2" height="265.3" fill="#f18686" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P4 Proceso y gobernanza / S20 revision o aprobacion pendiente: 3 casos (1,0%)</title></rect>
+<text x="1665.4" y="575.9" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#111111" text-anchor="middle">S20</text>
+<text x="1665.4" y="692.5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#111111" text-anchor="middle">n=3 | 1,0%</text>
+<rect x="935.2" y="712.5" width="397.2" height="350.0" fill="#e4f7fd" stroke="#ffffff" stroke-width="8"/>
+<rect x="939.2" y="716.5" width="389.2" height="52.0" fill="#56ccf2" rx="8" ry="8"/>
+<text x="951.2" y="742.5" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="start">P5 Dependencias y</text>
+<text x="951.2" y="760.5" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="start">versionado</text>
+<text x="1316.3" y="765.5" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="end">20 (6,7%)</text>
+<rect x="945.2" y="774.5" width="377.2" height="278.0" fill="#85daf6" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P5 Dependencias y versionado / S3 dependencias o versionado: 20 casos (6,7%)</title></rect>
+<text x="957.2" y="800.5" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">dependencias o versionado</text>
+<text x="957.2" y="1038.5" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=20 | 6,7%</text>
+<rect x="935.2" y="1062.5" width="397.2" height="297.5" fill="#dcf2e6" stroke="#ffffff" stroke-width="8"/>
+<rect x="939.2" y="1066.5" width="389.2" height="52.0" fill="#27ae60" rx="8" ry="8"/>
+<text x="951.2" y="1092.5" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="start">P6 Documentacion y</text>
+<text x="951.2" y="1110.5" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="start">descripcion</text>
+<text x="1316.3" y="1115.5" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="end">17 (5,7%)</text>
+<rect x="945.2" y="1124.5" width="377.2" height="225.5" fill="#63c58d" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P6 Documentacion y descripcion / S5 documentacion o descripcion incompleta: 17 casos (5,7%)</title></rect>
+<text x="957.2" y="1150.5" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">documentacion o descripcion incompleta</text>
+<text x="957.2" y="1336.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=17 | 5,7%</text>
+<rect x="1332.3" y="712.5" width="375.7" height="296.0" fill="#d6f1ee" stroke="#ffffff" stroke-width="8"/>
+<rect x="1336.3" y="716.5" width="367.7" height="52.0" fill="#00a896" rx="8" ry="8"/>
+<text x="1348.3" y="742.5" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="start">P7 Configuracion y</text>
+<text x="1348.3" y="760.5" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="start">automatizacion</text>
+<text x="1692.0" y="765.5" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="end">16 (5,3%)</text>
+<rect x="1342.3" y="774.5" width="355.7" height="224.0" fill="#47c0b3" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P7 Configuracion y automatizacion / S8 configuracion ci o automatizacion: 16 casos (5,3%)</title></rect>
+<text x="1354.3" y="800.5" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111111" text-anchor="start">configuracion ci o automatizacion</text>
+<text x="1354.3" y="984.5" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">n=16 | 5,3%</text>
+<rect x="1332.3" y="1008.5" width="217.5" height="351.5" fill="#fdf6e2" stroke="#ffffff" stroke-width="8"/>
+<rect x="1336.3" y="1012.5" width="209.5" height="52.0" fill="#f2c94c" rx="8" ry="8"/>
+<text x="1346.3" y="1037.5" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">P8  11</text>
+<text x="1535.8" y="1037.5" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="end">3,7%</text>
+<rect x="1342.3" y="1070.5" width="197.5" height="279.5" fill="#f6d87e" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P8 Seguridad y permisos / S13 seguridad permisos o validacion: 11 casos (3,7%)</title></rect>
+<text x="1441.1" y="1216.3" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#111111" text-anchor="middle">S13</text>
+<text x="1441.1" y="1340.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#111111" text-anchor="middle">n=11 | 3,7%</text>
+<rect x="1549.8" y="1008.5" width="158.2" height="175.7" fill="#ebebeb" stroke="#ffffff" stroke-width="8"/>
+<rect x="1553.8" y="1012.5" width="150.2" height="52.0" fill="#828282" rx="8" ry="8"/>
+<text x="1563.8" y="1037.5" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">P9  4</text>
+<rect x="1559.8" y="1070.5" width="138.2" height="103.7" fill="#a5a5a5" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P9 Evidencia insuficiente / S18 evidencia insuficiente: 4 casos (1,3%)</title></rect>
+<text x="1628.9" y="1128.4" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#111111" text-anchor="middle">S18</text>
+<text x="1628.9" y="1164.3" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#111111" text-anchor="middle">n=4 | 1,3%</text>
+<rect x="1549.8" y="1184.3" width="158.2" height="175.7" fill="#e8f7ee" stroke="#ffffff" stroke-width="8"/>
+<rect x="1553.8" y="1188.3" width="150.2" height="52.0" fill="#6fcf97" rx="8" ry="8"/>
+<text x="1563.8" y="1213.3" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">P10  4</text>
+<rect x="1559.8" y="1246.3" width="138.2" height="103.7" fill="#97dcb4" stroke="#ffffff" stroke-width="4" rx="6" ry="6"><title>P10 Mantenimiento y refactor / S19 refactor limpieza o nombres: 4 casos (1,3%)</title></rect>
+<text x="1628.9" y="1304.1" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#111111" text-anchor="middle">S19</text>
+<text x="1628.9" y="1340.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#111111" text-anchor="middle">n=4 | 1,3%</text>
+<rect x="1740.0" y="110.0" width="620.0" height="1250.0" fill="#f8fafc" stroke="#d0d7de" stroke-width="2" rx="12" ry="12"/>
+<text x="1762.0" y="146.0" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" fill="#111111" text-anchor="start">Leyenda para poster</text>
+<text x="1762.0" y="174.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#444444" text-anchor="start">Los bloques pequenos usan codigos para mantener legibilidad.</text>
+<text x="1762.0" y="212.0" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#111111" text-anchor="start">Categorias padre</text>
+<rect x="1762.0" y="225.0" width="16" height="16" fill="#2f80ed" rx="3" ry="3"/>
+<text x="1786.0" y="240.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#111111" text-anchor="start">P1 Validacion, calidad y CI</text>
+<text x="2336.0" y="240.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="end">104 | 34,7%</text>
+<rect x="1762.0" y="249.0" width="16" height="16" fill="#f2994a" rx="3" ry="3"/>
+<text x="1786.0" y="264.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#111111" text-anchor="start">P2 Implementacion y logica</text>
+<text x="2336.0" y="264.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="end">57 | 19,0%</text>
+<rect x="1762.0" y="273.0" width="16" height="16" fill="#9b51e0" rx="3" ry="3"/>
+<text x="1786.0" y="288.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#111111" text-anchor="start">P3 Arquitectura y diseno</text>
+<text x="2336.0" y="288.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="end">37 | 12,3%</text>
+<rect x="1762.0" y="297.0" width="16" height="16" fill="#eb5757" rx="3" ry="3"/>
+<text x="1786.0" y="312.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#111111" text-anchor="start">P4 Proceso y gobernanza</text>
+<text x="2336.0" y="312.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="end">30 | 10,0%</text>
+<rect x="1762.0" y="321.0" width="16" height="16" fill="#56ccf2" rx="3" ry="3"/>
+<text x="1786.0" y="336.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#111111" text-anchor="start">P5 Dependencias y versionado</text>
+<text x="2336.0" y="336.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="end">20 | 6,7%</text>
+<rect x="1762.0" y="345.0" width="16" height="16" fill="#27ae60" rx="3" ry="3"/>
+<text x="1786.0" y="360.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#111111" text-anchor="start">P6 Documentacion y descripcion</text>
+<text x="2336.0" y="360.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="end">17 | 5,7%</text>
+<rect x="1762.0" y="369.0" width="16" height="16" fill="#00a896" rx="3" ry="3"/>
+<text x="1786.0" y="384.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#111111" text-anchor="start">P7 Configuracion y automatizacion</text>
+<text x="2336.0" y="384.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="end">16 | 5,3%</text>
+<rect x="1762.0" y="393.0" width="16" height="16" fill="#f2c94c" rx="3" ry="3"/>
+<text x="1786.0" y="408.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#111111" text-anchor="start">P8 Seguridad y permisos</text>
+<text x="2336.0" y="408.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="end">11 | 3,7%</text>
+<rect x="1762.0" y="417.0" width="16" height="16" fill="#828282" rx="3" ry="3"/>
+<text x="1786.0" y="432.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#111111" text-anchor="start">P9 Evidencia insuficiente</text>
+<text x="2336.0" y="432.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="end">4 | 1,3%</text>
+<rect x="1762.0" y="441.0" width="16" height="16" fill="#6fcf97" rx="3" ry="3"/>
+<text x="1786.0" y="456.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#111111" text-anchor="start">P10 Mantenimiento y refactor</text>
+<text x="2336.0" y="456.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="end">4 | 1,3%</text>
+<text x="1762.0" y="498.0" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#111111" text-anchor="start">Subcategorias</text>
+<rect x="1762.0" y="513.0" width="12" height="12" fill="#69a4f2" stroke="#2f80ed" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="526.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S1 fallos ci build o tests</text>
+<text x="2336.0" y="526.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">63 | 21,0%</text>
+<rect x="1762.0" y="536.0" width="12" height="12" fill="#69a4f2" stroke="#2f80ed" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="549.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S2 lint formato o estilo</text>
+<text x="2336.0" y="549.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">34 | 11,3%</text>
+<rect x="1762.0" y="559.0" width="12" height="12" fill="#85daf6" stroke="#56ccf2" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="572.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S3 dependencias o versionado</text>
+<text x="2336.0" y="572.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">20 | 6,7%</text>
+<rect x="1762.0" y="582.0" width="12" height="12" fill="#f6b67d" stroke="#f2994a" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="595.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S4 manejo errores o casos borde</text>
+<text x="2336.0" y="595.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">20 | 6,7%</text>
+<rect x="1762.0" y="605.0" width="12" height="12" fill="#63c58d" stroke="#27ae60" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="618.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S5 documentacion o descripcion incompleta</text>
+<text x="2336.0" y="618.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">17 | 5,7%</text>
+<rect x="1762.0" y="628.0" width="12" height="12" fill="#b782e9" stroke="#9b51e0" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="641.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S6 duplicacion o falta de reutilizacion</text>
+<text x="2336.0" y="641.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">16 | 5,3%</text>
+<rect x="1762.0" y="651.0" width="12" height="12" fill="#b782e9" stroke="#9b51e0" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="664.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S7 reduccion alcance o sobrecodigo</text>
+<text x="2336.0" y="664.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">16 | 5,3%</text>
+<rect x="1762.0" y="674.0" width="12" height="12" fill="#47c0b3" stroke="#00a896" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="687.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S8 configuracion ci o automatizacion</text>
+<text x="2336.0" y="687.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">16 | 5,3%</text>
+<rect x="1762.0" y="697.0" width="12" height="12" fill="#f18686" stroke="#eb5757" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="710.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S9 requisito formal o gobernanza</text>
+<text x="2336.0" y="710.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">15 | 5,0%</text>
+<rect x="1762.0" y="720.0" width="12" height="12" fill="#f18686" stroke="#eb5757" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="733.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S10 dependencia u orden de merge</text>
+<text x="2336.0" y="733.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">12 | 4,0%</text>
+<rect x="1762.0" y="743.0" width="12" height="12" fill="#f6b67d" stroke="#f2994a" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="756.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S11 compatibilidad o migracion</text>
+<text x="2336.0" y="756.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">11 | 3,7%</text>
+<rect x="1762.0" y="766.0" width="12" height="12" fill="#f6b67d" stroke="#f2994a" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="779.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S12 rendimiento concurrencia o recursos</text>
+<text x="2336.0" y="779.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">11 | 3,7%</text>
+<rect x="1762.0" y="789.0" width="12" height="12" fill="#f6d87e" stroke="#f2c94c" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="802.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S13 seguridad permisos o validacion</text>
+<text x="2336.0" y="802.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">11 | 3,7%</text>
+<rect x="1762.0" y="812.0" width="12" height="12" fill="#f6b67d" stroke="#f2994a" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="825.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S14 ui ux o frontend</text>
+<text x="2336.0" y="825.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">10 | 3,3%</text>
+<rect x="1762.0" y="835.0" width="12" height="12" fill="#69a4f2" stroke="#2f80ed" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="848.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S15 pruebas faltantes o insuficientes</text>
+<text x="2336.0" y="848.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">7 | 2,3%</text>
+<rect x="1762.0" y="858.0" width="12" height="12" fill="#b782e9" stroke="#9b51e0" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="871.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S16 diseno api modelo o arquitectura</text>
+<text x="2336.0" y="871.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">5 | 1,7%</text>
+<rect x="1762.0" y="881.0" width="12" height="12" fill="#f6b67d" stroke="#f2994a" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="894.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S17 correccion funcional</text>
+<text x="2336.0" y="894.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">5 | 1,7%</text>
+<rect x="1762.0" y="904.0" width="12" height="12" fill="#a5a5a5" stroke="#828282" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="917.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S18 evidencia insuficiente</text>
+<text x="2336.0" y="917.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">4 | 1,3%</text>
+<rect x="1762.0" y="927.0" width="12" height="12" fill="#97dcb4" stroke="#6fcf97" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="940.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S19 refactor limpieza o nombres</text>
+<text x="2336.0" y="940.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">4 | 1,3%</text>
+<rect x="1762.0" y="950.0" width="12" height="12" fill="#f18686" stroke="#eb5757" stroke-width="1" rx="2" ry="2"/>
+<text x="1782.0" y="963.0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#111111" text-anchor="start">S20 revision o aprobacion pendiente</text>
+<text x="2336.0" y="963.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#111111" text-anchor="end">3 | 1,0%</text>
+</svg>
