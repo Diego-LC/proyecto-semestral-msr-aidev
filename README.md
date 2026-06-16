@@ -307,6 +307,7 @@ Para sesiones OpenCode, las instrucciones operativas compactas viven en `AGENTS.
 - Artefactos canónicos de población: `exploration/aidev/sampling/outputs/merged_after_rework_population.csv` y `merged_after_rework_population_summary.json`.
 - Artefactos canónicos de sampling: `exploration/aidev/sampling/outputs/*_sample_seed_<seed>.csv` y `*_sample_seed_<seed>_summary.json`.
 - Taxonomia inicial/manual: `exploration/aidev/taxonomy/initial/`, incluyendo los CSV por evaluador `merged_after_rework_manual_categories_<evaluador>.csv`.
+- Graficos de presentacion de la taxonomia final: `docs/taxonomia-final-*.svg`.
 
 ## Informes de integración
 

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-label="Subcategorias mas frecuentes">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <style>
+    .title { font: 700 28px Arial, sans-serif; fill: #1f2933; }
+    .subtitle { font: 400 15px Arial, sans-serif; fill: #52616b; }
+    .label { font: 600 15px Arial, sans-serif; fill: #1f2933; }
+    .small { font: 400 13px Arial, sans-serif; fill: #52616b; }
+    .value { font: 700 14px Arial, sans-serif; fill: #1f2933; }
+    .inside { font: 700 14px Arial, sans-serif; fill: #ffffff; }
+    .axis { stroke: #d9e2ec; stroke-width: 1; }
+  </style>
+  <text x="40" y="42" class="title">Subcategorias mas frecuentes</text>
+  <text x="40" y="68" class="subtitle">Top 12 motivos especificos dentro de la taxonomia final</text>
+  <text x="40" y="143" class="label">Fallos CI/build/tests</text>
+  <rect x="360" y="120" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="120" width="700" height="34" rx="4" fill="#2f80ed"/>
+  <text x="976" y="143" class="inside">63 (21,0%)</text>
+  <text x="40" y="160" class="small">Validacion, calidad y CI</text>
+  <text x="40" y="195" class="label">Lint, formato o estilo</text>
+  <rect x="360" y="172" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="172" width="377" height="34" rx="4" fill="#2f80ed"/>
+  <text x="653" y="195" class="inside">34 (11,3%)</text>
+  <text x="40" y="212" class="small">Validacion, calidad y CI</text>
+  <text x="40" y="247" class="label">Dependencias/versionado</text>
+  <rect x="360" y="224" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="224" width="222" height="34" rx="4" fill="#56ccf2"/>
+  <text x="498" y="247" class="inside">20 (6,7%)</text>
+  <text x="40" y="264" class="small">Dependencias y versionado</text>
+  <text x="40" y="299" class="label">Errores/casos borde</text>
+  <rect x="360" y="276" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="276" width="222" height="34" rx="4" fill="#f2994a"/>
+  <text x="498" y="299" class="inside">20 (6,7%)</text>
+  <text x="40" y="316" class="small">Implementacion y logica</text>
+  <text x="40" y="351" class="label">Documentacion/descripcion</text>
+  <rect x="360" y="328" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="328" width="188" height="34" rx="4" fill="#27ae60"/>
+  <text x="464" y="351" class="inside">17 (5,7%)</text>
+  <text x="40" y="368" class="small">Documentacion y descripcion</text>
+  <text x="40" y="403" class="label">Configuracion/automatizacion</text>
+  <rect x="360" y="380" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="380" width="177" height="34" rx="4" fill="#00a896"/>
+  <text x="453" y="403" class="inside">16 (5,3%)</text>
+  <text x="40" y="420" class="small">Configuracion y automatizacion</text>
+  <text x="40" y="455" class="label">Duplicacion/reuso</text>
+  <rect x="360" y="432" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="432" width="177" height="34" rx="4" fill="#9b51e0"/>
+  <text x="453" y="455" class="inside">16 (5,3%)</text>
+  <text x="40" y="472" class="small">Arquitectura y diseno</text>
+  <text x="40" y="507" class="label">Reduccion de alcance</text>
+  <rect x="360" y="484" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="484" width="177" height="34" rx="4" fill="#9b51e0"/>
+  <text x="453" y="507" class="inside">16 (5,3%)</text>
+  <text x="40" y="524" class="small">Arquitectura y diseno</text>
+  <text x="40" y="559" class="label">Requisito formal</text>
+  <rect x="360" y="536" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="536" width="166" height="34" rx="4" fill="#eb5757"/>
+  <text x="442" y="559" class="inside">15 (5,0%)</text>
+  <text x="40" y="576" class="small">Proceso y gobernanza</text>
+  <text x="40" y="611" class="label">Orden de merge</text>
+  <rect x="360" y="588" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="588" width="133" height="34" rx="4" fill="#eb5757"/>
+  <text x="409" y="611" class="inside">12 (4,0%)</text>
+  <text x="40" y="628" class="small">Proceso y gobernanza</text>
+  <text x="40" y="663" class="label">Compatibilidad/migracion</text>
+  <rect x="360" y="640" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="640" width="122" height="34" rx="4" fill="#f2994a"/>
+  <text x="398" y="663" class="inside">11 (3,7%)</text>
+  <text x="40" y="680" class="small">Implementacion y logica</text>
+  <text x="40" y="715" class="label">Rendimiento/recursos</text>
+  <rect x="360" y="692" width="700" height="34" rx="4" fill="#edf2f7"/>
+  <rect x="360" y="692" width="122" height="34" rx="4" fill="#f2994a"/>
+  <text x="398" y="715" class="inside">11 (3,7%)</text>
+  <text x="40" y="732" class="small">Implementacion y logica</text>
+</svg>

@@ -90,6 +90,23 @@ puede ocupar demasiado espacio en un poster. El Sankey no se recomienda como fig
 principal porque aqui no hay una transicion entre estados, sino una jerarquia de
 clasificacion.
 
+## Graficos alternativos para presentacion
+
+Ademas del treemap, se generaron tres visualizaciones en SVG pensadas para
+diapositivas:
+
+| Archivo | Uso sugerido | Lectura principal |
+| --- | --- | --- |
+| `taxonomia-final-categorias-padre-barras.svg` | Resultado general | Compara el peso de las categorias padre |
+| `taxonomia-final-top-subcategorias.svg` | Analisis tecnico | Muestra los motivos especificos mas frecuentes |
+| `taxonomia-final-validacion-evidencia.svg` | Estado actual y limitaciones | Resume veredictos y confianza de la auditoria |
+
+Estos graficos se regeneran con:
+
+```bash
+.venv/bin/python exploration/aidev/taxonomy/analysis/build_taxonomy_presentation_charts.py
+```
+
 ## Diagrama de taxonomia
 
 El diagrama principal recomendado es un arbol jerarquico de tres niveles visuales:
