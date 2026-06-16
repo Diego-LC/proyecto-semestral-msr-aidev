@@ -12,6 +12,11 @@ Referencias clave del diseño:
 
 - Plan metodologico versionado: `docs/plans/plan-metodologico-card-sorting.md`
 - Referencia metodológica de card sorting: `docs/card-sorting.pdf`
+- Referencias para validar la taxonomía: `docs/An Empirical Study of Quick Remedy Commits.pdf`
+  aporta familias de cambios correctivos u omitidos, mientras `docs/reporte.pdf`
+  permite distinguir incumplimientos funcionales y no funcionales propios del uso de
+  asistentes de IA. Estas referencias se usan para contrastar y consolidar las
+  categorías emergentes, no para reemplazar el card sorting abierto.
 
 ## Guía rápida para el criterio de entrega
 
@@ -263,6 +268,26 @@ con `decision_humana = pendiente`. No consulta la clasificacion de Diego ni reem
 ningun archivo manual canonico. La metodologia, el catalogo, la confianza y las
 validaciones de este borrador se documentan en
 `docs/clasificacion-asistida-codex.md`.
+
+### 6) Validacion de la taxonomia manual de Diego
+
+La validacion de Diego se maneja con un unico script:
+
+```bash
+.venv/bin/python exploration/aidev/taxonomy/analysis/validate_diego_taxonomy.py --write --apply-confidence media alta
+```
+
+El script contrasta las 300 categorias contra la evidencia completa de `cards.csv`,
+registra el veredicto por `card_id` en
+`exploration/aidev/taxonomy/analysis/merged_after_rework_diego_taxonomy_validation.csv`
+y, si se indica `--apply-confidence`, actualiza la hoja manual solo para esos
+niveles de confianza. Las filas con confianza `baja` quedan sin cambios para
+revision manual.
+
+Para las filas de baja confianza, el criterio recomendado es revisar primero la
+cita en `cards.csv`: si hay una solicitud causal pre-merge, corregir categoria,
+justificacion y cita; si la evidencia es ambigua, positiva o posterior al merge,
+mantener `evidencia_insuficiente`.
 
 ## Dónde está el código
 
