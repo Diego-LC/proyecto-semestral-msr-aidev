@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-label="Estado de validacion de categorias">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <style>
+    .title { font: 700 28px Arial, sans-serif; fill: #1f2933; }
+    .subtitle { font: 400 15px Arial, sans-serif; fill: #52616b; }
+    .label { font: 600 15px Arial, sans-serif; fill: #1f2933; }
+    .small { font: 400 13px Arial, sans-serif; fill: #52616b; }
+    .value { font: 700 14px Arial, sans-serif; fill: #1f2933; }
+    .inside { font: 700 14px Arial, sans-serif; fill: #ffffff; }
+    .axis { stroke: #d9e2ec; stroke-width: 1; }
+  </style>
+  <text x="40" y="42" class="title">Estado de validacion de categorias</text>
+  <text x="40" y="68" class="subtitle">Auditoria de Diego contra evidencia completa pre-merge</text>
+  <text x="40" y="176" class="label">Veredicto de evidencia</text>
+  <rect x="260" y="150" width="212" height="52" fill="#27ae60"/>
+  <text x="272" y="182" class="inside">84</text>
+  <rect x="472" y="150" width="32" height="52" fill="#f2c94c"/>
+  <rect x="504" y="150" width="514" height="52" fill="#828282"/>
+  <text x="516" y="182" class="inside">203</text>
+  <rect x="260" y="150" width="760" height="52" fill="none" stroke="#d9e2ec"/>
+  <rect x="260" y="222" width="16" height="16" fill="#27ae60"/>
+  <text x="284" y="235" class="small">Respaldada: 84 (28,0%)</text>
+  <rect x="480" y="222" width="16" height="16" fill="#f2c94c"/>
+  <text x="504" y="235" class="small">Parcial: 13 (4,3%)</text>
+  <rect x="700" y="222" width="16" height="16" fill="#828282"/>
+  <text x="724" y="235" class="small">No determinable: 203 (67,7%)</text>
+  <text x="40" y="336" class="label">Confianza de validacion</text>
+  <rect x="260" y="310" width="197" height="52" fill="#2f80ed"/>
+  <text x="272" y="342" class="inside">78</text>
+  <rect x="457" y="310" width="48" height="52" fill="#f2994a"/>
+  <rect x="505" y="310" width="514" height="52" fill="#828282"/>
+  <text x="517" y="342" class="inside">203</text>
+  <rect x="260" y="310" width="760" height="52" fill="none" stroke="#d9e2ec"/>
+  <rect x="260" y="382" width="16" height="16" fill="#2f80ed"/>
+  <text x="284" y="395" class="small">Alta: 78 (26,0%)</text>
+  <rect x="480" y="382" width="16" height="16" fill="#f2994a"/>
+  <text x="504" y="395" class="small">Media: 19 (6,3%)</text>
+  <rect x="700" y="382" width="16" height="16" fill="#828282"/>
+  <text x="724" y="395" class="small">Baja: 203 (67,7%)</text>
+</svg>
