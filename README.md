@@ -289,6 +289,31 @@ cita en `cards.csv`: si hay una solicitud causal pre-merge, corregir categoria,
 justificacion y cita; si la evidencia es ambigua, positiva o posterior al merge,
 mantener `evidencia_insuficiente`.
 
+### 7) Contraste final y taxonomia con conteos
+
+El contraste final homologa la clasificacion Javier/Codex y la validacion de Diego
+a una taxonomia canonica de dos niveles. La categoria final usa Javier/Codex como
+base y Diego como contraste para acuerdo, discrepancias y prioridades de revision:
+
+```bash
+.venv/bin/python exploration/aidev/taxonomy/analysis/build_final_taxonomy_contrast.py
+```
+
+Salidas:
+
+- `exploration/aidev/taxonomy/analysis/merged_after_rework_final_taxonomy_contrast.csv`
+- `exploration/aidev/taxonomy/analysis/merged_after_rework_final_taxonomy_summary.csv`
+- `docs/taxonomia-final-merged-after-rework.md`
+
+El reporte incluye conteos por `categoria_padre_final` y `subcategoria_final`,
+porcentajes sobre las 300 tarjetas, contraste con Diego y dos diagramas Mermaid:
+un arbol jerarquico de taxonomia y un grafico de barras por categoria padre. Para
+evitar etiquetas sobrepuestas, el grafico de barras usa codigos cortos y una leyenda.
+Tambien documenta y genera la recomendacion visual para poster: un treemap SVG
+jerarquico como visual principal, barras horizontales como apoyo y tabla compacta
+de conteos. El treemap usa codigos y leyenda lateral para mantener legibles los
+bloques pequenos.
+
 ## Dónde está el código
 
 - `exploration/aidev/aidev_data.py`: helpers minimos para acceder a manifests/URLs Parquet.
