@@ -1,0 +1,217 @@
+
+\documentclass[final,t]{beamer}
+
+\usepackage[size=a0,orientation=portrait,scale=0.98]{beamerposter}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc}
+\graphicspath{{docs/}{../}}
+
+% Overleaf: subir tambien taxonomia-final-merged-after-rework-treemap-poster-wide.pdf en la raiz del proyecto o en docs/.
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}{}
+\setbeamersize{text margin left=14mm,text margin right=14mm}
+\renewcommand{\familydefault}{\sfdefault}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.20em}
+\renewcommand{\arraystretch}{1.12}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\definecolor{paperText}{HTML}{1A1A1A}
+\definecolor{paperMuted}{HTML}{5F6368}
+\definecolor{paperRule}{HTML}{B7B7B7}
+\definecolor{paperAccent}{HTML}{1F4E79}
+\definecolor{paperAccentLight}{HTML}{EAF2F8}
+\definecolor{paperSoft}{HTML}{F7F7F7}
+\definecolor{barOne}{HTML}{315C8C}
+\definecolor{barTwo}{HTML}{5F84B2}
+\definecolor{barThree}{HTML}{8EABCC}
+\definecolor{barFour}{HTML}{B5C7DC}
+\definecolor{barOther}{HTML}{D9E2EC}
+
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=paperText,bg=white}
+\setbeamerfont{normal text}{size=\large}
+
+\newcommand{\articleblock}[2]{%
+  {\color{paperAccent}\LARGE\bfseries #1}\par
+  \vspace{0.05cm}{\color{paperRule}\hrule height 1.0pt}\vspace{0.08cm}
+  {#2}\par\vspace{0.08cm}
+}
+\newcommand{\smallnote}[1]{{\color{paperMuted}\normalsize #1}}
+\newcommand{\compactnote}[1]{{\color{paperMuted}\small #1}}
+
+\newcommand{\metriccell}[3]{%
+  \begin{minipage}[t]{0.31\linewidth}
+    \centering
+    {\fontsize{58}{62}\selectfont\bfseries #1}\par
+    {\Large\bfseries #2}\par
+    \smallnote{#3}
+  \end{minipage}%
+}
+
+\newcommand{\barrowwide}[5]{%
+  \noindent\begin{minipage}[t]{0.28\linewidth}\raggedright\Large #1\end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.58\linewidth}
+    \vspace{0.20em}%
+    \begin{tikzpicture}[x=1cm,y=1cm]
+      \pgfmathsetmacro{\barwidth}{#3*(#2)/104.0}%
+      \draw[fill=#5, draw=none] (0,0) rectangle (\barwidth,0.52);
+      \draw[draw=paperRule, line width=0.35pt] (0,0) rectangle (#3,0.52);
+    \end{tikzpicture}%
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.10\linewidth}\raggedleft\Large\bfseries #4\end{minipage}\par\vspace{0.16cm}%
+}
+
+\newcommand{\funnelrow}[5]{%
+  \noindent\begin{minipage}[t]{0.30\linewidth}\raggedright\Large #1\end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.56\linewidth}
+    \vspace{0.20em}%
+    \begin{tikzpicture}[x=1cm,y=1cm]
+      \pgfmathsetmacro{\barwidth}{#3*(#2)/104.0}%
+      \draw[fill=#5, draw=none] (0,0) rectangle (\barwidth,0.50);
+      \draw[draw=paperRule, line width=0.35pt] (0,0) rectangle (#3,0.50);
+    \end{tikzpicture}%
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.11\linewidth}\raggedleft\Large\bfseries #4\end{minipage}\par\vspace{0.14cm}%
+}
+
+\begin{document}
+\begin{frame}[t]
+
+\vspace*{0.08cm}
+\begin{center}
+  \includegraphics[height=2.8cm]{presentacion_poster/ufro-logo.png}\par
+  \vspace{0.14cm}
+  {\fontsize{46}{52}\selectfont\bfseries Taxonomía de motivos de retrabajo en pull requests de agentes de IA}\par
+  \vspace{0.14cm}
+  {\Large Javier Alcalde y Diego Labrín \quad | \quad Profesor: Dr. Pablo Valenzuela}\par
+  \vspace{0.06cm}
+  {\large Departamento de Computación e Informática, Universidad de La Frontera \quad | \quad Minería de Repositorios de Software}\par
+  \vspace{0.10cm}
+  {\color{paperRule}\rule{0.94\textwidth}{1.5pt}}
+\end{center}
+
+\vspace{0.12cm}
+\begin{center}
+\begin{minipage}{0.94\textwidth}
+
+\articleblock{Pregunta central y objetivos específicos}{
+Los agentes de IA pueden producir PRs mergeables, pero la integración suele requerir retrabajo humano previo. En AIDev analizamos PRs \textbf{mergeados después de retrabajo observable} para identificar los motivos que aparecen antes del merge.
+
+\vspace{0.18cm}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{6.1cm}Y}
+Pregunta central & ¿Qué motivos de retrabajo humano emergen en pull requests de agentes de IA antes de su integración? \\
+Objetivo 1 & Definir una población operacional auditable a partir del dataset AIDev, manteniendo trazabilidad entre población, muestra, tarjetas y categorías preliminares. \\
+Objetivo 2 & Implementar una muestra estratificada reproducible por agente de IA. \\
+Objetivo 3 & Generar tarjetas con evidencia textual humana y aplicar una primera etapa de card sorting manual coherente, con cita textual y justificación breve. \\
+\end{tabularx}
+}
+
+\articleblock{Diseño metodológico y trazabilidad}{
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[draw=paperAccent, fill=paperAccentLight, rounded corners=5pt, minimum width=14.6cm, minimum height=2.0cm, align=center] (prep) at (0,0) {\bfseries Preparation\\\smallnote{filtros, muestra estratificada, tarjetas}};
+  \node[draw=paperAccent, fill=white, rounded corners=5pt, minimum width=14.6cm, minimum height=2.0cm, align=center] (exec) at (17.2,0) {\bfseries Execution\\\smallnote{card sorting abierto}};
+  \node[draw=paperAccent, fill=paperAccentLight, rounded corners=5pt, minimum width=14.6cm, minimum height=2.0cm, align=center] (ana) at (34.4,0) {\bfseries Analysis\\\smallnote{taxonomía, métricas y soundness}};
+  \draw[-latex, line width=1.35pt, paperAccent] (prep) -- (exec);
+  \draw[-latex, line width=1.35pt, paperAccent] (exec) -- (ana);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.18cm}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{4.6cm}Y>{\bfseries}p{4.6cm}Y}
+Inclusión & PR cerrado y mergeado, \texttt{merged\_at} no nulo, \texttt{commit\_count > 1}, \texttt{human\_comment\_count > 0}. & Evidencia & Comentarios, reviews y timeline cruzados con la muestra; una tarjeta por PR. \\
+Exclusión & PRs abiertos, cerrados sin merge, sin comentario humano observable o rechazo definitivo. & Validez & Cada asignación debe responder la RQ y estar respaldada por evidencia textual o marcarse como insuficiente. \\
+\end{tabularx}
+}
+
+\articleblock{Datos, filtros y muestra}{
+\begin{center}
+\metriccell{33.596}{PRs en AIDev}{universo bruto}\hfill
+\metriccell{3.166}{PRs operacionales}{merged\_after\_rework}\hfill
+\metriccell{300}{PRs muestreados}{seed 20260510}
+\end{center}
+
+\vspace{0.30cm}
+\funnelrow{Universo AIDev}{104}{31.0}{100,00\%}{barOne}
+\funnelrow{PRs mergeados}{74.3}{31.0}{71,48\%}{barTwo}
+\funnelrow{Con commits adicionales}{21.3}{31.0}{20,49\%}{barThree}
+\funnelrow{Población operacional}{9.8}{31.0}{9,42\%}{barFour}
+\funnelrow{Muestra estratificada}{0.9}{31.0}{0,89\%}{barOther}
+
+\vspace{0.06cm}
+Asignación proporcional por agente: \(n_h = \operatorname{round}(n \times N_h / N)\), con \(n=300\), \(N=3.166\), mínimo por estrato y semilla fija. Cuotas: Copilot 145, Devin 86, OpenAI\_Codex 45, Cursor 17 y Claude\_Code 7.
+}
+
+
+\articleblock{Resultado principal: treemap de taxonomía final}{
+Las cuatro primeras familias explican \textbf{228 de 300 casos} (\textbf{76\%}). El treemap muestra la taxonomía final: cada área representa la frecuencia de un motivo de retrabajo humano pre-merge y las leyendas explicitan el tipo de rechazo temporal observado en comentarios/reviews.
+
+\vspace{0.10cm}
+\begin{center}
+% Treemap original (layout correcto, sin comas decimales).
+% 1. Descarga docs/taxonomia-final-merged-after-rework-treemap.svg
+% 2. Conviértelo a PDF (ej: convertio.co) y súbelo a Overleaf como .pdf
+% 3. O compila con LuaLaTeX/XeLaTeX (soporte SVG nativo con paquete svg).
+\includegraphics[width=0.87\linewidth]{taxonomia-final-merged-after-rework-treemap.pdf}
+\end{center}
+}
+
+
+\articleblock{Discusión e implicancias reforzadas}{
+\begin{tabularx}{\linewidth}{>{\bfseries}p{5.2cm}YY}
+\toprule
+Foco & Lectura del hallazgo & Implicancia práctica \\
+\midrule
+CI y calidad & P1 concentra 104 casos: fallos automáticos, formato, lint y cobertura. La aceptación no depende solo de generar código plausible, sino de satisfacer contratos verificables del repositorio. & Los agentes deberían ejecutar checks locales, interpretar fallos de CI, corregir estilo/pruebas y explicar qué validaciones pasaron antes de pedir revisión humana. \\
+Impl. & P2 muestra retrabajo semántico: casos borde, compatibilidad, rendimiento, recursos y comportamiento frontend. El problema no es solo sintaxis, sino adecuación funcional al contexto real de uso. & La evaluación debe medir trayectoria de integración, commits adicionales, cambios solicitados y feedback humano; la tasa de merge aislada sobreestima autonomía. \\
+Arq. y alcance & P3 indica que una solución técnicamente posible puede ser demasiado amplia, duplicada o inconsistente con el diseño local. El retrabajo corrige encaje arquitectónico, no solo errores. & Las herramientas IA necesitan memoria de repositorio: patrones arquitectónicos, convenciones, dependencias activas, owners, locks y límites explícitos del issue. \\
+Gobernanza & P4 muestra que el merge depende de aprobación, coordinación, orden de integración y reglas sociales del proyecto. La integración es un proceso colectivo, no un resultado binario. & Los mantenedores pueden reducir retrabajo repetitivo haciendo explícitos criterios de aceptación, reglas de contribución, checks obligatorios y dependencias entre PRs. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.18cm}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{5.2cm}Y>{\bfseries}p{5.2cm}Y}
+Lectura transversal & El retrabajo pre-merge funciona como una capa de alineación sociotécnica: transforma una contribución generada por IA en una contribución aceptable para una comunidad y un repositorio concretos. & Riesgo metodológico & Si solo contamos PRs mergeados, perdemos el costo oculto de revisión, coordinación y corrección que hizo posible ese merge. \\
+Diseño de agentes & La mejora no debería limitarse a mejores modelos de generación; también requiere loops de auto-verificación, lectura de feedback, respeto por alcance y adaptación a normas locales. & Uso para equipos & La taxonomía puede guiar checklists de revisión, plantillas de PR, reglas de CI y prompts internos para prevenir las familias de retrabajo más frecuentes. \\
+\end{tabularx}
+}
+
+\articleblock{Alcance, límites y trabajo futuro}{
+\begin{tabularx}{\linewidth}{>{\bfseries}p{4.8cm}YYY}
+\toprule
+Dimensión & Estado en esta entrega & Uso previsto & Precaución \\
+\midrule
+Hecho & Población operacional, muestra estratificada, tarjetas con evidencia textual humana, card sorting manual y taxonomía final trazable. & Responder la pregunta central: qué motivos de retrabajo emergen antes de la integración. & La taxonomía clasifica el motivo principal; algunos PRs contienen más de una señal de retrabajo. \\
+No implementado & Medición del tiempo de retrabajo hasta merge y comparación temporal por categoría. & Queda como trabajo futuro usando creación del PR, primera evidencia de retrabajo y \texttt{merged\_at}. & No se reportan conclusiones temporales en este póster; mencionarlo como resultado sería sobreinterpretar el alcance. \\
+Esfuerzo observable & Comentarios/reviews, citas textuales, commits adicionales y señales de CI o configuración presentes en la evidencia. & Permite describir tipos de intervención humana y técnica, pero no aún estimar duración del retrabajo. & Más comentarios o commits no siempre equivalen a más complejidad; requieren análisis contextual. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.10cm}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{4.8cm}Y>{\bfseries}p{4.8cm}Y}
+Límites & Una tarjeta se asigna a una subcategoría principal; la muestra caracteriza AIDev y no generaliza automáticamente. & Reprod. & Población, muestra, tarjetas, taxonomía y scripts están versionados; seed \texttt{20260510}. \\
+Refs. & Liang, Yang y Myers, ICSE 2024; Vaithilingam, Zhang y Glassman, CHI 2022; Barke, James y Polikarpova, 2022. & Repo & \texttt{github.com/Diego-LC/proyecto-semestral-msr-aidev}. \\
+\end{tabularx}
+}
+
+\end{minipage}
+\end{center}
+
+\end{frame}
+\end{document}
