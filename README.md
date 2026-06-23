@@ -4,19 +4,51 @@ En este repositorio construimos un flujo reproducible para responder:
 
 **Pregunta principal:** ¿Qué motivos de retrabajo humano emergen en pull requests de agentes de IA antes de su integración?
 
-**Pregunta complementaria:** ¿Cómo se relacionan esos motivos con el esfuerzo y el tiempo requeridos hasta el merge?
+**Pregunta complementaria no implementada en esta etapa:** ¿Cómo se relacionan esos motivos con el esfuerzo y el tiempo requeridos hasta el merge?
 
-Usamos como fuente principal el dataset **AIDev** (`hao-li/AIDev`). El núcleo metodológico es construir una **taxonomía inductiva** de motivos de retrabajo mediante **card sorting abierto** sobre una muestra reproducible, y luego analizar distribución y esfuerzo/tiempo de integración asociado.
+**Objetivos específicos:**
+
+1. Definir una población operacional auditable a partir del dataset AIDev, manteniendo trazabilidad entre población, muestra, tarjetas y categorías preliminares.
+2. Implementar una muestra estratificada reproducible por agente de IA.
+3. Generar tarjetas con evidencia textual humana y aplicar una primera etapa de card sorting manual coherente, con cita textual y justificación breve.
+
+Usamos como fuente principal el dataset **AIDev** (`hao-li/AIDev`). El núcleo metodológico es construir una **taxonomía inductiva** de motivos de retrabajo mediante **card sorting abierto** sobre una muestra reproducible. El análisis de esfuerzo/tiempo queda planteado como extensión posterior, pero no se implementó en esta etapa.
 
 Referencias clave del diseño:
 
-- Plan metodologico versionado: `docs/plans/plan-metodologico-card-sorting.md`
+- Plan metodológico versionado: `docs/plans/plan-metodologico-card-sorting.md`
 - Referencia metodológica de card sorting: `docs/card-sorting.pdf`
+- Preparación del póster académico A0: `docs/presentacion_poster/preparacion-poster-a0.md`
+- Fuente LaTeX del póster académico A0: `docs/presentacion_poster/poster-a0.tex`
+- La versión actual del póster está configurada en formato A0 vertical (841 x 1189 mm), con estética sobria inspirada en artículo académico y una sola columna de lectura vertical. Integra el treemap SVG original (`docs/taxonomia-final-merged-after-rework-treemap.svg`) como gráfico principal e incluye una sección de implicancias para Desarrolladores, Investigadores y Constructores de Herramientas. La medición de tiempo hasta merge queda como trabajo futuro no implementado en esta etapa.
 - Referencias para validar la taxonomía: `docs/An Empirical Study of Quick Remedy Commits.pdf`
   aporta familias de cambios correctivos u omitidos, mientras `docs/reporte.pdf`
   permite distinguir incumplimientos funcionales y no funcionales propios del uso de
   asistentes de IA. Estas referencias se usan para contrastar y consolidar las
   categorías emergentes, no para reemplazar el card sorting abierto.
+
+Compilación local del póster LaTeX, cuando exista un compilador instalado:
+
+```bash
+pdflatex -interaction=nonstopmode -halt-on-error \
+  -output-directory docs/presentacion_poster \
+  docs/presentacion_poster/poster-a0.tex
+```
+
+Para compilar en Overleaf, subir al proyecto al menos estos archivos en la raíz:
+
+- `poster-a0.tex` como archivo principal.
+- `taxonomia-final-merged-after-rework-treemap.pdf` (treemap jerárquico de taxonomía).
+- `ufro-logo.png` (logo Universidad de La Frontera).
+
+Todos los archivos deben estar en la **raíz del proyecto Overleaf** (sin subcarpetas).
+
+Validación esperada del tamaño del PDF:
+
+```bash
+pdfinfo docs/presentacion_poster/poster-a0.pdf | grep "Page size"
+# A0 vertical: 2384 x 3370 pts (841 x 1189 mm)
+```
 
 ## Guía rápida para el criterio de entrega
 
@@ -46,7 +78,7 @@ Para reproducir/verificar sin sobrescribir archivos canónicos:
 **Preguntas de investigación (RQs)**
 
 1. **RQ1**: ¿Qué motivos de retrabajo humano emergen del card sorting manual en pull requests de agentes de IA antes de su integración?
-2. **RQ2**: ¿Cómo se relacionan esos motivos con el esfuerzo y el tiempo requeridos hasta el merge?
+2. **RQ2 futura/no implementada en esta etapa**: ¿Cómo se relacionan esos motivos con el esfuerzo y el tiempo requeridos hasta el merge?
 3. **RQ3**: ¿Cómo se distribuyen esos motivos por agente, lenguaje y tipo de tarea?
 
 ## Definiciones operacionales (cómo se “materializa” el fenómeno en datos)
@@ -84,7 +116,7 @@ Adaptamos la estructura de Zimmermann en `docs/card-sorting.pdf`: **Preparation*
 ### 3) Analysis
 
 - Revisamos consistencia dentro de los grupos, consolidamos categorías similares y construimos una taxonomía jerárquica.
-- Cruzamos la categoría con métricas de agente, lenguaje, tipo de tarea, comentarios humanos y tiempo hasta aceptación.
+- En esta etapa consolidamos la taxonomía y su trazabilidad; los cruces con agente, lenguaje, tipo de tarea, comentarios humanos y tiempo hasta aceptación quedan como análisis posterior.
 - Aplicamos soundness: cada categoría debe responder directamente a la pregunta de investigación y estar respaldada por una cita textual cuando exista evidencia humana.
 
 ## Criterios de inclusión y exclusión

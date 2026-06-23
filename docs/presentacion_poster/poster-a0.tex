@@ -1,0 +1,205 @@
+\documentclass[final,t]{beamer}
+
+\usepackage[size=a0,orientation=portrait,scale=1.00]{beamerposter}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc}
+\graphicspath{{./}{../}}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}{}
+\setbeamersize{text margin left=14mm,text margin right=14mm}
+\renewcommand{\familydefault}{\sfdefault}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.20em}
+\renewcommand{\arraystretch}{1.12}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\definecolor{paperText}{HTML}{1A1A1A}
+\definecolor{paperMuted}{HTML}{5F6368}
+\definecolor{paperRule}{HTML}{B7B7B7}
+\definecolor{paperAccent}{HTML}{1F4E79}
+\definecolor{paperAccentLight}{HTML}{EAF2F8}
+\definecolor{barOne}{HTML}{315C8C}
+\definecolor{barTwo}{HTML}{5F84B2}
+\definecolor{barThree}{HTML}{8EABCC}
+\definecolor{barFour}{HTML}{B5C7DC}
+\definecolor{barOther}{HTML}{D9E2EC}
+
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=paperText,bg=white}
+\setbeamerfont{normal text}{size=\large}
+
+\newcommand{\articleblock}[2]{%
+  {\color{paperAccent}\LARGE\bfseries #1}\par
+  \vspace{0.05cm}{\color{paperRule}\hrule height 1.0pt}\vspace{0.08cm}
+  {#2}\par\vspace{0.08cm}
+}
+\newcommand{\smallnote}[1]{{\color{paperMuted}\normalsize #1}}
+
+\newcommand{\metriccell}[3]{%
+  \begin{minipage}[t]{0.31\linewidth}
+    \centering
+    {\fontsize{58}{62}\selectfont\bfseries #1}\par
+    {\Large\bfseries #2}\par
+    \smallnote{#3}
+  \end{minipage}%
+}
+
+\newcommand{\funnelrow}[5]{%
+  \noindent\begin{minipage}[t]{0.30\linewidth}\raggedright\Large #1\end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.56\linewidth}
+    \vspace{0.20em}%
+    \begin{tikzpicture}[x=1cm,y=1cm]
+      \pgfmathsetmacro{\barwidth}{#3*(#2)/100.0}%
+      \draw[fill=#5, draw=none] (0,0) rectangle (\barwidth,0.50);
+      \draw[draw=paperRule, line width=0.35pt] (0,0) rectangle (#3,0.50);
+    \end{tikzpicture}%
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.11\linewidth}\raggedleft\Large\bfseries #4\end{minipage}\par\vspace{0.14cm}%
+}
+
+\begin{document}
+\begin{frame}[t]
+
+\vspace*{0.12cm}
+\begin{center}
+  \includegraphics[height=3.0cm]{ufro-logo.png}\par
+  \vspace{0.15cm}
+  {\fontsize{50}{56}\selectfont\bfseries Taxonomía de motivos de retrabajo en solicitudes de cambios de agentes de IA}\par
+  \vspace{0.15cm}
+  {\Large Javier Alcalde y Diego Labrín \quad | \quad Profesor: Dr. Pablo Valenzuela}\par
+  \vspace{0.05cm}
+  {\large Departamento de Computación e Informática, Universidad de La Frontera \quad | \quad Minería de Repositorios de Software}\par
+  \vspace{0.12cm}
+  {\color{paperRule}\rule{0.94\textwidth}{1.5pt}}
+\end{center}
+
+\vspace{0.15cm}
+\begin{center}
+\begin{minipage}{0.94\textwidth}
+
+\articleblock{Pregunta y objetivos}{
+Los agentes de IA pueden producir solicitudes integrables, pero la integración requiere retrabajo humano. Analizamos solicitudes del dataset \textbf{AIDev} (33.596 solicitudes generadas por IA en repositorios reales) \textbf{integradas después de retrabajo observable}.
+
+\vspace{0.12cm}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{5.5cm}Y}
+Pregunta & ¿Qué motivos de retrabajo humano emergen antes de la integración? \\
+Obj. 1 & Definir población operacional auditable desde AIDev. \\
+Obj. 2 & Implementar muestra estratificada reproducible por agente. \\
+Obj. 3 & Generar tarjetas con evidencia y aplicar clasificación abierta. \\
+\end{tabularx}
+}
+
+\articleblock{Metodología}{
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[draw=paperAccent, fill=paperAccentLight, rounded corners=5pt, minimum width=14.0cm, minimum height=1.8cm, align=center] (prep) at (0,0) {\bfseries Preparación\\\smallnote{filtros, muestra, tarjetas}};
+  \node[draw=paperAccent, fill=white, rounded corners=5pt, minimum width=14.0cm, minimum height=1.8cm, align=center] (exec) at (16.5,0) {\bfseries Ejecución\\\smallnote{clasificación abierta}};
+  \node[draw=paperAccent, fill=paperAccentLight, rounded corners=5pt, minimum width=14.0cm, minimum height=1.8cm, align=center] (ana) at (33.0,0) {\bfseries Análisis\\\smallnote{taxonomía, métricas}};
+  \draw[-latex, line width=1.3pt, paperAccent] (prep) -- (exec);
+  \draw[-latex, line width=1.3pt, paperAccent] (exec) -- (ana);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.10cm}
+{\small\textbf{Confiabilidad:} 2 evaluadores, 300 tarjetas. Acuerdo categoría padre: 73\%; subcategoría: 47\%.}
+
+\vspace{0.12cm}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{4.2cm}Y>{\bfseries}p{4.2cm}Y}
+Inclusión & Integrada, \texttt{commit\_count>1}, \texttt{human\_comment\_count>0}. & Evidencia & Comentarios, revisiones, timeline. \\
+Exclusión & Abiertas, sin integrar, sin comentarios humanos. & Validez & Cada asignación responde la pregunta. \\
+\end{tabularx}
+}
+
+\articleblock{Datos y muestra}{
+\begin{center}
+\metriccell{33.596}{Universo}{AIDev}\hfill
+\metriccell{3.166}{Población}{operacional}\hfill
+\metriccell{300}{Muestra}{estratificada}
+\end{center}
+
+\vspace{0.25cm}
+\funnelrow{Universo AIDev}{100}{31.0}{100\%}{barOne}
+\funnelrow{Integradas}{71.48}{31.0}{71\%}{barTwo}
+\funnelrow{Con commits}{20.49}{31.0}{20\%}{barThree}
+\funnelrow{Población}{9.42}{31.0}{9\%}{barFour}
+\funnelrow{Muestra}{0.89}{31.0}{1\%}{barOther}
+
+\vspace{0.04cm}
+{\small\color{paperMuted}Error muestral: $\pm 5{,}4\%$ (95\% IC). Cuotas: Copilot 145, Devin 86, Codex 45, Cursor 17, Claude 7.}
+}
+
+\articleblock{Resultado: taxonomía final}{
+Las 4 primeras familias: \textbf{228 de 300} (76\%). El treemap muestra frecuencia de motivos de retrabajo pre-integración.
+
+\vspace{0.08cm}
+\begin{center}
+\includegraphics[width=0.90\linewidth]{taxonomia-final-merged-after-rework-treemap.pdf}
+\end{center}
+}
+
+\articleblock{Discusión}{
+\small
+\textbf{P1 (34,7\%):} Confirma Liang et al.~[1] (38\%). Mejora en validación, pero persiste como barrera principal.
+
+\textbf{P2 (19,0\%):} Vaithilingam et al.~[2] (22\% en novatos). IA introduce errores sutiles incluso con revisión.
+
+\textbf{P3 (12,3\%):} Barke et al.~[3] ``sobrecódigo generado''. Cuantificado en contexto real.
+
+\textbf{P4 (10,0\%):} Hallazgo emergente: IA debe navegar reglas sociales del repositorio.
+}
+
+\articleblock{Implicancias}{
+\small
+\begin{itemize}[leftmargin=*, label=\textcolor{paperAccent}{\textbullet}, itemsep=0.06cm]
+\item \textbf{Desarrolladores:} Ejecutar verificaciones locales (CI, tests, lint) antes de solicitar revisión; usar taxonomía como lista de verificación pre-envío.
+\item \textbf{Investigadores:} Medir trayectoria de integración (confirmaciones, cambios, tiempo), no solo tasa de integración; autonomía real es menor que la reportada.
+\item \textbf{Constructores de Herramientas:} Incorporar memoria de repositorio (convenciones, responsables, dependencias); bucles de auto-verificación antes de pedir revisión.
+\end{itemize}
+}
+
+\articleblock{Alcance y límites}{
+\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{3.5cm}YY}
+\toprule
+Dimensión & Estado & Precaución \\
+\midrule
+Hecho & Población (3.166), muestra (n=300), taxonomía trazable. & Motivo principal; puede haber múltiples señales. \\
+RQ2 (futuro) & Tiempo hasta integración por categoría. & Sin conclusiones temporales aún. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.08cm}
+{\footnotesize\textbf{Reproducibilidad:} Scripts versionados, semilla \texttt{20260510}. \textbf{Repo:} \texttt{github.com/Diego-LC/proyecto-semestral-msr-aidev}.}
+}
+
+\articleblock{Referencias}{
+\footnotesize
+[1] P. Liang, Y. Yang, D. Myers, ``An Empirical Study of Quick Remedy Commits,'' \textit{Proc. ICSE}, 2024. doi: 10.1145/3597503.3623332
+
+[2] P. Vaithilingam, T. Zhang, E. Glassman, ``Expectation vs. Experience: Evaluating the Usability of Code Generation Tools,'' \textit{Proc. CHI EA}, 2022. doi: 10.1145/3491102.3517585
+
+[3] M. Barke, M. B. James, N. Polikarpova, ``Grounded Copilot: How Programmers Interact with Code-Generating Models,'' \textit{Proc. ACM Program. Lang.}, vol. 7, no. OOPSLA1, pp. 935--963, 2023. doi: 10.1145/3591241
+
+[4] H. Li, ``AIDev: Dataset of AI-Generated Pull Requests,'' \textit{Hugging Face}, 2024. \texttt{https://huggingface.co/datasets/hao-li/AIDev}
+}
+
+\end{minipage}
+\end{center}
+
+\end{frame}
+\end{document}
