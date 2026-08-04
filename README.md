@@ -39,6 +39,7 @@ Para compilar en Overleaf, subir al proyecto al menos estos archivos en la raíz
 
 - `poster-a0.tex` como archivo principal.
 - `taxonomia-final-merged-after-rework-treemap.pdf` (treemap jerárquico de taxonomía).
+- `taxonomia-final-merged-after-rework-treemap.png` (exportación PNG del treemap jerárquico de taxonomía).
 - `ufro-logo.png` (logo Universidad de La Frontera).
 
 Todos los archivos deben estar en la **raíz del proyecto Overleaf** (sin subcarpetas).

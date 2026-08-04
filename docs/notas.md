@@ -38,7 +38,7 @@ Discutir (constraste: referencia bibliograficas, conferencias (FCSE, FSE, ASE, I
 Implicancias: recomendaciones o advertencias para los siguientes, esto es incluso mas importante que alcanzar el objetivo. Importante incluir al poster ->
 
 * Devs
-* Reserders (investigadores)
+* researchers (investigadores)
 * Tool Builders
 
 Historia de resumen para el poster (Tesis):
@@ -53,3 +53,12 @@ Historia de resumen para el poster (Tesis):
 
 No aplica la generalidad en estos casos de medicion cualitativa.
 el excel debe tener taxonomia previa, contraste e implicancia.
+
+Se puede representar la taxonomia como un json (esquema de datos facil de splotear)
+Arreglar categorias de nombres no explicitos, la lectura debe ser clara sin tener que dar mayor explicaciones. Corregir faltas de ortografia y gramatica de los graficos para el poster.
+
+falta la parte mas importante, la discusion y la implicancia. no hace falta que sea para los 3 actores, ni de todas las categorias. 
+
+ML5 funciona sobre un modelo proyecto P5
+
+teachable machine 
